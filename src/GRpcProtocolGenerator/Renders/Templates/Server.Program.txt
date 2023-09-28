@@ -1,0 +1,161 @@
+using Grpc.Core;
+using Grpc.Core.Interceptors;
+using GRpcProtocolGenerator.Common;
+using Mapster;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Net.Http;
+using System.Reflection;
+using System.Threading.Tasks;
+
+namespace {{ config.server.project_name }}
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
+
+            var builder = WebApplication.CreateBuilder(args);
+
+            var config = new SwaggerConfig()
+            {
+                SwaggerConfigType = SwaggerConfigType.{{ config.json_transcoding.swagger.swagger_config_type }},
+                Name = "{{ config.json_transcoding.swagger.name }}",
+                Title = "{{ config.json_transcoding.swagger.title }}",
+                Audience = "{{ config.json_transcoding.swagger.audience }}",
+                Scope = new[]
+                {
+                    {{- for scope in config.json_transcoding.swagger.scope }}
+                    "{{ scope }}",
+                    {{- end }}
+                },
+                ClientId = "{{ config.json_transcoding.swagger.client_id }}",
+                ClientSecret = "{{ config.json_transcoding.swagger.client_secret }}",
+                IdentityUrl = "{{ config.json_transcoding.swagger.identity_url }}",
+                Version = "{{ config.json_transcoding.swagger.version }}",
+                DocumentXml = new[]
+                {
+                    {{- for xml in config.json_transcoding.swagger.document_xml }}
+                    "{{ xml }}",
+                    {{- end }}
+                }
+            };
+            {{}}
+            {{- if config.json_transcoding.use_json_transcoding }}
+            builder.Services.AddGrpc(option =>
+                {
+                    option.Interceptors.Add<ErrorInterceptor>();
+                })
+                .AddJsonTranscoding(o =>
+                {
+                    o.JsonSettings.WriteIndented = true;
+                    o.JsonSettings.WriteEnumsAsIntegers = true;
+                });            
+
+            //swagger
+            builder.Services.AddGrpcSwagger();
+            builder.Services.AddCustomSwagger(config);
+
+            builder.Services.AddCors(option => option.AddPolicy("cors", policy =>
+               policy.AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .WithExposedHeaders("Content-Disposition")
+                   .AllowAnyOrigin()));
+            {{- else }}
+            builder.Services.AddGrpc();
+            {{- end }}         
+            {{}}
+            {{- if config.json_transcoding.use_jwt_authentication }}
+            //认证授权
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy =>
+                {
+                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+                    policy.RequireClaim("sub");
+                });
+            });
+
+            builder.Services.AddAuthentication("Bearer").AddJwtBearer(options =>
+            {
+                options.Audience = config.Audience;
+                options.Authority = config.IdentityUrl;
+                options.RequireHttpsMetadata = false;
+                options.BackchannelHttpHandler = new HttpClientHandler() { ServerCertificateCustomValidationCallback = ((_, _, _, _) => true) };
+            });
+            {{- end }}
+
+            var app = builder.Build();
+
+            {{- if config.json_transcoding.use_json_transcoding }}     
+            {{}}
+            //swagger
+            app.UseCustomSwagger(config);
+
+            app.UseRouting();
+            app.UseCors("cors");
+
+            {{- end }}    
+            {{}}
+            {{- if config.json_transcoding.use_jwt_authentication }}
+            app.UseAuthentication();
+            app.UseAuthorization();
+            {{- end }}            
+            {{}}
+            //注册 gRpc Server
+            {{- for server in servers }}
+            app.MapGrpcService<{{ server.full_name }}>();
+            {{- end }}
+
+            app.Run();
+        }
+    }
+    {{}}
+    {{- if config.json_transcoding.use_json_transcoding }}    
+    /// <summary>
+    /// 拦截器，处理GRpc异常
+    /// </summary>
+    public class ErrorInterceptor : Interceptor
+    {
+        private readonly ILogger<ErrorInterceptor> _logger;
+
+        public ErrorInterceptor(ILogger<ErrorInterceptor> logger)
+        {
+            _logger = logger;
+        }
+
+        public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(
+            TRequest request,
+            ServerCallContext context,
+            UnaryServerMethod<TRequest, TResponse> continuation)
+        {
+            LogCall<TRequest, TResponse>(MethodType.Unary, context);
+            
+            try
+            {
+                return await continuation(request, context);
+            }
+            catch (RpcException e)
+            {
+                throw new RpcException(new Status(StatusCode.Unknown, e.Message), e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new RpcException(new Status(StatusCode.Unknown, e.Message), e.Message);
+            }
+        }
+
+        private void LogCall<TRequest, TResponse>(MethodType methodType, ServerCallContext context)
+            where TRequest : class
+            where TResponse : class
+        {
+            _logger.LogWarning($"Starting call. Type: {methodType}. Request: {typeof(TRequest)}. Response: {typeof(TResponse)}");
+        }
+    }
+    {{- end }}
+}
