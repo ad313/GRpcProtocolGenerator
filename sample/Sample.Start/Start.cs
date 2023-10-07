@@ -74,6 +74,7 @@ namespace Sample.Start
                     proto.OriginalClassNameFunc = name => "GRpc" + name.Replace("`1", "").Replace("`", "");
                 });
 
+                //配置 service 实现
                 builder.SetServerConfig(server =>
                 {
                     server.Output = $"../{project}.Server";
@@ -81,6 +82,7 @@ namespace Sample.Start
                     server.NamespaceFunc = meta => $"{project}.Server.Implements";
                 });
 
+                //配置json 转码，生成 Restful API
                 builder.SetJsonTranscoding(json =>
                 {
                     json.UseJsonTranscoding = true;
