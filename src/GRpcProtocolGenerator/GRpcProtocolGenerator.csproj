@@ -3,8 +3,10 @@
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>1.0.0.14</Version>
+		<Version>0.1.0</Version>
 		<Description>C# GRpc to proto  server  restfulapi  swagger</Description>
+		<PackageProjectUrl>https://github.com/ad313/GRpcProtocolGenerator</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/ad313/GRpcProtocolGenerator</RepositoryUrl>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<NoWarn>1701;1702;1591</NoWarn>
