@@ -24,7 +24,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.NotNull(sampleClassMessage.ClassMetaData);
             Assert.True(sampleClassMessage.IsOriginalClass);
             Assert.Equal(nameof(SampleClass), sampleClassMessage.Name);
-            Assert.Equal("GrpcSampleClass", sampleClassMessage.GetGRpcName());
+            Assert.Equal("GRpcSampleClass", sampleClassMessage.GetGRpcName());
 
             //属性总数
             Assert.True(sampleClassMessage.Items.Count == 14);
@@ -149,7 +149,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.NotNull(item);
             Assert.False(item.IsArray);
             Assert.True(item.ClassMetaData != null);
-            Assert.Equal("GrpcSampleClass", item.GRpcType);
+            Assert.Equal("GRpcSampleClass", item.GRpcType);
 
             itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // ClassColumn";
             Assert.Equal(item.ToString(), itemString);
@@ -168,7 +168,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             item = sampleClassMessage.Items.FirstOrDefault(x => x.Name == "StructColumn");
             Assert.NotNull(item);
             Assert.False(item.IsArray);
-            Assert.Equal("GrpcSampleStruct", item.GRpcType);
+            Assert.Equal("GRpcSampleStruct", item.GRpcType);
 
             itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // StructColumn";
             Assert.Equal(item.ToString(), itemString);
@@ -184,7 +184,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.NotNull(sampleClassMessage.ClassMetaData);
             Assert.True(sampleClassMessage.IsOriginalClass);
             Assert.Equal(nameof(ExtClass), sampleClassMessage.Name);
-            Assert.Equal("GrpcExtClass", sampleClassMessage.GetGRpcName());
+            Assert.Equal("GRpcExtClass", sampleClassMessage.GetGRpcName());
 
             //属性总数
             Assert.True(sampleClassMessage.Items.Count == 15);
@@ -193,7 +193,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             var item = sampleClassMessage.Items.FirstOrDefault(x => x.Name == "GenericClass");
             Assert.NotNull(item);
             Assert.False(item.IsArray);
-            Assert.Equal("GrpcTreeNode_SampleClass", item.GRpcType);
+            Assert.Equal("GRpcTreeNode_SampleClass", item.GRpcType);
 
             var itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // GenericClass";
             Assert.Equal(item.ToString(), itemString);
@@ -219,20 +219,20 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.Equal("repeated string a = 0;", BuilderPart.BuildMessageItem("a", typeof(string), true, false, 0, ""));
 
             //class
-            Assert.Equal("GrpcSampleClass a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleClass), false, false, 0, ""));
-            Assert.Equal("GrpcSampleClass a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleClass), false, true, 0, ""));
-            Assert.Equal("repeated GrpcSampleClass a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleClass), true, true, 0, ""));
-            Assert.Equal("repeated GrpcSampleClass a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleClass), true, false, 0, ""));
+            Assert.Equal("GRpcSampleClass a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleClass), false, false, 0, ""));
+            Assert.Equal("GRpcSampleClass a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleClass), false, true, 0, ""));
+            Assert.Equal("repeated GRpcSampleClass a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleClass), true, true, 0, ""));
+            Assert.Equal("repeated GRpcSampleClass a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleClass), true, false, 0, ""));
 
             //泛型class
             Assert.Equal($"{typeof(TreeNode<SampleClass>).GetGenericClassName().FormatMessageName()} a = 0;",
                 BuilderPart.BuildMessageItem("a", typeof(TreeNode<SampleClass>), false, false, 0, ""));
 
             //struct
-            Assert.Equal("GrpcSampleStruct a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleStruct), false, false, 0, ""));
-            Assert.Equal("GrpcSampleStruct a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleStruct), false, true, 0, ""));
-            Assert.Equal("repeated GrpcSampleStruct a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleStruct), true, true, 0, ""));
-            Assert.Equal("repeated GrpcSampleStruct a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleStruct), true, false, 0, ""));
+            Assert.Equal("GRpcSampleStruct a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleStruct), false, false, 0, ""));
+            Assert.Equal("GRpcSampleStruct a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleStruct), false, true, 0, ""));
+            Assert.Equal("repeated GRpcSampleStruct a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleStruct), true, true, 0, ""));
+            Assert.Equal("repeated GRpcSampleStruct a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleStruct), true, false, 0, ""));
 
             //bytes
             Assert.Equal("bytes a = 0;", BuilderPart.BuildMessageItem("a", typeof(byte[]), false, false, 0, ""));

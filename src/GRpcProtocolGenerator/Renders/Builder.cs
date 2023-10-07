@@ -4,9 +4,7 @@ using GRpcProtocolGenerator.Renders.Protocol;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace GRpcProtocolGenerator.Renders
 {
@@ -40,143 +38,6 @@ namespace GRpcProtocolGenerator.Renders
             //接口
             CreateProtoServiceList(assemblyMetaData.InterfaceMetaDataDictionary.Select(d => d.Value).ToList());
         }
-
-        /// <summary>
-        /// 生成代码
-        /// </summary>
-        /// <returns></returns>
-        public async Task RenderAsync()
-        {
-            BuilderPath.Init(Config);
-
-            foreach (var service in Services.OrderBy(d => d.InterfaceMetaData.FullName))
-            {
-                //proto
-                var protoContent = new ProtocolContent(service, Config);
-                var content = protoContent.ToContent();
-                await BuilderPath.CreateFile(service.InterfaceMetaData.FormatServiceProtoFileName(), content);
-                Console.WriteLine(service.InterfaceMetaData.FormatServiceProtoFileName());
-                Console.WriteLine(content);
-
-                //server
-                if (Config.HasServer)
-                {
-                    var server = new ProtocolServiceImpl(protoContent);
-                    var serverContent = server.ToContent();
-                    await BuilderPath.CreateServerFile(server.ServerName, serverContent);
-                    Console.WriteLine(serverContent);
-                }
-            }
-
-            if (Config.HasServer)
-            {
-                //mapper
-                var mapperString = await ScribanHelper.Render(new { data = Config.Server.ProjectName }, "Server.MapperRegister");
-                await BuilderPath.CreateServerMapperFile("DefaultMapperConfig", mapperString);
-
-                // program
-                var servers = Services.Select(d => new ProtocolServiceImpl(new ProtocolContent(d, Config))).ToList();
-                var serverProgramString = await ScribanHelper.Render(new { config = Config, servers = servers }, "Server.Program");
-                var serverProgramFileName = "Program";
-
-                if (File.Exists(Config.Server.GetProgramFilePath()))
-                {
-                    serverProgramString = "/*" + Environment.NewLine + serverProgramString + Environment.NewLine + "*/";
-                    serverProgramFileName += "New";
-                }
-
-                await BuilderPath.CreateServerRootFile(serverProgramFileName + ".cs", serverProgramString);
-
-
-                // server csproj
-                var serverCsprojString = await ScribanHelper.Render(new { config = Config, servers = Services }, "Server.csproj");
-                var serverCsprojFileName = Config.Server.ProjectName + ".csproj";
-                if (File.Exists(Config.Server.GetCsprojFilePath()))
-                {
-                    serverCsprojFileName += "New";
-                }
-
-                await BuilderPath.CreateServerRootFile(serverCsprojFileName, serverCsprojString);
-            }
-
-            // proto csproj
-            var protoCsprojString = await ScribanHelper.Render(new { config = Config, servers = Services }, "Protocol.csproj");
-            var protoCsprojFileName = Config.Proto.ProjectName + ".csproj";
-            if (File.Exists(Config.Proto.GetCsprojFilePath()))
-            {
-                protoCsprojFileName += "New";
-            }
-
-            await BuilderPath.CreateProtoRootFile(protoCsprojFileName, protoCsprojString);
-
-            //google api
-            if (Config.JsonTranscoding.UseJsonTranscoding)
-            {
-                var annotations = await ScribanHelper.Render(new { }, "google.api.annotations");
-                var http = await ScribanHelper.Render(new { }, "google.api.http");
-
-                await BuilderPath.CreateProtoGoogleApiFile("annotations.proto", annotations);
-                await BuilderPath.CreateProtoGoogleApiFile("http.proto", http);
-
-                //swagger
-                var swaggerProgramString = await ScribanHelper.Render(new { config = Config }, "Server.Swagger");
-                var swaggerProgramFileName = "SwaggerExtensions";
-                await BuilderPath.CreateServerRootFile(swaggerProgramFileName + ".cs", swaggerProgramString);
-            }
-            
-            //不支持的方法
-            Console.WriteLine($"不支持的方法：{_assemblyMetaData.NotSupportMethodList.Count}");
-            foreach (var method in _assemblyMetaData.NotSupportMethodList.OrderBy(d => d.Name))
-            {
-                Console.WriteLine(method.DeclaringType?.FullName + "." + method.Name);
-            }
-
-            Console.WriteLine("生成完毕");
-        }
-
-
-
-
-
-        //public ProtoMessage CreateProtoMessage(List<ParamMetaData> paramList)
-        //{
-        //    if (paramList == null || !paramList.Any())
-        //        return new EmptyProtoMessage();
-
-        //    paramList = paramList.OrderBy(d => d.FullName).ToList();
-        //    var key = string.Join("_", paramList.Select(d => d.Name));
-
-        //    var message = _classMessage.GetOrAdd(key, k =>
-        //    {
-        //        //1、单个参数
-        //        // 1.1 非数组
-        //        //     值类型 创建对象 单层
-        //        //     字典   创建对象 单层 repeated
-        //        //     枚举   创建对象 单层
-        //        //     类     类对象   单层
-        //        // 1.2 数组
-        //        //     值类型 创建对象 单层 repeated
-        //        //     字典   创建对象 两层 repeated
-        //        //     枚举   创建对象      repeated
-        //        //     类     创建对象      repeated
-        //        //
-        //        //2、多个参数 创建对象
-        //        //
-
-        //        if (paramList.Count > 1)
-        //            return null;
-
-
-
-
-
-        //        return new ProtoMessage();
-        //    });
-
-        //    return message;
-        //}
-
-
 
         private void CreateEnumMessageList(List<EnumMetaData> enumMetaList)
         {
@@ -259,6 +120,12 @@ namespace GRpcProtocolGenerator.Renders
             if (Config.JsonTranscoding.UseResultWrapper == false)
                 return msg;
 
+            ProtocolItemMessage CreateCodeProtocolItemMessage() => new ProtocolItemMessage(typeof(int), false, false,
+                "Code", "int32", "int32", 0, null, null, null);
+
+            ProtocolItemMessage CreateMessageProtocolItemMessage() => new ProtocolItemMessage(typeof(string), true,
+                false, "Message", "google.protobuf.StringValue", "google.protobuf.StringValue", 0, null, null, null);
+            
             //空
             if (msg.IsEmpty)
             {
@@ -270,8 +137,8 @@ namespace GRpcProtocolGenerator.Renders
                     false,
                     null);
 
-                wrapper.Items.Insert(0, new ProtocolItemMessage(typeof(int), false, false, "Code", "int32", "int32", 0, null, null, null));
-                wrapper.Items.Insert(1, new ProtocolItemMessage(typeof(string), true, false, "Message", "google.protobuf.StringValue", "google.protobuf.StringValue", 0, null, null, null));
+                wrapper.Items.Insert(0, CreateCodeProtocolItemMessage());
+                wrapper.Items.Insert(1, CreateMessageProtocolItemMessage());
 
                 return wrapper;
             }
@@ -287,15 +154,15 @@ namespace GRpcProtocolGenerator.Renders
                     false,
                     null);
 
-                wrapper.Items.Insert(0, new ProtocolItemMessage(typeof(int), false, false, "Code", "int32", "int32", 0, null, null, null));
-                wrapper.Items.Insert(1, new ProtocolItemMessage(typeof(string), true, false, "Message", "google.protobuf.StringValue", "google.protobuf.StringValue", 0, null, null, null));
+                wrapper.Items.Insert(0, CreateCodeProtocolItemMessage());
+                wrapper.Items.Insert(1, CreateMessageProtocolItemMessage());
                 wrapper.Items.Insert(2, new ProtocolItemMessage(msg.ClassMetaData.TypeWrapper.Type, true, false, "Data", msg.GetGRpcName(), "google.protobuf.StringValue", 0, msg.ClassMetaData, msg.ClassMetaData, msg.EnumMetaData));
 
                 return wrapper;
             }
 
-            msg.Items.Insert(0, new ProtocolItemMessage(typeof(int), false, false, "Code", "int32", "int32", 0, null, null, null));
-            msg.Items.Insert(1, new ProtocolItemMessage(typeof(string), true, false, "Message", "google.protobuf.StringValue", "google.protobuf.StringValue", 0, null, null, null));
+            msg.Items.Insert(0, CreateCodeProtocolItemMessage());
+            msg.Items.Insert(1, CreateMessageProtocolItemMessage());
 
             return msg;
         }
