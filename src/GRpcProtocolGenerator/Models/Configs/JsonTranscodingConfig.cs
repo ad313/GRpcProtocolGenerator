@@ -29,7 +29,7 @@ namespace GRpcProtocolGenerator.Models.Configs
         /// <summary>
         /// swagger
         /// </summary>
-        public SwaggerConfig Swagger { get; set; }
+        public SwaggerConfig Swagger { get; set; } = new SwaggerConfig();
 
         /// <summary>
         /// 成功状态码

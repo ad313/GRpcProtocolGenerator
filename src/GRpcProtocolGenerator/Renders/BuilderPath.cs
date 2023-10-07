@@ -35,7 +35,7 @@ namespace GRpcProtocolGenerator.Renders
 
             CreateDirectory(ProtoOutput);
 
-            if (config.JsonTranscoding.UseJsonTranscoding)
+            if (config.JsonTranscoding?.UseJsonTranscoding == true)
             {
                 CreateDirectory(GoogleApiProtoPath);
             }

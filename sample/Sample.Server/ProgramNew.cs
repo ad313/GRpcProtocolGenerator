@@ -29,7 +29,7 @@ namespace Sample.Server
                 Name = "GRpc Server + Restful api",
                 Title = "gRPC transcoding",
                 Audience = "attendancesystem",
-                Scope = new[]
+                Scope = new string[]
                 {
                     "gateway",
                 },
@@ -37,7 +37,7 @@ namespace Sample.Server
                 ClientSecret = "secret",
                 IdentityUrl = "https://192.168.1.20:8443",
                 Version = "v1",
-                DocumentXml = new[]
+                DocumentXml = new string[]
                 {
                     "Sample.Server.xml",
                     "Sample.Protocol.xml",

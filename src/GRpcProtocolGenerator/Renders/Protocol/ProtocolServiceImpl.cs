@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GRpcProtocolGenerator.Models.Configs;
 
 namespace GRpcProtocolGenerator.Renders.Protocol
 {
@@ -40,7 +41,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
             _gRpcServiceName = _protoContent.ProtoService.InterfaceMetaData.FormatServiceName();
             ServerName = $"{_gRpcServiceName}Impl";
-            FullName = $"{_protoContent.Config.Server?.GetServerNamespace()}.{ServerName}";
+            FullName = $"{Config.ConfigInstance.Server?.GetServerNamespace()}.{ServerName}";
             _interfaceName = _protoContent.ProtoService.InterfaceMetaData.Name;
 
             Using = new List<string>
@@ -55,9 +56,9 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                 protoContent.ProtoService.InterfaceMetaData.Namespace,
             };
 
-            IsWrapper = _protoContent.Config.JsonTranscoding.UseResultWrapper;
-            SuccessCode = _protoContent.Config.JsonTranscoding.SuccessCode;
-            FailureCode = _protoContent.Config.JsonTranscoding.ErrorCode;
+            IsWrapper = Config.ConfigInstance.JsonTranscoding.UseResultWrapper;
+            SuccessCode = Config.ConfigInstance.JsonTranscoding.SuccessCode;
+            FailureCode = Config.ConfigInstance.JsonTranscoding.ErrorCode;
         }
 
         public string ToContent()
@@ -92,18 +93,18 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
         private void CreateClassBegin()
         {
-            _sb.AppendLine($"namespace {_protoContent.Config.Server?.GetNamespace(_protoContent.ProtoService.InterfaceMetaData)}");
+            _sb.AppendLine($"namespace {Config.ConfigInstance.Server?.GetNamespace(_protoContent.ProtoService.InterfaceMetaData)}");
             _sb.AppendLine("{");
 
             //接口注释
             _sb.AppendLine("\t/// <summary>");
-            _sb.AppendLine($"\t/// {Builder.Config.Proto.PropertyDescriptionFunc(_protoContent.ProtoService.InterfaceMetaData)} - {_protoContent.ProtoService.InterfaceMetaData.FullName}");
+            _sb.AppendLine($"\t/// {Config.ConfigInstance.Proto.PropertyDescriptionFunc(_protoContent.ProtoService.InterfaceMetaData)} - {_protoContent.ProtoService.InterfaceMetaData.FullName}");
             _sb.AppendLine("\t/// </summary>");
 
             //附加 Attribute 属性
-            _protoContent.Config.Server?.AppendAttributeToServer?.ForEach(attr => { _sb.AppendLine($"\t{attr}"); });
+            Config.ConfigInstance.Server?.AppendAttributeToServer?.ForEach(attr => { _sb.AppendLine($"\t{attr}"); });
 
-            if (_protoContent.Config.JsonTranscoding.UseJwtAuthentication)
+            if (Config.ConfigInstance.JsonTranscoding.UseJwtAuthentication)
                 _sb.AppendLine("\t[Microsoft.AspNetCore.Authorization.Authorize]");
 
             _sb.AppendLine($"\tpublic class {ServerName} : {_gRpcServiceName}.{_gRpcServiceName}Base");
@@ -141,7 +142,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                 var outParam = BuilderPart.BuildMethodReturnType(IsWrapper, isOutParamEmpty, item.OutParam.GetGRpcName(), EmptyType);
 
                 //注释
-                _sb.AppendLine($"\t\t/// {Builder.Config.Proto.PropertyDescriptionFunc(item.MethodMetaData)}");
+                _sb.AppendLine($"\t\t/// {Config.ConfigInstance.Proto.PropertyDescriptionFunc(item.MethodMetaData)}");
 
                 //方法名
                 _sb.AppendLine($"\t\tpublic override {outParam} {item.Name}({inParam} request, ServerCallContext context)");

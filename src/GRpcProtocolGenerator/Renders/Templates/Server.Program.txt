@@ -28,7 +28,7 @@ namespace {{ config.server.project_name }}
                 Name = "{{ config.json_transcoding.swagger.name }}",
                 Title = "{{ config.json_transcoding.swagger.title }}",
                 Audience = "{{ config.json_transcoding.swagger.audience }}",
-                Scope = new[]
+                Scope = new string[]
                 {
                     {{- for scope in config.json_transcoding.swagger.scope }}
                     "{{ scope }}",
@@ -38,7 +38,7 @@ namespace {{ config.server.project_name }}
                 ClientSecret = "{{ config.json_transcoding.swagger.client_secret }}",
                 IdentityUrl = "{{ config.json_transcoding.swagger.identity_url }}",
                 Version = "{{ config.json_transcoding.swagger.version }}",
-                DocumentXml = new[]
+                DocumentXml = new string[]
                 {
                     {{- for xml in config.json_transcoding.swagger.document_xml }}
                     "{{ xml }}",

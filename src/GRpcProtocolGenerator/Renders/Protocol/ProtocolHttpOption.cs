@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Text;
+using GRpcProtocolGenerator.Models.Configs;
 using GRpcProtocolGenerator.Models.MetaData;
 using GRpcProtocolGenerator.Types;
 
@@ -59,7 +60,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         {
             var route = $"{InterfaceMetaData.FormatServiceName()}" + $"{(string.IsNullOrWhiteSpace(Route) ? "" : "/" + Route)}";
 
-            var newRoute = Builder.Config.JsonTranscoding.RouteFunc?.Invoke(route);
+            var newRoute = Config.ConfigInstance.JsonTranscoding.RouteFunc?.Invoke(route);
             return string.IsNullOrWhiteSpace(newRoute) ? $"\"/api/v1/{route}" + "\"," : $"\"/{newRoute}" + "\",";
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GRpcProtocolGenerator.Models.Configs;
 using GRpcProtocolGenerator.Models.MetaData;
 using GRpcProtocolGenerator.Types;
 
@@ -119,7 +120,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"//{Builder.Config.Proto.PropertyDescriptionFunc(ClassMetaData)} {ClassMetaData?.FullName ?? Name}");
+            sb.AppendLine($"//{Config.ConfigInstance.Proto.PropertyDescriptionFunc(ClassMetaData)} {ClassMetaData?.FullName ?? Name}");
             sb.AppendLine($"message {GetGRpcName()} " + "{");
 
             var index = 1;
@@ -230,13 +231,13 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         public override string ToString()
         {
             //GRpc json，属性小写，否则大写
-            var name = Builder.Config.JsonTranscoding.UseJsonTranscoding ? Name.ToFirstLowString() : Name;
+            var name = Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? Name.ToFirstLowString() : Name;
             return BuilderPart.BuildMessageItem(name,
                 Type,
                 IsArray,
                 IsNullable,
                 Index,
-                Builder.Config.Proto.PropertyDescriptionFunc(CommentMetaData));
+                Config.ConfigInstance.Proto.PropertyDescriptionFunc(CommentMetaData));
         }
 
         public void SetName(string name)
@@ -270,7 +271,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"\t//{Builder.Config.Proto.PropertyDescriptionFunc(EnumMetaData)} {_enumMetaData?.FullName ?? Name}");
+            sb.AppendLine($"\t//{Config.ConfigInstance.Proto.PropertyDescriptionFunc(EnumMetaData)} {_enumMetaData?.FullName ?? Name}");
             sb.AppendLine($"\tenum {this.FormatMessageName()} " + "{");
 
             foreach (var item in Items)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GRpcProtocolGenerator.Common.Attributes;
+using GRpcProtocolGenerator.Models.Configs;
 using GRpcProtocolGenerator.Models.MetaData;
 
 namespace GRpcProtocolGenerator.Renders.Protocol
@@ -36,7 +37,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"//{Builder.Config.Proto.PropertyDescriptionFunc(InterfaceMetaData)} {InterfaceMetaData.FullName}");
+            sb.AppendLine($"//{Config.ConfigInstance.Proto.PropertyDescriptionFunc(InterfaceMetaData)} {InterfaceMetaData.FullName}");
             sb.AppendLine($"service {InterfaceMetaData.FormatServiceName()} " + "{");
 
             foreach (var item in Items)
@@ -75,9 +76,9 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         {
             var sb = new StringBuilder();
             sb.AppendLine();
-            sb.AppendLine($"\t// {Builder.Config.Proto.PropertyDescriptionFunc(MethodMetaData)}");
+            sb.AppendLine($"\t// {Config.ConfigInstance.Proto.PropertyDescriptionFunc(MethodMetaData)}");
 
-            if (Builder.Config.JsonTranscoding.UseJsonTranscoding)
+            if (Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding)
             {
                 sb.Append($"\trpc {Name}({InParam.GetGRpcName()}) returns({OutParam.GetGRpcName()})");
 

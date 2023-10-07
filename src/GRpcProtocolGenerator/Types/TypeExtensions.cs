@@ -1,4 +1,5 @@
 ﻿using GRpcProtocolGenerator.Common.Attributes;
+using GRpcProtocolGenerator.Models.Configs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -199,6 +200,15 @@ namespace GRpcProtocolGenerator.Types
         public static TypeWrapper ToTypeWrapper(this Type type)
         {
             return new TypeWrapper(type);
+        }
+
+        public static string ToProtobufString(this Type type, bool isNullable)
+        {
+            var result = Config.ConfigInstance.Proto.CSharpTypeToProtobufString?.Invoke(type, isNullable);
+            if (!string.IsNullOrWhiteSpace(result))
+                return result;
+
+            return TypeConvert.Convert(type, isNullable);
         }
     }
 

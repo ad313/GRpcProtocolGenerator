@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using GRpcProtocolGenerator.Models.Configs;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GRpcProtocolGenerator.Models.Configs;
 
 namespace GRpcProtocolGenerator.Renders.Protocol
 {
     public class ProtocolContent
     {
-        public readonly Config Config;
-
         public ProtocolService ProtoService { get; }
 
         public List<string> DependencyList { get; set; }
@@ -26,9 +24,8 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         ///// </summary>
         //private const string EnumFileName = "enums";
 
-        public ProtocolContent(ProtocolService protoService, Config config)
+        public ProtocolContent(ProtocolService protoService)
         {
-            Config = config;
             ProtoService = protoService;
             _sbHeader = new StringBuilder();
             DependencyList = new List<string>();
@@ -59,7 +56,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             DependencyList.Insert(0, "google/protobuf/wrappers");
 
             // http api
-            if (Config.JsonTranscoding.UseJsonTranscoding)
+            if (Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding)
                 DependencyList.Insert(2, "google/api/annotations");
 
             ////枚举依赖 枚举统一写入 enums.proto 文件
@@ -70,7 +67,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
             DependencyList = DependencyList.Where(d => d != ProtoService.InterfaceMetaData.FormatServiceProtoFileNameFullPath()).Distinct().ToList();
 
-            CSharpNamespace = Config.Proto.GetCSharpNamespace(ProtoService.InterfaceMetaData);
+            CSharpNamespace = Config.ConfigInstance.Proto.GetCSharpNamespace(ProtoService.InterfaceMetaData);
         }
 
         public string ToContent()
@@ -113,7 +110,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
         private void CreatePackage()
         {
-            _sbHeader.AppendLine($"package {Config.Proto.GetPackageName(ProtoService.InterfaceMetaData)};");
+            _sbHeader.AppendLine($"package {Config.ConfigInstance.Proto.GetPackageName(ProtoService.InterfaceMetaData)};");
         }
 
         private void CreateEmptyLine()
@@ -121,15 +118,15 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             _sbHeader.AppendLine();
         }
 
-        private void CreateLine()
-        {
-            _sbHeader.AppendLine("//----------------------------------------------------------");
-        }
+        //private void CreateLine()
+        //{
+        //    _sbHeader.AppendLine("//----------------------------------------------------------");
+        //}
 
-        private void CreateNote(string note)
-        {
-            _sbHeader.AppendLine($"//{note}------------------------------------------------------");
-        }
+        //private void CreateNote(string note)
+        //{
+        //    _sbHeader.AppendLine($"//{note}------------------------------------------------------");
+        //}
 
         private void CreateContent()
         {

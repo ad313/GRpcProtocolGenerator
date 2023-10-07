@@ -47,7 +47,7 @@ namespace GRpcProtocolGenerator
 
         public Builder CreateBuilder()
         {
-            return new Builder(AssemblyMetaData, _config);
+            return new Builder(AssemblyMetaData);
         }
 
         private void Init()
@@ -75,9 +75,7 @@ namespace GRpcProtocolGenerator
                 Console.WriteLine($"未匹配到程序集：{_config.Assemblies}");
                 return;
             }
-
-            BuilderName.Config = _config;
-
+            
             AssemblyMetaData = new MetaDataResolve().Resolve(assembly, _config);
 
             ShowLog(AssemblyMetaData);

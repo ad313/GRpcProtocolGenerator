@@ -1,6 +1,7 @@
 ﻿using GRpcProtocolGenerator.Models.Configs;
 using GRpcProtocolGenerator.Models.MetaData;
 using GRpcProtocolGenerator.Renders.Protocol;
+using GRpcProtocolGenerator.Types;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -18,12 +19,10 @@ namespace GRpcProtocolGenerator.Renders
         public readonly List<ProtocolService> Services;
 
         private readonly AssemblyMetaData _assemblyMetaData;
-        public static Config Config;
 
-        public Builder(AssemblyMetaData assemblyMetaData, Config config)
+        public Builder(AssemblyMetaData assemblyMetaData)
         {
             _assemblyMetaData = assemblyMetaData;
-            Config = config;
 
             ClassMessages = new ConcurrentDictionary<string, ProtocolMessage>();
             EnumMessages = new ConcurrentDictionary<string, EnumProtocolMessage>();
@@ -117,7 +116,7 @@ namespace GRpcProtocolGenerator.Renders
         /// <returns></returns>
         private ProtocolMessage ProtoMessageWrapper(InterfaceMetaData interfaceMetaData, ProtocolMessage msg)
         {
-            if (Config.JsonTranscoding.UseResultWrapper == false)
+            if (Config.ConfigInstance.JsonTranscoding?.UseResultWrapper != true)
                 return msg;
 
             ProtocolItemMessage CreateCodeProtocolItemMessage() => new ProtocolItemMessage(typeof(int), false, false,
@@ -201,7 +200,7 @@ namespace GRpcProtocolGenerator.Renders
             //重新生成名称
             if (paramList.Count > 0)
             {
-                var reName = Config.Proto?.MethodInOutParamNameFunc?.Invoke(methodMetaData, paramList);
+                var reName = Config.ConfigInstance.Proto?.MethodInOutParamNameFunc?.Invoke(methodMetaData, paramList);
                 if (!string.IsNullOrWhiteSpace(reName))
                 {
                     newName = reName;

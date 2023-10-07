@@ -62,7 +62,8 @@ namespace GRpcProtocolGenerator.Resolve
         {
             ArgumentNullException.ThrowIfNull(jsonTranscodingConfigAction, nameof(jsonTranscodingConfigAction));
 
-            Config.JsonTranscoding = new JsonTranscodingConfig();
+            Config.JsonTranscoding ??= new JsonTranscodingConfig();
+            Config.JsonTranscoding.UseJsonTranscoding = true;
 
             jsonTranscodingConfigAction.Invoke(Config.JsonTranscoding);
 

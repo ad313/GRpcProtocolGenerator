@@ -1,4 +1,5 @@
-﻿using GRpcProtocolGenerator.Models.MetaData;
+﻿using GRpcProtocolGenerator.Common;
+using GRpcProtocolGenerator.Models.MetaData;
 using System;
 
 namespace GRpcProtocolGenerator.Models.Configs
@@ -8,6 +9,11 @@ namespace GRpcProtocolGenerator.Models.Configs
     /// </summary>
     public class Config
     {
+        /// <summary>
+        /// 配置实例
+        /// </summary>
+        public static Config ConfigInstance { get; private set; }
+
         /// <summary>
         /// 宿主程序运行根目录，用于相对路径定位到具体的路径
         /// </summary>
@@ -54,6 +60,10 @@ namespace GRpcProtocolGenerator.Models.Configs
                 throw new ArgumentNullException(nameof(currentPath));
 
             CurrentPath = currentPath;
+
+            JsonTranscoding = new JsonTranscodingConfig() { Swagger = new SwaggerConfig() };
+
+            ConfigInstance = this;
         }
 
         public void Check()

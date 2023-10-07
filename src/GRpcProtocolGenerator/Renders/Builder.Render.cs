@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using GRpcProtocolGenerator.Models.Configs;
 
 namespace GRpcProtocolGenerator.Renders
 {
@@ -17,19 +18,19 @@ namespace GRpcProtocolGenerator.Renders
         /// <returns></returns>
         public async Task RenderAsync()
         {
-            BuilderPath.Init(Config);
+            BuilderPath.Init(Config.ConfigInstance);
 
             foreach (var service in Services.OrderBy(d => d.InterfaceMetaData.FullName))
             {
                 //proto
-                var protoContent = new ProtocolContent(service, Config);
+                var protoContent = new ProtocolContent(service);
                 var content = protoContent.ToContent();
                 await BuilderPath.CreateFile(service.InterfaceMetaData.FormatServiceProtoFileName(), content);
                 Console.WriteLine(service.InterfaceMetaData.FormatServiceProtoFileName());
                 Console.WriteLine(content);
 
                 //server
-                if (Config.HasServer)
+                if (Config.ConfigInstance.HasServer)
                 {
                     var server = new ProtocolServiceImpl(protoContent);
                     var serverContent = server.ToContent();
@@ -38,19 +39,19 @@ namespace GRpcProtocolGenerator.Renders
                 }
             }
 
-            if (Config.HasServer)
+            if (Config.ConfigInstance.HasServer)
             {
                 //mapper
-                var mapperString = await ScribanHelper.Render(new { data = Config.Server.ProjectName }, "Server.MapperRegister");
+                var mapperString = await ScribanHelper.Render(new { data = Config.ConfigInstance.Server.ProjectName }, "Server.MapperRegister");
                 await BuilderPath.CreateServerMapperFile("DefaultMapperConfig", mapperString);
 
                 // program
-                var servers = Services.Select(d => new ProtocolServiceImpl(new ProtocolContent(d, Config))).ToList();
-                var serverProgramString = await ScribanHelper.Render(new { config = Config, servers = servers }, "Server.Program");
+                var servers = Services.Select(d => new ProtocolServiceImpl(new ProtocolContent(d))).ToList();
+                var serverProgramString = await ScribanHelper.Render(new { config = Config.ConfigInstance, servers = servers }, "Server.Program");
                 var serverProgramFileName = "Program";
 
                 // 如果 program.cs 已存在，则生成 programNew.cs，不覆盖原来的 program.cs
-                if (File.Exists(Config.Server.GetProgramFilePath()))
+                if (File.Exists(Config.ConfigInstance.Server.GetProgramFilePath()))
                 {
                     serverProgramString = "/*" + Environment.NewLine + serverProgramString + Environment.NewLine + "*/";
                     serverProgramFileName += "New";
@@ -60,11 +61,11 @@ namespace GRpcProtocolGenerator.Renders
 
 
                 // server csproj
-                var serverCsprojString = await ScribanHelper.Render(new { config = Config, servers = Services }, "Server.csproj");
-                var serverCsprojFileName = Config.Server.ProjectName + ".csproj";
+                var serverCsprojString = await ScribanHelper.Render(new { config = Config.ConfigInstance, servers = Services }, "Server.csproj");
+                var serverCsprojFileName = Config.ConfigInstance.Server.ProjectName + ".csproj";
 
                 // 如果 csproj 已存在，则生成 csprojNew，不覆盖原来的 csproj
-                if (File.Exists(Config.Server.GetCsprojFilePath()))
+                if (File.Exists(Config.ConfigInstance.Server.GetCsprojFilePath()))
                 {
                     serverCsprojFileName += "New";
                 }
@@ -73,11 +74,11 @@ namespace GRpcProtocolGenerator.Renders
             }
 
             // proto csproj
-            var protoCsprojString = await ScribanHelper.Render(new { config = Config, servers = Services }, "Protocol.csproj");
-            var protoCsprojFileName = Config.Proto.ProjectName + ".csproj";
+            var protoCsprojString = await ScribanHelper.Render(new { config = Config.ConfigInstance, servers = Services }, "Protocol.csproj");
+            var protoCsprojFileName = Config.ConfigInstance.Proto.ProjectName + ".csproj";
 
             // 如果 csproj 已存在，则生成 csprojNew，不覆盖原来的 csproj
-            if (File.Exists(Config.Proto.GetCsprojFilePath()))
+            if (File.Exists(Config.ConfigInstance.Proto.GetCsprojFilePath()))
             {
                 protoCsprojFileName += "New";
             }
@@ -85,7 +86,7 @@ namespace GRpcProtocolGenerator.Renders
             await BuilderPath.CreateProtoRootFile(protoCsprojFileName, protoCsprojString);
 
             //google api
-            if (Config.JsonTranscoding.UseJsonTranscoding)
+            if (Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding)
             {
                 var annotations = await ScribanHelper.Render(new { }, "google.api.annotations");
                 var http = await ScribanHelper.Render(new { }, "google.api.http");
@@ -94,7 +95,7 @@ namespace GRpcProtocolGenerator.Renders
                 await BuilderPath.CreateProtoGoogleApiFile("http.proto", http);
 
                 //swagger
-                var swaggerProgramString = await ScribanHelper.Render(new { config = Config }, "Server.Swagger");
+                var swaggerProgramString = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Server.Swagger");
                 var swaggerProgramFileName = "SwaggerExtensions";
                 await BuilderPath.CreateServerRootFile(swaggerProgramFileName + ".cs", swaggerProgramString);
             }

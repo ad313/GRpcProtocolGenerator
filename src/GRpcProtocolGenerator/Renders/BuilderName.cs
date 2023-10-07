@@ -1,7 +1,6 @@
 ﻿using GRpcProtocolGenerator.Models.Configs;
 using GRpcProtocolGenerator.Models.MetaData;
 using GRpcProtocolGenerator.Renders.Protocol;
-using GRpcProtocolGenerator.Types;
 using System;
 using System.Text;
 
@@ -9,13 +8,11 @@ namespace GRpcProtocolGenerator.Renders
 {
     public static class BuilderName
     {
-        public static Config Config = null;
-
         public static string FormatServiceName(this InterfaceMetaData meta)
         {
             ArgumentNullException.ThrowIfNull(meta, nameof(meta));
 
-            return Config?.Proto?.ServiceNameFunc?.Invoke(meta) ?? meta.Name;
+            return Config.ConfigInstance?.Proto?.ServiceNameFunc?.Invoke(meta) ?? meta.Name;
         }
 
         public static string FormatServiceProtoFileName(this InterfaceMetaData meta)
@@ -25,8 +22,8 @@ namespace GRpcProtocolGenerator.Renders
 
         public static string FormatServiceProtoFileNameFullPath(this InterfaceMetaData meta)
         {
-            return Config.Proto.UseProtoDirectoryWhenImportPackage ?
-                $"{Config.Proto.ProtoDirectory}/{meta.FormatServiceName().ToSnakeString()}" :
+            return Config.ConfigInstance.Proto.UseProtoDirectoryWhenImportPackage ?
+                $"{Config.ConfigInstance.Proto.ProtoDirectory}/{meta.FormatServiceName().ToSnakeString()}" :
                 $"{meta.FormatServiceName().ToSnakeString()}";
         }
 
@@ -34,7 +31,7 @@ namespace GRpcProtocolGenerator.Renders
         {
             ArgumentNullException.ThrowIfNull(method, nameof(method));
 
-            return Config?.Proto?.MethodNameFunc?.Invoke(method) ?? method.Name;
+            return Config.ConfigInstance?.Proto?.MethodNameFunc?.Invoke(method) ?? method.Name;
         }
 
         public static string FormatMessageName(this ProtocolMessage meta)
@@ -51,18 +48,9 @@ namespace GRpcProtocolGenerator.Renders
         {
             ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-            return Config?.Proto?.OriginalClassNameFunc?.Invoke(name) ?? name;
+            return Config.ConfigInstance?.Proto?.OriginalClassNameFunc?.Invoke(name) ?? name;
         }
-
-        public static string ToProtobufString(this Type type, bool isNullable)
-        {
-            var result = Config.Proto.CSharpTypeToProtobufString?.Invoke(type, isNullable);
-            if (!string.IsNullOrWhiteSpace(result))
-                return result;
-
-            return TypeConvert.Convert(type, isNullable);
-        }
-
+        
         public static string ToSnakeString(this string str)
         {
             var builder = new StringBuilder();
