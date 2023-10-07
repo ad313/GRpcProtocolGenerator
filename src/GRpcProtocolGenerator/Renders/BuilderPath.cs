@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using GRpcProtocolGenerator.Resolve.Configs;
+using GRpcProtocolGenerator.Models.Configs;
 
 namespace GRpcProtocolGenerator.Renders
 {

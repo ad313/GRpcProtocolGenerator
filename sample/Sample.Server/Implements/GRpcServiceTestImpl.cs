@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using Google.Protobuf.WellKnownTypes;
 using Mapster;
-using Sample.Grpc.Protocol;
+using Sample.GRpc.Protocol;
 using Sample.Services;
 
 namespace Sample.Server.Implements
@@ -52,7 +52,7 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<GRpcServiceTest_EmptyWrapper> MethodWithInputReturnVoid3Sync(GrpcSampleClass request, ServerCallContext context)
+		public override async Task<GRpcServiceTest_EmptyWrapper> MethodWithInputReturnVoid3Sync(GRpcSampleClass request, ServerCallContext context)
 		{
 			_service.MethodWithInputReturnVoid3Sync(request?.Adapt<Sample.Services.Models.SampleClass>());
 			return new GRpcServiceTest_EmptyWrapper { Code = 1 };
@@ -101,7 +101,7 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<GRpcServiceTest_EmptyWrapper> MethodWithInputReturnVoid3(GrpcSampleClass request, ServerCallContext context)
+		public override async Task<GRpcServiceTest_EmptyWrapper> MethodWithInputReturnVoid3(GRpcSampleClass request, ServerCallContext context)
 		{
 			await _service.MethodWithInputReturnVoid3Async(request?.Adapt<Sample.Services.Models.SampleClass>());
 			return new GRpcServiceTest_EmptyWrapper { Code = 1 };
@@ -144,29 +144,29 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<GRpcServiceTest_GrpcSampleClassWrapper> MethodWithInputReturnClassSync(GRpcServiceTest_MethodWithInputReturnClassSync_Request4 request, ServerCallContext context)
+		public override async Task<GRpcServiceTest_GRpcSampleClassWrapper> MethodWithInputReturnClassSync(GRpcServiceTest_MethodWithInputReturnClassSync_Request4 request, ServerCallContext context)
 		{
 			var data = _service.MethodWithInputReturnClassSync(request.A, request.B);
-			return new GRpcServiceTest_GrpcSampleClassWrapper
+			return new GRpcServiceTest_GRpcSampleClassWrapper
 			{
 				Code = 1,
-				Data = data.Adapt<GrpcSampleClass>()
+				Data = data.Adapt<GRpcSampleClass>()
 			};
 		}
 
 		/// 
-		public override async Task<GRpcServiceTestListSampleClassResponse> MethodWithInputReturnListClassSync(GrpcSampleClass request, ServerCallContext context)
+		public override async Task<GRpcServiceTestListSampleClassResponse> MethodWithInputReturnListClassSync(GRpcSampleClass request, ServerCallContext context)
 		{
 			var data = _service.MethodWithInputReturnListClassSync(request?.Adapt<Sample.Services.Models.SampleClass>());
 			return new GRpcServiceTestListSampleClassResponse
 			{
 				Code = 1,
-				Data = { data.Adapt<List<GrpcSampleClass>>() }
+				Data = { data.Adapt<List<GRpcSampleClass>>() }
 			};
 		}
 
 		/// 
-		public override async Task<GRpcServiceTestListInt32Response> MethodWithInputReturnListIntSync(GrpcSampleClass request, ServerCallContext context)
+		public override async Task<GRpcServiceTestListInt32Response> MethodWithInputReturnListIntSync(GRpcSampleClass request, ServerCallContext context)
 		{
 			var data = _service.MethodWithInputReturnListIntSync(request?.Adapt<Sample.Services.Models.SampleClass>());
 			return new GRpcServiceTestListInt32Response
@@ -210,40 +210,40 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<GRpcServiceTest_GrpcSampleClassWrapper> MethodWithInputReturnClass(GRpcServiceTest_MethodWithInputReturnClassAsync_Request3 request, ServerCallContext context)
+		public override async Task<GRpcServiceTest_GRpcSampleClassWrapper> MethodWithInputReturnClass(GRpcServiceTest_MethodWithInputReturnClassAsync_Request3 request, ServerCallContext context)
 		{
 			var data = await _service.MethodWithInputReturnClassAsync(request.A, request.B);
-			return new GRpcServiceTest_GrpcSampleClassWrapper
+			return new GRpcServiceTest_GRpcSampleClassWrapper
 			{
 				Code = 1,
-				Data = data.Adapt<GrpcSampleClass>()
+				Data = data.Adapt<GRpcSampleClass>()
 			};
 		}
 
 		/// 
-		public override async Task<GRpcServiceTest_GrpcNullableClassWrapper> MethodWithInputReturnNullableClass(GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request10 request, ServerCallContext context)
+		public override async Task<GRpcServiceTest_GRpcNullableClassWrapper> MethodWithInputReturnNullableClass(GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request10 request, ServerCallContext context)
 		{
 			var data = await _service.MethodWithInputReturnNullableClassAsync(request.A, request.B);
-			return new GRpcServiceTest_GrpcNullableClassWrapper
+			return new GRpcServiceTest_GRpcNullableClassWrapper
 			{
 				Code = 1,
-				Data = data.Adapt<GrpcNullableClass>()
+				Data = data.Adapt<GRpcNullableClass>()
 			};
 		}
 
 		/// 
-		public override async Task<GRpcServiceTestListSampleClassResponse> MethodWithInputReturnListClass(GrpcSampleClass request, ServerCallContext context)
+		public override async Task<GRpcServiceTestListSampleClassResponse> MethodWithInputReturnListClass(GRpcSampleClass request, ServerCallContext context)
 		{
 			var data = await _service.MethodWithInputReturnListClassAsync(request?.Adapt<Sample.Services.Models.SampleClass>());
 			return new GRpcServiceTestListSampleClassResponse
 			{
 				Code = 1,
-				Data = { data.Adapt<List<GrpcSampleClass>>() }
+				Data = { data.Adapt<List<GRpcSampleClass>>() }
 			};
 		}
 
 		/// 
-		public override async Task<GRpcServiceTestListInt32Response> MethodWithInputReturnListInt(GrpcSampleClass request, ServerCallContext context)
+		public override async Task<GRpcServiceTestListInt32Response> MethodWithInputReturnListInt(GRpcSampleClass request, ServerCallContext context)
 		{
 			var data = await _service.MethodWithInputReturnListIntAsync(request?.Adapt<Sample.Services.Models.SampleClass>());
 			return new GRpcServiceTestListInt32Response
@@ -290,7 +290,7 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<GRpcServiceTest_EmptyWrapper> TestExtClass2(GrpcExtClass2 request, ServerCallContext context)
+		public override async Task<GRpcServiceTest_EmptyWrapper> TestExtClass2(GRpcExtClass2 request, ServerCallContext context)
 		{
 			_service.TestExtClass2(request?.Adapt<Sample.Services.Models.ExtClass2>());
 			return new GRpcServiceTest_EmptyWrapper { Code = 1 };

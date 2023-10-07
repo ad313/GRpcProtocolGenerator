@@ -1,9 +1,9 @@
-﻿using System;
-using System.Text;
+﻿using GRpcProtocolGenerator.Models.Configs;
 using GRpcProtocolGenerator.Models.MetaData;
 using GRpcProtocolGenerator.Renders.Protocol;
-using GRpcProtocolGenerator.Resolve.Configs;
 using GRpcProtocolGenerator.Types;
+using System;
+using System.Text;
 
 namespace GRpcProtocolGenerator.Renders
 {

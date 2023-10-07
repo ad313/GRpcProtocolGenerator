@@ -1,7 +1,7 @@
-﻿using GRpcProtocolGenerator.Models.MetaData;
+﻿using GRpcProtocolGenerator.Models.Configs;
+using GRpcProtocolGenerator.Models.MetaData;
 using GRpcProtocolGenerator.Renders;
 using GRpcProtocolGenerator.Resolve;
-using GRpcProtocolGenerator.Resolve.Configs;
 using System;
 using System.Linq;
 using System.Text;
@@ -22,6 +22,32 @@ namespace GRpcProtocolGenerator
             _isContinue = enable?.Invoke() == true;
 
             Init();
+        }
+
+        public GeneratorHandler(string currentPath, Action<ConfigBuilder> configBuilderAction)
+        {
+            ArgumentNullException.ThrowIfNull(configBuilderAction, nameof(configBuilderAction));
+
+            var configBuilder = new ConfigBuilder(currentPath);
+            configBuilderAction.Invoke(configBuilder);
+
+            _config = configBuilder.Config;
+            _isContinue = true;
+
+            Init();
+        }
+
+        public async Task GeneratorAsync()
+        {
+            if (!_isContinue)
+                return;
+
+            await CreateBuilder().RenderAsync();
+        }
+
+        public Builder CreateBuilder()
+        {
+            return new Builder(AssemblyMetaData, _config);
         }
 
         private void Init()
@@ -55,19 +81,6 @@ namespace GRpcProtocolGenerator
             AssemblyMetaData = new MetaDataResolve().Resolve(assembly, _config);
 
             ShowLog(AssemblyMetaData);
-        }
-
-        public async Task GeneratorAsync()
-        {
-            if (!_isContinue)
-                return;
-
-            await CreateBuilder().RenderAsync();
-        }
-
-        public Builder CreateBuilder()
-        {
-            return new Builder(AssemblyMetaData, _config);
         }
 
         private void ShowLog(AssemblyMetaData assemblyMetaData)

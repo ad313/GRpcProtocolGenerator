@@ -2,12 +2,10 @@ using GRpcProtocolGenerator.Common;
 using GRpcProtocolGenerator.Common.Attributes;
 using GRpcProtocolGenerator.Models.MetaData;
 using GRpcProtocolGenerator.Renders;
-using GRpcProtocolGenerator.Resolve;
 using Sample.Services;
 using Sample.Services.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using GRpcProtocolGenerator.Resolve.Configs;
 
 namespace GRpcProtocolGenerator.Test.Metadatas
 {
@@ -23,29 +21,32 @@ namespace GRpcProtocolGenerator.Test.Metadatas
 
             var basePath = "123";
             var project = "Sample";
-            Handler = new GeneratorHandler(new Config(basePath)
+
+            Handler = new GeneratorHandler(basePath, builder =>
             {
-                Assemblies = $"{project}.Services",
-                Proto = new ProtocolConfig()
+                //配置目标程序集名称
+                builder.SetAssembly($"{project}.Services");
+
+                //配置 protocol
+                builder.SetProtocolConfig(proto =>
                 {
-                    Output = $"../{project}.Protocol",
-                    ProtoDirectory = "protos",
-                    PackageNameFunc = meta => "_grpc",
-                    CSharpNamespaceFunc = meta => $"{project}.Grpc.Proto",
-                    PropertyDescriptionFunc = meta => meta?.Display ?? meta?.DisplayName ?? meta?.Description,
-                    ServiceNameFunc = meta => "Grpc" + meta.Name.TrimStart('I'),
-                    UseProtoDirectoryWhenImportPackage = true,
-                    MethodNameFunc = meta =>
+                    proto.Output = $"../{project}.Protocol";
+                    proto.ProtoDirectory = "protos";
+                    proto.PackageNameFunc = meta => "_grpc";
+                    proto.CSharpNamespaceFunc = meta => $"{project}.GRpc.Protocol";
+                    proto.PropertyDescriptionFunc = meta => meta?.Display ?? meta?.DisplayName ?? meta?.Description;
+                    proto.ServiceNameFunc = meta => "GRpc" + meta.Name.TrimStart('I');
+                    proto.UseProtoDirectoryWhenImportPackage = true;
+                    proto.MethodNameFunc = meta =>
                     {
                         if (meta.Name.EndsWith("Async"))
                         {
                             return meta.Name.Substring(0, meta.Name.Length - 5);
-                            //return meta.Name + "Method";
                         }
 
                         return meta.Name;
-                    },
-                    MethodInOutParamNameFunc = (method, props) =>
+                    };
+                    proto.MethodInOutParamNameFunc = (method, props) =>
                     {
                         //传入
                         if (props.Count == 1 && !props[0].TypeWrapper.IsArray &&
@@ -79,30 +80,26 @@ namespace GRpcProtocolGenerator.Test.Metadatas
                         }
 
                         return null;
-                    },
-                    OriginalClassNameFunc = name => "Grpc" + name.Replace("`1", "").Replace("`", "")
-                },
-                Server = new ServerConfig()
+                    };
+                    proto.OriginalClassNameFunc = name => "GRpc" + name.Replace("`1", "").Replace("`", "");
+                });
+
+                builder.SetServerConfig(server =>
                 {
-                    Output = $"../{project}.Server",
-                    ServerDirectory = "Server",
-                    NamespaceFunc = meta => $"{project}.Server.Server",
-                    //AppendAttributeToServer = new List<string>() { "[SaiLing.Grpc.Server.GrpcServer]" }
-                },
-                Filter = new Filter()
+                    server.Output = $"../{project}.Server";
+                    server.ImplementsDirectory = "Implements";
+                    server.NamespaceFunc = meta => $"{project}.Server.Implements";
+                });
+
+                builder.SetJsonTranscoding(json =>
                 {
-                    InterfaceFilterFunc = meta => true,
-                    MethodFilterFunc = (interfaceMeta, methodMeta) => true
-                },
-                JsonTranscoding = new JsonTranscodingConfig()
-                {
-                    UseJsonTranscoding = true,
-                    UseResultWrapper = true,
-                    UseJwtAuthentication = true,
-                    SuccessCode = 1,
-                    ErrorCode = 2,
-                    //RouteFunc = route => $"{project}/api/v1/{route}"
-                    Swagger = new SwaggerConfig()
+                    json.UseJsonTranscoding = true;
+                    json.UseResultWrapper = true;
+                    json.UseJwtAuthentication = true;
+                    json.SuccessCode = 1;
+                    json.ErrorCode = 2;
+                    json.RouteFunc = route => $"{project}/api/v1/{route}";
+                    json.Swagger = new SwaggerConfig()
                     {
                         SwaggerConfigType = SwaggerConfigType.IdentityLogin,
                         Name = "GrpcServer + Restful api",
@@ -115,13 +112,19 @@ namespace GRpcProtocolGenerator.Test.Metadatas
                         Version = "v1",
                         DocumentXml = new[]
                         {
-                            $"GrpcService.Server.xml",
-                            "GrpcService.Proto.xml"
+                            $"{project}.Server.xml",
+                            $"{project}.Protocol.xml"
                         }
-                    }
-                }
-            }, () => true);
+                    };
+                });
 
+                builder.SetFilter(filter =>
+                {
+                    filter.InterfaceFilterFunc = meta => true;
+                    filter.MethodFilterFunc = (interfaceMeta, methodMeta) => true;
+                });
+            });
+            
             _assemblyMetaData = Handler.AssemblyMetaData;
         }
 

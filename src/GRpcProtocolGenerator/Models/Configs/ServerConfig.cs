@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace GRpcProtocolGenerator.Resolve.Configs
+namespace GRpcProtocolGenerator.Models.Configs
 {
     /// <summary>
     /// gRpc 服务端生成配置
@@ -14,7 +14,7 @@ namespace GRpcProtocolGenerator.Resolve.Configs
         /// <summary>
         /// 宿主程序运行根目录，用于相对路径定位到具体的路径
         /// </summary>
-        public string BasePath { get; set; }
+        public string CurrentPath { get; private set; }
 
         /// <summary>
         /// gRpc Server 文件 输出路径，路径的最后一层就是项目名称
@@ -32,26 +32,39 @@ namespace GRpcProtocolGenerator.Resolve.Configs
         public string ProjectName { get; private set; }
 
         /// <summary>
-        /// 存放 Server 的文件夹
+        /// 存放 grpc service 实现
         /// </summary>
-        public string ServerDirectory { get; set; }
+        public string ImplementsDirectory { get; set; }
 
         /// <summary>
         /// 给 server 附加 属性
         /// </summary>
         public List<string> AppendAttributeToServer { get; set; } = new List<string>();
 
+        /// <summary>
+        /// 初始化，传入宿主程序地址，不是bin地址
+        /// </summary>
+        /// <param name="currentPath">宿主程序地址，不是bin地址</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public ServerConfig(string currentPath)
+        {
+            if (string.IsNullOrWhiteSpace(currentPath))
+                throw new ArgumentNullException(nameof(currentPath));
+
+            CurrentPath = currentPath;
+        }
+
         public void Check()
         {
             ArgumentNullException.ThrowIfNull(Output, nameof(Output));
 
             ProjectName = Output?.Split('/').LastOrDefault() ?? "";
-            OutputFullPath = Path.GetFullPath(Path.Combine(BasePath, Output));
+            OutputFullPath = Path.GetFullPath(Path.Combine(CurrentPath, Output));
         }
 
         public string GetServerFileOutputPath()
         {
-            var path = Path.Combine(OutputFullPath, ServerDirectory ?? "");
+            var path = Path.Combine(OutputFullPath, ImplementsDirectory ?? "");
             return Path.GetFullPath(path);
         }
 
@@ -82,7 +95,7 @@ namespace GRpcProtocolGenerator.Resolve.Configs
 
         public string GetServerNamespace()
         {
-            return $"{ProjectName}.{ServerDirectory}";
+            return $"{ProjectName}.{ImplementsDirectory}";
         }
 
         #endregion

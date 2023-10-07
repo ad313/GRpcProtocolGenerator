@@ -1,7 +1,7 @@
 ﻿using GRpcProtocolGenerator.Models.MetaData;
 using System;
 
-namespace GRpcProtocolGenerator.Resolve.Configs
+namespace GRpcProtocolGenerator.Models.Configs
 {
     /// <summary>
     /// 生成相关配置
@@ -11,7 +11,7 @@ namespace GRpcProtocolGenerator.Resolve.Configs
         /// <summary>
         /// 宿主程序运行根目录，用于相对路径定位到具体的路径
         /// </summary>
-        public string BasePath { get; }
+        public string CurrentPath { get; }
 
         /// <summary>
         /// 提取接口的程序集集合
@@ -46,14 +46,14 @@ namespace GRpcProtocolGenerator.Resolve.Configs
         /// <summary>
         /// 初始化，传入宿主程序地址，不是bin地址
         /// </summary>
-        /// <param name="basePath">宿主程序地址，不是bin地址</param>
+        /// <param name="currentPath">宿主程序地址，不是bin地址</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public Config(string basePath)
+        public Config(string currentPath)
         {
-            if (string.IsNullOrWhiteSpace(basePath))
-                throw new ArgumentNullException(nameof(basePath));
+            if (string.IsNullOrWhiteSpace(currentPath))
+                throw new ArgumentNullException(nameof(currentPath));
 
-            BasePath = basePath;
+            CurrentPath = currentPath;
         }
 
         public void Check()
@@ -62,11 +62,6 @@ namespace GRpcProtocolGenerator.Resolve.Configs
                 throw new Exception("请指定程序集");
 
             ArgumentNullException.ThrowIfNull(Proto, nameof(Proto));
-
-            Proto.BasePath = BasePath;
-
-            if (Server != null)
-                Server.BasePath = BasePath;
         }
     }
 

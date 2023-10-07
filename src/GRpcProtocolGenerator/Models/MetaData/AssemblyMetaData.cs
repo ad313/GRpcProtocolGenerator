@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using GRpcProtocolGenerator.Resolve.Configs;
+using GRpcProtocolGenerator.Models.Configs;
 using GRpcProtocolGenerator.Types;
 
 namespace GRpcProtocolGenerator.Models.MetaData

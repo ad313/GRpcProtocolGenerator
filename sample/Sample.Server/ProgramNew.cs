@@ -26,7 +26,7 @@ namespace Sample.Server
             var config = new SwaggerConfig()
             {
                 SwaggerConfigType = SwaggerConfigType.IdentityLogin,
-                Name = "GrpcServer + Restful api",
+                Name = "GRpc Server + Restful api",
                 Title = "gRPC transcoding",
                 Audience = "attendancesystem",
                 Scope = new[]

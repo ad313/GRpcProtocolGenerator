@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GRpcProtocolGenerator.Models.Configs;
 using GRpcProtocolGenerator.Models.MetaData;
-using GRpcProtocolGenerator.Resolve.Configs;
 using GRpcProtocolGenerator.Types;
 using Namotion.Reflection;
 

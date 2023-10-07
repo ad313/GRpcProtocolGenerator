@@ -1,7 +1,7 @@
 ﻿using GRpcProtocolGenerator.Common;
 using System;
 
-namespace GRpcProtocolGenerator.Resolve.Configs
+namespace GRpcProtocolGenerator.Models.Configs
 {
     /// <summary>
     /// gRpc Json 转码

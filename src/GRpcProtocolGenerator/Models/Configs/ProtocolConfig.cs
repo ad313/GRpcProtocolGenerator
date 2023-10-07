@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace GRpcProtocolGenerator.Resolve.Configs
+namespace GRpcProtocolGenerator.Models.Configs
 {
     /// <summary>
     /// 生成proto 配置
@@ -14,7 +14,7 @@ namespace GRpcProtocolGenerator.Resolve.Configs
         /// <summary>
         /// 宿主程序运行根目录，用于相对路径定位到具体的路径
         /// </summary>
-        public string BasePath { get; set; }
+        public string CurrentPath { get; private set; }
 
         /// <summary>
         /// proto 文件 输出路径，路径的最后一层就是项目名称
@@ -41,12 +41,25 @@ namespace GRpcProtocolGenerator.Resolve.Configs
         /// </summary>
         public bool UseProtoDirectoryWhenImportPackage { get; set; } = true;
 
+        /// <summary>
+        /// 初始化，传入宿主程序地址，不是bin地址
+        /// </summary>
+        /// <param name="currentPath">宿主程序地址，不是bin地址</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public ProtocolConfig(string currentPath)
+        {
+            if (string.IsNullOrWhiteSpace(currentPath))
+                throw new ArgumentNullException(nameof(currentPath));
+
+            CurrentPath = currentPath;
+        }
+
         public void Check()
         {
             ArgumentNullException.ThrowIfNull(Output, nameof(Output));
 
             ProjectName = Output?.Split('/').LastOrDefault() ?? "";
-            OutputFullPath = Path.GetFullPath(Path.Combine(BasePath, Output));
+            OutputFullPath = Path.GetFullPath(Path.Combine(CurrentPath, Output));
         }
 
         /// <summary>

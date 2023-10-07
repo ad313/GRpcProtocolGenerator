@@ -1,12 +1,12 @@
-﻿using System;
+﻿using GRpcProtocolGenerator.Models.Configs;
+using GRpcProtocolGenerator.Models.MetaData;
+using GRpcProtocolGenerator.Renders.Protocol;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using GRpcProtocolGenerator.Models.MetaData;
-using GRpcProtocolGenerator.Renders.Protocol;
-using GRpcProtocolGenerator.Resolve.Configs;
 
 namespace GRpcProtocolGenerator.Renders
 {
