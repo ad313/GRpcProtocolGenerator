@@ -1,23 +1,24 @@
-﻿using System;
+﻿using GRpcProtocolGenerator.Models.MetaData;
+using GRpcProtocolGenerator.Renders;
+using GRpcProtocolGenerator.Resolve;
+using GRpcProtocolGenerator.Resolve.Configs;
+using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GRpcProtocolGenerator.Models.MetaData;
-using GRpcProtocolGenerator.Renders;
 
 namespace GRpcProtocolGenerator
 {
     public class GeneratorHandler
     {
-        private readonly GeneratorConfig _assemblyLoaderConfig;
+        private readonly Config _config;
         private readonly bool _isContinue = false;
 
         public AssemblyMetaData AssemblyMetaData { get; private set; }
-
-
-        public GeneratorHandler(GeneratorConfig assemblyLoaderConfig, Func<bool> enable)
+        
+        public GeneratorHandler(Config config, Func<bool> enable)
         {
-            _assemblyLoaderConfig = assemblyLoaderConfig;
+            _config = config;
             _isContinue = enable?.Invoke() == true;
 
             Init();
@@ -28,32 +29,30 @@ namespace GRpcProtocolGenerator
             if (!_isContinue)
                 return;
 
-            ArgumentNullException.ThrowIfNull(_assemblyLoaderConfig, nameof(_assemblyLoaderConfig));
-            ArgumentNullException.ThrowIfNull(_assemblyLoaderConfig.Proto, nameof(_assemblyLoaderConfig.Proto));
-            _assemblyLoaderConfig.Check();
-            _assemblyLoaderConfig.Proto.Check();
-            _assemblyLoaderConfig.Server?.Check();
+            ArgumentNullException.ThrowIfNull(_config, nameof(_config));
+            ArgumentNullException.ThrowIfNull(_config.Proto, nameof(_config.Proto));
+            _config.Check();
+            _config.Proto.Check();
+            _config.Server?.Check();
 
             //获取当前作用域内所有程序集
             var allAssemblies = AppDomain.CurrentDomain.GetAssemblies();
 
             //过滤
-            var assembly = allAssemblies.FirstOrDefault(d => _assemblyLoaderConfig.Assemblies.Contains(d.ManifestModule.ToString().Replace(".dll", "")));
+            var assembly = allAssemblies.FirstOrDefault(d => _config.Assemblies.Contains(d.ManifestModule.ToString().Replace(".dll", "")));
             if (assembly != null)
             {
                 Console.WriteLine($"匹配到程序集：{assembly.FullName}");
             }
             else
             {
-                Console.WriteLine($"未匹配到程序集：{_assemblyLoaderConfig.Assemblies}");
+                Console.WriteLine($"未匹配到程序集：{_config.Assemblies}");
                 return;
             }
 
-            NameExtensions.config = _assemblyLoaderConfig;
+            BuilderName.Config = _config;
 
-            AssemblyMetaData = new MetaDataResolve()
-                .Resolve(assembly)
-                .Filter(_assemblyLoaderConfig);
+            AssemblyMetaData = new MetaDataResolve().Resolve(assembly, _config);
 
             ShowLog(AssemblyMetaData);
         }
@@ -63,12 +62,12 @@ namespace GRpcProtocolGenerator
             if (!_isContinue)
                 return;
 
-            await CreateCodeRender().RenderAsync();
+            await CreateBuilder().RenderAsync();
         }
 
-        public CodeRender CreateCodeRender()
+        public Builder CreateBuilder()
         {
-            return new CodeRender(AssemblyMetaData, _assemblyLoaderConfig);
+            return new Builder(AssemblyMetaData, _config);
         }
 
         private void ShowLog(AssemblyMetaData assemblyMetaData)

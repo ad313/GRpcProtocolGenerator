@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using GRpcProtocolGenerator.Models.MetaData;
+using GRpcProtocolGenerator.Resolve.Configs;
+using GRpcProtocolGenerator.Types;
 using Namotion.Reflection;
 
-namespace GRpcProtocolGenerator
+namespace GRpcProtocolGenerator.Resolve
 {
     /// <summary>
     /// 元数据解析
@@ -17,15 +19,17 @@ namespace GRpcProtocolGenerator
 
         private readonly List<MethodInfo> _notSupportMethodList = new List<MethodInfo>();
 
-        public AssemblyMetaData Resolve(Assembly assembly)
+        public AssemblyMetaData Resolve(Assembly assembly, Config config)
         {
             var interfaces = assembly.GetTypes().Where(d => d.IsInterface).ToList();
+
             return new AssemblyMetaData(assembly.GetName().Name,
                 assembly.FullName,
                 ToInterfaceMetaDataList(interfaces).ToDictionary(d => d.FullName, d => d),
                 _classMetaDataDictionary,
                 _enumMetaDataDictionary,
-                _notSupportMethodList);
+                _notSupportMethodList,
+                config);
         }
 
         #region Interface
@@ -62,7 +66,7 @@ namespace GRpcProtocolGenerator
 
             //设置 Key
             node.SetKey();
-            
+
             return node;
         }
 
@@ -178,13 +182,13 @@ namespace GRpcProtocolGenerator
                 //return new PropertyMetaData(typeWrapper, info?.Name, null, null, null);
                 return null;
             }
-            
+
             (ClassMetaData meta, bool target) classMetaData = (null, false);
             if (typeWrapper.IsClass || typeWrapper.IsStruct)
             {
                 classMetaData = ToClassMetaData(typeWrapper, new List<Type>());
             }
-            
+
             var enumMeta = typeWrapper.IsEnum ? ToEnumMetaData(typeWrapper) : null;
 
             //处理必填项，当如果项目启用了 nullable
@@ -220,7 +224,7 @@ namespace GRpcProtocolGenerator
                 _notSupportMethodList.Add(methodInfo);
                 return null;
             }
-            
+
             //传入参数
             var inParam = methodInfo.GetParameters().Select(d => ToParamMetaData(d.ParameterType.ToTypeWrapper(), d)).ToList();
 
@@ -268,7 +272,7 @@ namespace GRpcProtocolGenerator
                 //过滤不支持的类型
                 if (infoType.IsSupport() == false)
                     continue;
-                
+
                 var attributes = ToAttributeMetaDataList(info.CustomAttributes.ToList());
                 (ClassMetaData meta, bool target) currentClass = ToClassMetaData(infoType, parentType);
                 var enumMeta = infoType.IsEnum ? ToEnumMetaData(infoType) : null;
@@ -278,7 +282,7 @@ namespace GRpcProtocolGenerator
                 {
                     infoType.SetNullable(info.ToContextualProperty().Nullability != Nullability.NotNullable);
                 }
-                
+
                 var prop = new PropertyMetaData(infoType, info.Name, attributes, !currentClass.target ? currentClass.meta : null, enumMeta);
                 props.Add(prop);
 

@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GRpcProtocolGenerator.Resolve.Configs;
 
-namespace GRpcProtocolGenerator.Renders
+namespace GRpcProtocolGenerator.Renders.Protocol
 {
-    public class ProtoContent
+    public class ProtocolContent
     {
-        public readonly GeneratorConfig Config;
+        public readonly Config Config;
 
-        public ProtoService ProtoService { get; }
+        public ProtocolService ProtoService { get; }
 
         public List<string> DependencyList { get; set; }
 
-        public List<ProtoMessage> ProtoMessageList { get; set; }
+        public List<ProtocolMessage> ProtoMessageList { get; set; }
 
         private readonly StringBuilder _sbHeader;
 
@@ -25,7 +26,7 @@ namespace GRpcProtocolGenerator.Renders
         ///// </summary>
         //private const string EnumFileName = "enums";
 
-        public ProtoContent(ProtoService protoService, GeneratorConfig config)
+        public ProtocolContent(ProtocolService protoService, Config config)
         {
             Config = config;
             ProtoService = protoService;
@@ -54,7 +55,7 @@ namespace GRpcProtocolGenerator.Renders
             }
 
             //谷歌数据包装器
-            DependencyList.Insert(0, new EmptyProtoMessage().MessagePath);
+            DependencyList.Insert(0, new EmptyProtocolMessage().MessagePath);
             DependencyList.Insert(0, "google/protobuf/wrappers");
 
             // http api

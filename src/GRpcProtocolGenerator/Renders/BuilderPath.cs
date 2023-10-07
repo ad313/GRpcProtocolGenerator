@@ -3,10 +3,11 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GRpcProtocolGenerator.Resolve.Configs;
 
 namespace GRpcProtocolGenerator.Renders
 {
-    internal class PathHelper
+    internal class BuilderPath
     {
         private static string ProtoOutput { get; set; }
 
@@ -20,7 +21,7 @@ namespace GRpcProtocolGenerator.Renders
 
         private static string ServerMapperOutput { get; set; }
 
-        public static void Init(GeneratorConfig config)
+        public static void Init(Config config)
         {
             ArgumentNullException.ThrowIfNull(config, nameof(config));
 

@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Text;
 using GRpcProtocolGenerator.Models.MetaData;
-using GRpcProtocolGenerator.Renders;
+using GRpcProtocolGenerator.Renders.Protocol;
+using GRpcProtocolGenerator.Resolve.Configs;
+using GRpcProtocolGenerator.Types;
 
-namespace GRpcProtocolGenerator
+namespace GRpcProtocolGenerator.Renders
 {
-    public static class NameExtensions
+    public static class BuilderName
     {
-        public static GeneratorConfig config = null;
+        public static Config Config = null;
 
         public static string FormatServiceName(this InterfaceMetaData meta)
         {
             ArgumentNullException.ThrowIfNull(meta, nameof(meta));
 
-            return config?.Proto?.ServiceNameFunc?.Invoke(meta) ?? meta.Name;
+            return Config?.Proto?.ServiceNameFunc?.Invoke(meta) ?? meta.Name;
         }
 
         public static string FormatServiceProtoFileName(this InterfaceMetaData meta)
@@ -23,8 +25,8 @@ namespace GRpcProtocolGenerator
 
         public static string FormatServiceProtoFileNameFullPath(this InterfaceMetaData meta)
         {
-            return config.Proto.UseProtoDirectoryWhenImportPackage ?
-                $"{config.Proto.ProtoDirectory}/{meta.FormatServiceName().ToSnakeString()}" :
+            return Config.Proto.UseProtoDirectoryWhenImportPackage ?
+                $"{Config.Proto.ProtoDirectory}/{meta.FormatServiceName().ToSnakeString()}" :
                 $"{meta.FormatServiceName().ToSnakeString()}";
         }
 
@@ -32,16 +34,16 @@ namespace GRpcProtocolGenerator
         {
             ArgumentNullException.ThrowIfNull(method, nameof(method));
 
-            return config?.Proto?.MethodNameFunc?.Invoke(method) ?? method.Name;
+            return Config?.Proto?.MethodNameFunc?.Invoke(method) ?? method.Name;
         }
-        
-        public static string FormatMessageName(this ProtoMessage meta)
+
+        public static string FormatMessageName(this ProtocolMessage meta)
         {
             ArgumentNullException.ThrowIfNull(meta, nameof(meta));
 
             if (!meta.IsOriginalClass && meta.EnumMetaData == null)
                 return meta.Name;
-            
+
             return meta.Name.FormatMessageName();
         }
 
@@ -49,16 +51,16 @@ namespace GRpcProtocolGenerator
         {
             ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-            return config?.Proto?.OriginalClassNameFunc?.Invoke(name) ?? name;
+            return Config?.Proto?.OriginalClassNameFunc?.Invoke(name) ?? name;
         }
 
         public static string ToProtobufString(this Type type, bool isNullable)
         {
-            var result = config.Proto.CSharpTypeToProtobufString?.Invoke(type, isNullable);
+            var result = Config.Proto.CSharpTypeToProtobufString?.Invoke(type, isNullable);
             if (!string.IsNullOrWhiteSpace(result))
                 return result;
 
-            return ProtobufTypeConvert.Convert(type, isNullable);
+            return TypeConvert.Convert(type, isNullable);
         }
 
         public static string ToSnakeString(this string str)
@@ -91,7 +93,7 @@ namespace GRpcProtocolGenerator
         public static string ToFirstLowString(this string str)
         {
             if (string.IsNullOrWhiteSpace(str))
-                return String.Empty;
+                return string.Empty;
 
             return str.Substring(0, 1).ToLower() + str.Substring(1);
         }
@@ -99,7 +101,7 @@ namespace GRpcProtocolGenerator
         public static string ToFirstUpString(this string str)
         {
             if (string.IsNullOrWhiteSpace(str))
-                return String.Empty;
+                return string.Empty;
 
             return str.Substring(0, 1).ToUpper() + str.Substring(1);
         }

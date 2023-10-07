@@ -5,29 +5,31 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using GRpcProtocolGenerator.Models.MetaData;
+using GRpcProtocolGenerator.Renders.Protocol;
+using GRpcProtocolGenerator.Resolve.Configs;
 
 namespace GRpcProtocolGenerator.Renders
 {
     /// <summary>
     /// 生成代码
     /// </summary>
-    public partial class CodeRender
+    public partial class Builder
     {
-        public readonly ConcurrentDictionary<string, ProtoMessage> ClassMessages;
-        public readonly ConcurrentDictionary<string, EnumProtoMessage> EnumMessages;
-        public readonly List<ProtoService> Services;
+        public readonly ConcurrentDictionary<string, ProtocolMessage> ClassMessages;
+        public readonly ConcurrentDictionary<string, EnumProtocolMessage> EnumMessages;
+        public readonly List<ProtocolService> Services;
 
         private readonly AssemblyMetaData _assemblyMetaData;
-        public static GeneratorConfig Config;
+        public static Config Config;
 
-        public CodeRender(AssemblyMetaData assemblyMetaData, GeneratorConfig config)
+        public Builder(AssemblyMetaData assemblyMetaData, Config config)
         {
             _assemblyMetaData = assemblyMetaData;
             Config = config;
 
-            ClassMessages = new ConcurrentDictionary<string, ProtoMessage>();
-            EnumMessages = new ConcurrentDictionary<string, EnumProtoMessage>();
-            Services = new List<ProtoService>();
+            ClassMessages = new ConcurrentDictionary<string, ProtocolMessage>();
+            EnumMessages = new ConcurrentDictionary<string, EnumProtocolMessage>();
+            Services = new List<ProtocolService>();
 
             //枚举
             CreateEnumMessageList(assemblyMetaData.EnumMetaDataDictionary.Select(d => d.Value).ToList());
@@ -45,23 +47,23 @@ namespace GRpcProtocolGenerator.Renders
         /// <returns></returns>
         public async Task RenderAsync()
         {
-            PathHelper.Init(Config);
+            BuilderPath.Init(Config);
 
             foreach (var service in Services.OrderBy(d => d.InterfaceMetaData.FullName))
             {
                 //proto
-                var protoContent = new ProtoContent(service, Config);
+                var protoContent = new ProtocolContent(service, Config);
                 var content = protoContent.ToContent();
-                await PathHelper.CreateFile(service.InterfaceMetaData.FormatServiceProtoFileName(), content);
+                await BuilderPath.CreateFile(service.InterfaceMetaData.FormatServiceProtoFileName(), content);
                 Console.WriteLine(service.InterfaceMetaData.FormatServiceProtoFileName());
                 Console.WriteLine(content);
 
                 //server
                 if (Config.HasServer)
                 {
-                    var server = new ProtoServer(protoContent);
+                    var server = new ProtocolServiceImpl(protoContent);
                     var serverContent = server.ToContent();
-                    await PathHelper.CreateServerFile(server.ServerName, serverContent);
+                    await BuilderPath.CreateServerFile(server.ServerName, serverContent);
                     Console.WriteLine(serverContent);
                 }
             }
@@ -69,12 +71,12 @@ namespace GRpcProtocolGenerator.Renders
             if (Config.HasServer)
             {
                 //mapper
-                var mapperString = await TemplateRender.Render(new { data = Config.Server.ProjectName }, "Server.MapperRegister");
-                await PathHelper.CreateServerMapperFile("DefaultMapperConfig", mapperString);
+                var mapperString = await ScribanHelper.Render(new { data = Config.Server.ProjectName }, "Server.MapperRegister");
+                await BuilderPath.CreateServerMapperFile("DefaultMapperConfig", mapperString);
 
                 // program
-                var servers = Services.Select(d => new ProtoServer(new ProtoContent(d, Config))).ToList();
-                var serverProgramString = await TemplateRender.Render(new { config = Config, servers = servers }, "Server.Program");
+                var servers = Services.Select(d => new ProtocolServiceImpl(new ProtocolContent(d, Config))).ToList();
+                var serverProgramString = await ScribanHelper.Render(new { config = Config, servers = servers }, "Server.Program");
                 var serverProgramFileName = "Program";
 
                 if (File.Exists(Config.Server.GetProgramFilePath()))
@@ -83,43 +85,43 @@ namespace GRpcProtocolGenerator.Renders
                     serverProgramFileName += "New";
                 }
 
-                await PathHelper.CreateServerRootFile(serverProgramFileName + ".cs", serverProgramString);
+                await BuilderPath.CreateServerRootFile(serverProgramFileName + ".cs", serverProgramString);
 
 
                 // server csproj
-                var serverCsprojString = await TemplateRender.Render(new { config = Config, servers = Services }, "Server.csproj");
+                var serverCsprojString = await ScribanHelper.Render(new { config = Config, servers = Services }, "Server.csproj");
                 var serverCsprojFileName = Config.Server.ProjectName + ".csproj";
                 if (File.Exists(Config.Server.GetCsprojFilePath()))
                 {
                     serverCsprojFileName += "New";
                 }
 
-                await PathHelper.CreateServerRootFile(serverCsprojFileName, serverCsprojString);
+                await BuilderPath.CreateServerRootFile(serverCsprojFileName, serverCsprojString);
             }
 
             // proto csproj
-            var protoCsprojString = await TemplateRender.Render(new { config = Config, servers = Services }, "Protocol.csproj");
+            var protoCsprojString = await ScribanHelper.Render(new { config = Config, servers = Services }, "Protocol.csproj");
             var protoCsprojFileName = Config.Proto.ProjectName + ".csproj";
             if (File.Exists(Config.Proto.GetCsprojFilePath()))
             {
                 protoCsprojFileName += "New";
             }
 
-            await PathHelper.CreateProtoRootFile(protoCsprojFileName, protoCsprojString);
+            await BuilderPath.CreateProtoRootFile(protoCsprojFileName, protoCsprojString);
 
             //google api
             if (Config.JsonTranscoding.UseJsonTranscoding)
             {
-                var annotations = await TemplateRender.Render(new { }, "google.api.annotations");
-                var http = await TemplateRender.Render(new { }, "google.api.http");
+                var annotations = await ScribanHelper.Render(new { }, "google.api.annotations");
+                var http = await ScribanHelper.Render(new { }, "google.api.http");
 
-                await PathHelper.CreateProtoGoogleApiFile("annotations.proto", annotations);
-                await PathHelper.CreateProtoGoogleApiFile("http.proto", http);
+                await BuilderPath.CreateProtoGoogleApiFile("annotations.proto", annotations);
+                await BuilderPath.CreateProtoGoogleApiFile("http.proto", http);
 
                 //swagger
-                var swaggerProgramString = await TemplateRender.Render(new { config = Config }, "Server.Swagger");
+                var swaggerProgramString = await ScribanHelper.Render(new { config = Config }, "Server.Swagger");
                 var swaggerProgramFileName = "SwaggerExtensions";
-                await PathHelper.CreateServerRootFile(swaggerProgramFileName + ".cs", swaggerProgramString);
+                await BuilderPath.CreateServerRootFile(swaggerProgramFileName + ".cs", swaggerProgramString);
             }
             
             //不支持的方法
@@ -242,7 +244,7 @@ namespace GRpcProtocolGenerator.Renders
                     }
                 }
 
-                Services.Add(new ProtoService(interfaceMetaData.Name, items, interfaceMetaData));
+                Services.Add(new ProtocolService(interfaceMetaData.Name, items, interfaceMetaData));
             }
         }
 
@@ -252,7 +254,7 @@ namespace GRpcProtocolGenerator.Renders
         /// <param name="interfaceMetaData"></param>
         /// <param name="msg"></param>
         /// <returns></returns>
-        private ProtoMessage ProtoMessageWrapper(InterfaceMetaData interfaceMetaData, ProtoMessage msg)
+        private ProtocolMessage ProtoMessageWrapper(InterfaceMetaData interfaceMetaData, ProtocolMessage msg)
         {
             if (Config.JsonTranscoding.UseResultWrapper == false)
                 return msg;
@@ -260,16 +262,16 @@ namespace GRpcProtocolGenerator.Renders
             //空
             if (msg.IsEmpty)
             {
-                var wrapper = new ProtoMessage($"{interfaceMetaData.FormatServiceName()}_EmptyWrapper",
-                    new List<ProtoItemMessage>(),
-                    new List<ProtoMessage>() { msg },
-                    new List<EnumProtoMessage>(),
+                var wrapper = new ProtocolMessage($"{interfaceMetaData.FormatServiceName()}_EmptyWrapper",
+                    new List<ProtocolItemMessage>(),
+                    new List<ProtocolMessage>() { msg },
+                    new List<EnumProtocolMessage>(),
                     false,
                     false,
                     null);
 
-                wrapper.Items.Insert(0, new ProtoItemMessage(typeof(int), false, false, "Code", "int32", "int32", 0, null, null, null));
-                wrapper.Items.Insert(1, new ProtoItemMessage(typeof(string), true, false, "Message", "google.protobuf.StringValue", "google.protobuf.StringValue", 0, null, null, null));
+                wrapper.Items.Insert(0, new ProtocolItemMessage(typeof(int), false, false, "Code", "int32", "int32", 0, null, null, null));
+                wrapper.Items.Insert(1, new ProtocolItemMessage(typeof(string), true, false, "Message", "google.protobuf.StringValue", "google.protobuf.StringValue", 0, null, null, null));
 
                 return wrapper;
             }
@@ -277,38 +279,38 @@ namespace GRpcProtocolGenerator.Renders
             //原始类
             if (msg.IsOriginalClass)
             {
-                var wrapper = new ProtoMessage(interfaceMetaData.FormatServiceName() + "_" + msg.GetGRpcName() + "Wrapper",
-                    new List<ProtoItemMessage>(),
-                    new List<ProtoMessage>() { msg },
-                    new List<EnumProtoMessage>(),
+                var wrapper = new ProtocolMessage(interfaceMetaData.FormatServiceName() + "_" + msg.GetGRpcName() + "Wrapper",
+                    new List<ProtocolItemMessage>(),
+                    new List<ProtocolMessage>() { msg },
+                    new List<EnumProtocolMessage>(),
                     false,
                     false,
                     null);
 
-                wrapper.Items.Insert(0, new ProtoItemMessage(typeof(int), false, false, "Code", "int32", "int32", 0, null, null, null));
-                wrapper.Items.Insert(1, new ProtoItemMessage(typeof(string), true, false, "Message", "google.protobuf.StringValue", "google.protobuf.StringValue", 0, null, null, null));
-                wrapper.Items.Insert(2, new ProtoItemMessage(msg.ClassMetaData.TypeWrapper.Type, true, false, "Data", msg.GetGRpcName(), "google.protobuf.StringValue", 0, msg.ClassMetaData, msg.ClassMetaData, msg.EnumMetaData));
+                wrapper.Items.Insert(0, new ProtocolItemMessage(typeof(int), false, false, "Code", "int32", "int32", 0, null, null, null));
+                wrapper.Items.Insert(1, new ProtocolItemMessage(typeof(string), true, false, "Message", "google.protobuf.StringValue", "google.protobuf.StringValue", 0, null, null, null));
+                wrapper.Items.Insert(2, new ProtocolItemMessage(msg.ClassMetaData.TypeWrapper.Type, true, false, "Data", msg.GetGRpcName(), "google.protobuf.StringValue", 0, msg.ClassMetaData, msg.ClassMetaData, msg.EnumMetaData));
 
                 return wrapper;
             }
 
-            msg.Items.Insert(0, new ProtoItemMessage(typeof(int), false, false, "Code", "int32", "int32", 0, null, null, null));
-            msg.Items.Insert(1, new ProtoItemMessage(typeof(string), true, false, "Message", "google.protobuf.StringValue", "google.protobuf.StringValue", 0, null, null, null));
+            msg.Items.Insert(0, new ProtocolItemMessage(typeof(int), false, false, "Code", "int32", "int32", 0, null, null, null));
+            msg.Items.Insert(1, new ProtocolItemMessage(typeof(string), true, false, "Message", "google.protobuf.StringValue", "google.protobuf.StringValue", 0, null, null, null));
 
             return msg;
         }
 
-        private ProtoMessage CreateMethodParam(InterfaceMetaData interfaceMetaData, MethodMetaData methodMetaData, List<PropertyMetaData> paramList, string append, ref int index)
+        private ProtocolMessage CreateMethodParam(InterfaceMetaData interfaceMetaData, MethodMetaData methodMetaData, List<PropertyMetaData> paramList, string append, ref int index)
         {
             if (paramList.Count == 0)
             {
-                return new EmptyProtoMessage();
+                return new EmptyProtocolMessage();
             }
 
-            ProtoMessage getMessage(ClassMetaData meta)
+            ProtocolMessage GetMessageFromClassMetaData(ClassMetaData meta)
             {
                 if (meta == null) return null;
-                return ClassMessages.TryGetValue(meta.FullName, out ProtoMessage msg) ? msg : null;
+                return ClassMessages.TryGetValue(meta.FullName, out ProtocolMessage msg) ? msg : null;
             }
 
             if (paramList.Count == 1 &&
@@ -317,7 +319,7 @@ namespace GRpcProtocolGenerator.Renders
             {
                 //只有一个参数，并且参数是类，并且不是数组 此时不需要创建新对象，直接用类对象
                 var className = paramList.First().ClassMetaData.FullName;
-                var msg = getMessage(paramList.First().ClassMetaData);
+                var msg = GetMessageFromClassMetaData(paramList.First().ClassMetaData);
                 if (msg != null)
                 {
                     return msg;
@@ -343,7 +345,7 @@ namespace GRpcProtocolGenerator.Renders
                 }
             }
 
-            var paramMessage = new ProtoMessage(newName, new List<ProtoItemMessage>(), null);
+            var paramMessage = new ProtocolMessage(newName, new List<ProtocolItemMessage>(), null);
 
             foreach (var param in paramList)
             {
@@ -365,17 +367,17 @@ namespace GRpcProtocolGenerator.Renders
                         }
                     }
 
-                    var currentMsg = getMessage(param.ClassMetaData);
-                    paramMessage.AddClassDependency(currentMsg?.ClassDependency.Concat(new List<ProtoMessage>() { currentMsg }).ToList());
+                    var currentMsg = GetMessageFromClassMetaData(param.ClassMetaData);
+                    paramMessage.AddClassDependency(currentMsg?.ClassDependency.Concat(new List<ProtocolMessage>() { currentMsg }).ToList());
                 }
             }
 
             return paramMessage;
         }
 
-        private ProtoMessage CreateClassMessage(ClassMetaData classMetaData, List<ProtoMessage> result, ref List<string> parents)
+        private ProtocolMessage CreateClassMessage(ClassMetaData classMetaData, List<ProtocolMessage> result, ref List<string> parents)
         {
-            result ??= new List<ProtoMessage>();
+            result ??= new List<ProtocolMessage>();
             parents ??= new List<string>();
 
             if (classMetaData == null)
@@ -390,8 +392,8 @@ namespace GRpcProtocolGenerator.Renders
             if (ClassMessages.ContainsKey(key))
                 return null;
 
-            var enumDependency = new List<EnumProtoMessage>();
-            var items = new List<ProtoItemMessage>();
+            var enumDependency = new List<EnumProtocolMessage>();
+            var items = new List<ProtocolItemMessage>();
             foreach (var prop in classMetaData.PropertyMetaDataList)
             {
                 if (prop.ClassMetaData == null && prop.EnumMetaData == null)
@@ -416,7 +418,7 @@ namespace GRpcProtocolGenerator.Renders
                 CreateClassMessage(prop.ClassMetaData, result, ref parents);
             }
 
-            var current = new ProtoMessage(classMetaData.Name, items, null, enumDependency, true, false, classMetaData);
+            var current = new ProtocolMessage(classMetaData.Name, items, null, enumDependency, true, false, classMetaData);
 
             result.Add(current);
 
@@ -425,7 +427,7 @@ namespace GRpcProtocolGenerator.Renders
             return current;
         }
 
-        private EnumProtoMessage CreateEnumMessage(EnumMetaData enumMetaData)
+        private EnumProtocolMessage CreateEnumMessage(EnumMetaData enumMetaData)
         {
             if (enumMetaData == null)
                 return null;
@@ -439,30 +441,30 @@ namespace GRpcProtocolGenerator.Renders
             if (EnumMessages.ContainsKey(key))
                 return null;
 
-            var items = new List<ProtoItemMessage>();
+            var items = new List<ProtocolItemMessage>();
             foreach (var member in enumMetaData.Members)
             {
                 items.Add(CreateEnumMessageItem(member));
             }
 
-            var current = new EnumProtoMessage(enumMetaData.Name, items, enumMetaData);
+            var current = new EnumProtocolMessage(enumMetaData.Name, items, enumMetaData);
 
             EnumMessages.TryAdd(key, current);
 
             return current;
         }
 
-        private ProtoItemMessage CreateSampleMessageItem(PropertyMetaData prop)
+        private ProtocolItemMessage CreateSampleMessageItem(PropertyMetaData prop)
         {
             if (prop == null || prop.ClassMetaData != null || prop.EnumMetaData != null)
                 return null;
 
-            return new ProtoItemMessage(prop.TypeWrapper.Type, prop.TypeWrapper.IsNullable, prop.TypeWrapper.IsArray, prop.Name, null,
+            return new ProtocolItemMessage(prop.TypeWrapper.Type, prop.TypeWrapper.IsNullable, prop.TypeWrapper.IsArray, prop.Name, null,
                 prop.TypeWrapper.Type.ToProtobufString(prop.TypeWrapper.IsNullable), 0, prop,
                 prop.ClassMetaData, null);
         }
 
-        private ProtoItemMessage CreateClassMessageItem(PropertyMetaData prop)
+        private ProtocolItemMessage CreateClassMessageItem(PropertyMetaData prop)
         {
             if (prop?.ClassMetaData == null && prop?.EnumMetaData == null)
                 return null;
@@ -470,22 +472,22 @@ namespace GRpcProtocolGenerator.Renders
             //特殊处理枚举，转换成 int
             if (prop.EnumMetaData != null)
             {
-                return new ProtoItemMessage(typeof(int), prop.TypeWrapper.IsNullable, prop.TypeWrapper.IsArray, prop.Name, null, typeof(int).ToProtobufString(prop.TypeWrapper.IsNullable), 0, prop, prop.ClassMetaData, prop.EnumMetaData);
+                return new ProtocolItemMessage(typeof(int), prop.TypeWrapper.IsNullable, prop.TypeWrapper.IsArray, prop.Name, null, typeof(int).ToProtobufString(prop.TypeWrapper.IsNullable), 0, prop, prop.ClassMetaData, prop.EnumMetaData);
             }
 
             var type = prop.ClassMetaData?.Name ?? prop.TypeWrapper.Type.Name;
 
-            return new ProtoItemMessage(prop.TypeWrapper.Type, prop.TypeWrapper.IsNullable, prop.TypeWrapper.IsArray, prop.Name, type.FormatMessageName(), type, 0, prop, prop.ClassMetaData, prop.EnumMetaData);
+            return new ProtocolItemMessage(prop.TypeWrapper.Type, prop.TypeWrapper.IsNullable, prop.TypeWrapper.IsArray, prop.Name, type.FormatMessageName(), type, 0, prop, prop.ClassMetaData, prop.EnumMetaData);
         }
 
-        private ProtoItemMessage CreateEnumMessageItem(EnumMemberMetaData member)
+        private ProtocolItemMessage CreateEnumMessageItem(EnumMemberMetaData member)
         {
-            return new ProtoItemMessage(typeof(int), false, false, member.Name, null, "", member.Value, new CommentMetaData(member.Name, member.Name, member.AttributeMetaDataList), null, null);
+            return new ProtocolItemMessage(typeof(int), false, false, member.Name, null, "", member.Value, new CommentMetaData(member.Name, member.Name, member.AttributeMetaDataList), null, null);
         }
 
-        private EnumProtoMessage GetEnumProtoMessage(string name)
+        private EnumProtocolMessage GetEnumProtoMessage(string name)
         {
-            return EnumMessages.TryGetValue(name, out EnumProtoMessage msg) ? msg : null;
+            return EnumMessages.TryGetValue(name, out EnumProtocolMessage msg) ? msg : null;
         }
     }
 }

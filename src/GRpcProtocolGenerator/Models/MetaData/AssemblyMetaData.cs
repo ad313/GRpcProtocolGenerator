@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GRpcProtocolGenerator.Resolve.Configs;
+using GRpcProtocolGenerator.Types;
 
 namespace GRpcProtocolGenerator.Models.MetaData
 {
@@ -34,7 +36,8 @@ namespace GRpcProtocolGenerator.Models.MetaData
             Dictionary<string, InterfaceMetaData> interfaceMetaDataDictionary,
             Dictionary<string, ClassMetaData> classMetaDataDictionary,
             Dictionary<string, EnumMetaData> enumMetaDataDictionary,
-            List<MethodInfo> notSupportMethodList)
+            List<MethodInfo> notSupportMethodList,
+            Config config)
         {
             Name = name;
             FullName = fullName;
@@ -43,7 +46,14 @@ namespace GRpcProtocolGenerator.Models.MetaData
             EnumMetaDataDictionary = enumMetaDataDictionary;
             NotSupportMethodList = notSupportMethodList;
 
+            //过滤不支持的方法和属性
             ClearNotSupport();
+
+            //数据过滤
+            Filter(config);
+
+            //处理 method 对应的接口元数据
+            SetMethodInterface();
         }
 
         /// <summary>
@@ -70,10 +80,10 @@ namespace GRpcProtocolGenerator.Models.MetaData
         /// 数据过滤
         /// </summary>
         /// <param name="config"></param>
-        public AssemblyMetaData Filter(GeneratorConfig config)
+        private void Filter(Config config)
         {
             if (config?.Filter == null)
-                return this;
+                return;
 
             if (config.Filter.InterfaceFilterFunc != null)
             {
@@ -94,19 +104,18 @@ namespace GRpcProtocolGenerator.Models.MetaData
                 }
             }
 
-            SetMethodInterface();
-
-            return this;
         }
 
-        private AssemblyMetaData SetMethodInterface()
+        /// <summary>
+        /// 处理 method 对应的接口元数据
+        /// </summary>
+        /// <returns></returns>
+        private void SetMethodInterface()
         {
             foreach (var pair in InterfaceMetaDataDictionary)
             {
                 pair.Value.SetMethodInterface();
             }
-
-            return this;
         }
     }
 }

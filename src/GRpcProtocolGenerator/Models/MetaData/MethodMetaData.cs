@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using GRpcProtocolGenerator.Renders;
+using GRpcProtocolGenerator.Types;
 
 namespace GRpcProtocolGenerator.Models.MetaData
 {

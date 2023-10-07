@@ -1,9 +1,10 @@
 ﻿using System;
 using GRpcProtocolGenerator.Models.MetaData;
+using GRpcProtocolGenerator.Types;
 
 namespace GRpcProtocolGenerator.Renders
 {
-    public class RenderHelper
+    public class BuilderPart
     {
         #region MapTo
 

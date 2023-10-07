@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GRpcProtocolGenerator.Types;
 
 namespace GRpcProtocolGenerator.Models.MetaData
 {

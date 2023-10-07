@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GRpcProtocolGenerator.Models.MetaData;
+using GRpcProtocolGenerator.Types;
 
-namespace GRpcProtocolGenerator.Renders
+namespace GRpcProtocolGenerator.Renders.Protocol
 {
-    public class ProtoMessage: IEquatable<ProtoMessage>
+    public class ProtocolMessage : IEquatable<ProtocolMessage>
     {
         /// <summary>
         /// 包名
@@ -24,15 +25,15 @@ namespace GRpcProtocolGenerator.Renders
         /// <summary>
         /// message 项集合
         /// </summary>
-        public List<ProtoItemMessage> Items { get; private set; } = new List<ProtoItemMessage>();
+        public List<ProtocolItemMessage> Items { get; private set; } = new List<ProtocolItemMessage>();
         /// <summary>
         /// 依赖的message 集合
         /// </summary>
-        public List<ProtoMessage> ClassDependency { get; private set; }
+        public List<ProtocolMessage> ClassDependency { get; private set; }
         /// <summary>
         /// 依赖的枚举 集合
         /// </summary>
-        public List<EnumProtoMessage> EnumDependency { get; private set; }
+        public List<EnumProtocolMessage> EnumDependency { get; private set; }
         /// <summary>
         /// 是原始的类，而不是新建的类
         /// </summary>
@@ -55,12 +56,12 @@ namespace GRpcProtocolGenerator.Renders
         /// </summary>
         public bool IsCancellationToken { get; private set; }
 
-        public ProtoMessage(string name, List<ProtoItemMessage> items, List<ProtoMessage> classDependency, List<EnumProtoMessage> enumDependency, bool isOriginalClass, bool isEmpty, ClassMetaData classMetaData)
+        public ProtocolMessage(string name, List<ProtocolItemMessage> items, List<ProtocolMessage> classDependency, List<EnumProtocolMessage> enumDependency, bool isOriginalClass, bool isEmpty, ClassMetaData classMetaData)
         {
             Name = name;
             Items = items;
-            ClassDependency = classDependency ?? new List<ProtoMessage>();
-            EnumDependency = enumDependency ?? new List<EnumProtoMessage>();
+            ClassDependency = classDependency ?? new List<ProtocolMessage>();
+            EnumDependency = enumDependency ?? new List<EnumProtocolMessage>();
             IsOriginalClass = isOriginalClass;
             ClassMetaData = classMetaData;
             IsEmpty = isEmpty;
@@ -68,41 +69,41 @@ namespace GRpcProtocolGenerator.Renders
             IsCancellationToken = isOriginalClass && ClassMetaData.TypeWrapper.Type.IsCancellationToken();
         }
 
-        public ProtoMessage(string name, List<ProtoItemMessage> items, EnumMetaData enumMetaData)
+        public ProtocolMessage(string name, List<ProtocolItemMessage> items, EnumMetaData enumMetaData)
         {
             Name = name;
             Items = items;
             EnumMetaData = enumMetaData;
-            ClassDependency = new List<ProtoMessage>();
-            EnumDependency = new List<EnumProtoMessage>();
+            ClassDependency = new List<ProtocolMessage>();
+            EnumDependency = new List<EnumProtocolMessage>();
         }
 
-        public ProtoMessage(string name, string messagePath, bool isEmpty)
+        public ProtocolMessage(string name, string messagePath, bool isEmpty)
         {
             Name = name;
             MessagePath = messagePath;
             IsEmpty = isEmpty;
-            ClassDependency = new List<ProtoMessage>();
-            EnumDependency = new List<EnumProtoMessage>();
+            ClassDependency = new List<ProtocolMessage>();
+            EnumDependency = new List<EnumProtocolMessage>();
         }
 
-        public void SetClassDependency(List<ProtoMessage> protoMessageList)
+        public void SetClassDependency(List<ProtocolMessage> protoMessageList)
         {
             if (IsCancellationToken)
             {
-                ClassDependency = new List<ProtoMessage>();
+                ClassDependency = new List<ProtocolMessage>();
                 return;
             }
 
             ClassDependency = protoMessageList;
         }
 
-        public void AddClassDependency(List<ProtoMessage> protoMessageList)
+        public void AddClassDependency(List<ProtocolMessage> protoMessageList)
         {
             if (protoMessageList == null)
                 return;
 
-            ClassDependency ??= new List<ProtoMessage>();
+            ClassDependency ??= new List<ProtocolMessage>();
 
             foreach (var message in protoMessageList)
             {
@@ -118,7 +119,7 @@ namespace GRpcProtocolGenerator.Renders
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"//{CodeRender.Config.Proto.PropertyDescriptionFunc(ClassMetaData)} {ClassMetaData?.FullName ?? Name}");
+            sb.AppendLine($"//{Builder.Config.Proto.PropertyDescriptionFunc(ClassMetaData)} {ClassMetaData?.FullName ?? Name}");
             sb.AppendLine($"message {GetGRpcName()} " + "{");
 
             var index = 1;
@@ -154,7 +155,7 @@ namespace GRpcProtocolGenerator.Renders
 
                     Imports.AddRange(ClassDependency.Select(d => d.MessagePath));
                 }
-                
+
                 Imports = Imports.Distinct().ToList();
 
                 if (IsCancellationToken == false)
@@ -176,7 +177,7 @@ namespace GRpcProtocolGenerator.Renders
             return this.FormatMessageName();
         }
 
-        public bool Equals(ProtoMessage other)
+        public bool Equals(ProtocolMessage other)
         {
             return Name == other?.Name;
         }
@@ -187,11 +188,11 @@ namespace GRpcProtocolGenerator.Renders
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return this.Name.GetHashCode();
+            return Name.GetHashCode();
         }
     }
 
-    public class ProtoItemMessage
+    public class ProtocolItemMessage
     {
         public bool IsNullable { get; private set; }
 
@@ -211,7 +212,7 @@ namespace GRpcProtocolGenerator.Renders
 
         public EnumMetaData EnumMetaData { get; private set; }
 
-        public ProtoItemMessage(Type type1, bool isNullable, bool isArray, string name, string gRpcType, string type, int index, CommentMetaData commentMetaData, ClassMetaData classMetaData, EnumMetaData enumMetaData)
+        public ProtocolItemMessage(Type type1, bool isNullable, bool isArray, string name, string gRpcType, string type, int index, CommentMetaData commentMetaData, ClassMetaData classMetaData, EnumMetaData enumMetaData)
         {
             IsNullable = isNullable;
             IsArray = isArray;
@@ -229,13 +230,13 @@ namespace GRpcProtocolGenerator.Renders
         public override string ToString()
         {
             //GRpc json，属性小写，否则大写
-            var name = CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? Name.ToFirstLowString() : Name;
-            return RenderHelper.BuildMessageItem(name,
+            var name = Builder.Config.JsonTranscoding.UseJsonTranscoding ? Name.ToFirstLowString() : Name;
+            return BuilderPart.BuildMessageItem(name,
                 Type,
                 IsArray,
                 IsNullable,
                 Index,
-                CodeRender.Config.Proto.PropertyDescriptionFunc(CommentMetaData));
+                Builder.Config.Proto.PropertyDescriptionFunc(CommentMetaData));
         }
 
         public void SetName(string name)
@@ -249,19 +250,19 @@ namespace GRpcProtocolGenerator.Renders
         }
     }
 
-    public class EmptyProtoMessage : ProtoMessage
+    public class EmptyProtocolMessage : ProtocolMessage
     {
-        public EmptyProtoMessage() : base("google.protobuf.Empty", "google/protobuf/empty", true)
+        public EmptyProtocolMessage() : base("google.protobuf.Empty", "google/protobuf/empty", true)
         {
 
         }
     }
 
-    public class EnumProtoMessage : ProtoMessage
+    public class EnumProtocolMessage : ProtocolMessage
     {
         private readonly EnumMetaData _enumMetaData;
 
-        public EnumProtoMessage(string name, List<ProtoItemMessage> items, EnumMetaData enumMetaData) : base(name, items, enumMetaData)
+        public EnumProtocolMessage(string name, List<ProtocolItemMessage> items, EnumMetaData enumMetaData) : base(name, items, enumMetaData)
         {
             _enumMetaData = enumMetaData;
         }
@@ -269,7 +270,7 @@ namespace GRpcProtocolGenerator.Renders
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"\t//{CodeRender.Config.Proto.PropertyDescriptionFunc(EnumMetaData)} {_enumMetaData?.FullName ?? Name}");
+            sb.AppendLine($"\t//{Builder.Config.Proto.PropertyDescriptionFunc(EnumMetaData)} {_enumMetaData?.FullName ?? Name}");
             sb.AppendLine($"\tenum {this.FormatMessageName()} " + "{");
 
             foreach (var item in Items)

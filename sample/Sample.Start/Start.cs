@@ -1,5 +1,7 @@
 ﻿using GRpcProtocolGenerator;
 using GRpcProtocolGenerator.Common;
+using GRpcProtocolGenerator.Renders;
+using GRpcProtocolGenerator.Resolve.Configs;
 using Sample.Services.Models;
 
 namespace Sample.Start
@@ -13,10 +15,10 @@ namespace Sample.Start
 
             var project = "Sample";
 
-            await new GeneratorHandler(new GeneratorConfig(basePath)
+            await new GeneratorHandler(new Config(basePath)
             {
                 Assemblies = $"{project}.Services",
-                Proto = new ProtoConfig()
+                Proto = new ProtocolConfig()
                 {
                     Output = $"../{project}.Protocol",
                     ProtoDirectory = "protos",
@@ -80,7 +82,7 @@ namespace Sample.Start
                     InterfaceFilterFunc = meta => true,
                     MethodFilterFunc = (interfaceMeta, methodMeta) => true
                 },
-                JsonTranscoding = new JsonTranscoding()
+                JsonTranscoding = new JsonTranscodingConfig()
                 {
                     UseJsonTranscoding = true,
                     UseResultWrapper = true,

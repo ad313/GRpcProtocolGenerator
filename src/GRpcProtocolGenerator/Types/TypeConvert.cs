@@ -3,12 +3,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-namespace GRpcProtocolGenerator.Renders
+namespace GRpcProtocolGenerator.Types
 {
     /// <summary>
     /// gRpc 字段类型转换
     /// </summary>
-    public static class ProtobufTypeConvert
+    public static class TypeConvert
     {
         public static string Convert(Type type, bool isNullable)
         {

@@ -5,9 +5,9 @@ using System.Text;
 using GRpcProtocolGenerator.Common.Attributes;
 using GRpcProtocolGenerator.Models.MetaData;
 
-namespace GRpcProtocolGenerator.Renders
+namespace GRpcProtocolGenerator.Renders.Protocol
 {
-    public class ProtoService
+    public class ProtocolService
     {
         /// <summary>
         /// Service名称
@@ -24,7 +24,7 @@ namespace GRpcProtocolGenerator.Renders
         /// </summary>
         public InterfaceMetaData InterfaceMetaData { get; set; }
 
-        public ProtoService(string name, List<ProtoServiceItem> items, InterfaceMetaData interfaceMetaData)
+        public ProtocolService(string name, List<ProtoServiceItem> items, InterfaceMetaData interfaceMetaData)
         {
             Name = name;
             Items = items.OrderBy(d => d.Index).ToList();
@@ -36,12 +36,12 @@ namespace GRpcProtocolGenerator.Renders
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"//{CodeRender.Config.Proto.PropertyDescriptionFunc(InterfaceMetaData)} {InterfaceMetaData.FullName}");
+            sb.AppendLine($"//{Builder.Config.Proto.PropertyDescriptionFunc(InterfaceMetaData)} {InterfaceMetaData.FullName}");
             sb.AppendLine($"service {InterfaceMetaData.FormatServiceName()} " + "{");
-            
+
             foreach (var item in Items)
             {
-                sb.AppendLine("\t"+item.ToString());
+                sb.AppendLine("\t" + item.ToString());
             }
             sb.AppendLine("}");
             return sb.ToString();
@@ -56,28 +56,28 @@ namespace GRpcProtocolGenerator.Renders
         /// 方法名称
         /// </summary>
         public string Name { get; set; }
-        
+
         /// <summary>
         /// 传入参数
         /// </summary>
-        public ProtoMessage InParam { get; set; }
+        public ProtocolMessage InParam { get; set; }
 
         /// <summary>
         /// 传出参数
         /// </summary>
-        public ProtoMessage OutParam { get; set; }
+        public ProtocolMessage OutParam { get; set; }
 
         public MethodMetaData MethodMetaData { get; set; }
-        
+
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             var sb = new StringBuilder();
             sb.AppendLine();
-            sb.AppendLine($"\t// {CodeRender.Config.Proto.PropertyDescriptionFunc(MethodMetaData)}");
+            sb.AppendLine($"\t// {Builder.Config.Proto.PropertyDescriptionFunc(MethodMetaData)}");
 
-            if (CodeRender.Config.JsonTranscoding.UseJsonTranscoding)
+            if (Builder.Config.JsonTranscoding.UseJsonTranscoding)
             {
                 sb.Append($"\trpc {Name}({InParam.GetGRpcName()}) returns({OutParam.GetGRpcName()})");
 
@@ -98,11 +98,11 @@ namespace GRpcProtocolGenerator.Renders
             {
                 sb.Append($"\trpc {Name}({InParam.GetGRpcName()}) returns({OutParam.GetGRpcName()});");
             }
-           
+
             return sb.ToString();
         }
 
-        private ProtoHttpOption GetHttpOption(HttpMethod httpMethod, Type type)
+        private ProtocolHttpOption GetHttpOption(HttpMethod httpMethod, Type type)
         {
             var httpAttribute = MethodMetaData.AttributeMetaDataList.FirstOrDefault(d => d.Type == type);
             if (httpAttribute != null)
@@ -110,16 +110,16 @@ namespace GRpcProtocolGenerator.Renders
                 //获取路由
                 var route = httpAttribute.ConstructorDictionary.FirstOrDefault().Value ??
                             httpAttribute.NamedDictionary.FirstOrDefault().Value ?? "";
-                
-                return new ProtoHttpOption(httpMethod, route.ToString(), MethodMetaData.InterfaceMetaData);
+
+                return new ProtocolHttpOption(httpMethod, route.ToString(), MethodMetaData.InterfaceMetaData);
             }
 
             return null;
         }
 
-        private ProtoHttpOption GetDefaultHttpOption()
+        private ProtocolHttpOption GetDefaultHttpOption()
         {
-            return new ProtoHttpOption(HttpMethod.Get, MethodMetaData.FormatServiceMethodName(), MethodMetaData.InterfaceMetaData);
+            return new ProtocolHttpOption(HttpMethod.Get, MethodMetaData.FormatServiceMethodName(), MethodMetaData.InterfaceMetaData);
         }
     }
 }

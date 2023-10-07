@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Text;
 
-namespace GRpcProtocolGenerator.Renders
+namespace GRpcProtocolGenerator.Renders.Protocol
 {
-    public class ProtoServer
+    public class ProtocolServiceImpl
     {
-        private readonly ProtoContent _protoContent;
+        private readonly ProtocolContent _protoContent;
 
         public List<string> Using { get; set; }
 
@@ -27,14 +27,14 @@ namespace GRpcProtocolGenerator.Renders
         /// <summary>
         /// 成功状态码
         /// </summary>
-        protected int SuccessCode ;
+        protected int SuccessCode;
 
         /// <summary>
         /// 失败状态码
         /// </summary>
-        protected int FailureCode ;
+        protected int FailureCode;
 
-        public ProtoServer(ProtoContent protoContent)
+        public ProtocolServiceImpl(ProtocolContent protoContent)
         {
             _protoContent = protoContent;
 
@@ -97,7 +97,7 @@ namespace GRpcProtocolGenerator.Renders
 
             //接口注释
             _sb.AppendLine("\t/// <summary>");
-            _sb.AppendLine($"\t/// {CodeRender.Config.Proto.PropertyDescriptionFunc(_protoContent.ProtoService.InterfaceMetaData)} - {_protoContent.ProtoService.InterfaceMetaData.FullName}");
+            _sb.AppendLine($"\t/// {Builder.Config.Proto.PropertyDescriptionFunc(_protoContent.ProtoService.InterfaceMetaData)} - {_protoContent.ProtoService.InterfaceMetaData.FullName}");
             _sb.AppendLine("\t/// </summary>");
 
             //附加 Attribute 属性
@@ -138,10 +138,10 @@ namespace GRpcProtocolGenerator.Renders
                     : item.InParam.GetGRpcName();
 
                 var isOutParamEmpty = item.MethodMetaData.OutParamMetaDataList.Count == 0;
-                var outParam = RenderHelper.BuildMethodReturnType(IsWrapper, isOutParamEmpty, item.OutParam.GetGRpcName(), EmptyType);
+                var outParam = BuilderPart.BuildMethodReturnType(IsWrapper, isOutParamEmpty, item.OutParam.GetGRpcName(), EmptyType);
 
                 //注释
-                _sb.AppendLine($"\t\t/// {CodeRender.Config.Proto.PropertyDescriptionFunc(item.MethodMetaData)}");
+                _sb.AppendLine($"\t\t/// {Builder.Config.Proto.PropertyDescriptionFunc(item.MethodMetaData)}");
 
                 //方法名
                 _sb.AppendLine($"\t\tpublic override {outParam} {item.Name}({inParam} request, ServerCallContext context)");
@@ -149,7 +149,7 @@ namespace GRpcProtocolGenerator.Renders
 
                 //传入参数
                 var inParamString = GetInParamString(item);
-                
+
                 //返回参数
                 var outParamString = isOutParamEmpty ? "" : "var data = ";
                 outParamString += item.MethodMetaData.IsTask ? "await " : "";
@@ -158,13 +158,13 @@ namespace GRpcProtocolGenerator.Renders
 
                 //return
                 _sb.AppendLine(GetOutParamString(item).ToString());
-                
+
                 _sb.AppendLine("\t\t}");
                 _sb.AppendLine();
             }
         }
 
-        
+
         private void CreateClassEnd()
         {
             _sb.AppendLine("\t}");
@@ -179,18 +179,18 @@ namespace GRpcProtocolGenerator.Renders
             //原始类
             if (item.InParam.IsOriginalClass)
                 return item.MethodMetaData.HasCancellationToken
-                    ? RenderHelper.BuildCancellationTokenInput()
-                    : RenderHelper.MapTo(true, inputParamName, item.InParam.ClassMetaData.FullName);
+                    ? BuilderPart.BuildCancellationTokenInput()
+                    : BuilderPart.MapTo(true, inputParamName, item.InParam.ClassMetaData.FullName);
 
             var inParamString = "";
             foreach (var prop in item.MethodMetaData.InParamMetaDataList)
             {
-                inParamString += RenderHelper.BuildInputItem(prop, inputParamName) + ", ";
+                inParamString += BuilderPart.BuildInputItem(prop, inputParamName) + ", ";
             }
 
             return inParamString.Trim().TrimEnd(',');
         }
-        
+
         public StringBuilder GetOutParamString(ProtoServiceItem item)
         {
             var builder = new StringBuilder();
@@ -198,7 +198,7 @@ namespace GRpcProtocolGenerator.Renders
             //没有返回值
             if (item.MethodMetaData.OutParamMetaDataList.Count == 0)
             {
-                builder.Append($"\t\t\t{RenderHelper.BuildEmptyReturn(item.OutParam.GetGRpcName(), IsWrapper, SuccessCode)}");
+                builder.Append($"\t\t\t{BuilderPart.BuildEmptyReturn(item.OutParam.GetGRpcName(), IsWrapper, SuccessCode)}");
                 return builder;
             }
 
@@ -207,7 +207,7 @@ namespace GRpcProtocolGenerator.Renders
             //原始类
             if (item.OutParam.IsOriginalClass)
             {
-                builder.Append($"\t\t\t{RenderHelper.BuildClassReturn(item.OutParam.GetGRpcName(), param.IsArray, IsWrapper, SuccessCode)}");
+                builder.Append($"\t\t\t{BuilderPart.BuildClassReturn(item.OutParam.GetGRpcName(), param.IsArray, IsWrapper, SuccessCode)}");
                 return builder;
             }
 
@@ -220,16 +220,16 @@ namespace GRpcProtocolGenerator.Renders
 
             if (param.ClassMetaData != null)
             {
-                builder.AppendLine("\t\t\t\t" + RenderHelper.BuildClassItemReturn(param.Name, param.IsArray, param.GRpcType));
+                builder.AppendLine("\t\t\t\t" + BuilderPart.BuildClassItemReturn(param.Name, param.IsArray, param.GRpcType));
             }
             else if (param.EnumMetaData != null)
             {
 
-                builder.AppendLine("\t\t\t\t" + RenderHelper.BuildEnumItemReturn(param.Name, param.IsArray, param.IsNullable));
+                builder.AppendLine("\t\t\t\t" + BuilderPart.BuildEnumItemReturn(param.Name, param.IsArray, param.IsNullable));
             }
             else
             {
-                builder.AppendLine("\t\t\t\t" + RenderHelper.BuildSampleItemReturn(param.Name, param.IsArray));
+                builder.AppendLine("\t\t\t\t" + BuilderPart.BuildSampleItemReturn(param.Name, param.IsArray));
             }
 
             builder.Append("\t\t\t};");

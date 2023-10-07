@@ -1,15 +1,16 @@
 ﻿using GRpcProtocolGenerator.Renders;
+using GRpcProtocolGenerator.Types;
 using Sample.Services.Models;
 
 namespace GRpcProtocolGenerator.Test.Metadatas
 {
     public class MessageTest
     {
-        private readonly CodeRender _codeRender;
+        private readonly Builder _codeRender;
 
         public MessageTest()
         {
-            _codeRender = new MetaDataTest().Handler.CreateCodeRender();
+            _codeRender = new MetaDataTest().Handler.CreateBuilder();
         }
 
 
@@ -35,7 +36,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Int.GetDescription());
 
-            var itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // IntColumn";
+            var itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // IntColumn";
             Assert.Equal(item.ToString(), itemString);
 
 
@@ -46,7 +47,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Long.GetDescription());
 
-            itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // LongColumn";
+            itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // LongColumn";
             Assert.Equal(item.ToString(), itemString);
 
 
@@ -57,7 +58,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Double.GetDescription());
 
-            itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // DecimalColumn";
+            itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // DecimalColumn";
             Assert.Equal(item.ToString(), itemString);
 
 
@@ -68,7 +69,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Double.GetDescription());
 
-            itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // DoubleColumn";
+            itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // DoubleColumn";
             Assert.Equal(item.ToString(), itemString);
 
             
@@ -79,7 +80,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Float.GetDescription());
 
-            itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // FloatColumn";
+            itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // FloatColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //UintColumn
@@ -89,7 +90,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.UInt.GetDescription());
 
-            itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // UintColumn";
+            itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // UintColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //UlongColumn
@@ -99,7 +100,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.ULong.GetDescription());
 
-            itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // UlongColumn";
+            itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // UlongColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //StringColumn  默认可为空
@@ -109,7 +110,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.True(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpNullableTypeEnum.String.GetDescription());
 
-            itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // StringColumn";
+            itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // StringColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //BoolColumn
@@ -119,7 +120,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Bool.GetDescription());
 
-            itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // BoolColumn";
+            itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // BoolColumn";
             Assert.Equal(item.ToString(), itemString);
 
 
@@ -130,7 +131,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.String.GetDescription());
 
-            itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // DateTimeColumn";
+            itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // DateTimeColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //ByteColumn
@@ -140,7 +141,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Int.GetDescription());
 
-            itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // ByteColumn";
+            itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // ByteColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //ClassColumn
@@ -150,7 +151,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.True(item.ClassMetaData != null);
             Assert.Equal("GrpcSampleClass", item.GRpcType);
 
-            itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // ClassColumn";
+            itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // ClassColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //EnumColumn 默认转数字
@@ -160,7 +161,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Int.GetDescription());
 
-            itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // EnumColumn";
+            itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // EnumColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //StructColumn
@@ -169,7 +170,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsArray);
             Assert.Equal("GrpcSampleStruct", item.GRpcType);
 
-            itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // StructColumn";
+            itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // StructColumn";
             Assert.Equal(item.ToString(), itemString);
         }
 
@@ -194,7 +195,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsArray);
             Assert.Equal("GrpcTreeNode_SampleClass", item.GRpcType);
 
-            var itemString = $"{item.GRpcType} {(CodeRender.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // GenericClass";
+            var itemString = $"{item.GRpcType} {(Builder.Config.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // GenericClass";
             Assert.Equal(item.ToString(), itemString);
         }
 
@@ -202,39 +203,39 @@ namespace GRpcProtocolGenerator.Test.Metadatas
         public void MessageItemTest3()
         {
             //CancellationToken
-            Assert.Null(RenderHelper.BuildMessageItem("a", typeof(CancellationToken), false, false, 0, null));
+            Assert.Null(BuilderPart.BuildMessageItem("a", typeof(CancellationToken), false, false, 0, null));
 
             //int
-            Assert.Equal("int32 a = 1; // desc", RenderHelper.BuildMessageItem("a", typeof(int), false, false, 1, "desc"));
-            Assert.Equal("int32 a = 2;", RenderHelper.BuildMessageItem("a", typeof(int), false, false, 2, ""));
-            Assert.Equal("google.protobuf.Int32Value a = 3;", RenderHelper.BuildMessageItem("a", typeof(int), false, true, 3, ""));
-            Assert.Equal("repeated google.protobuf.Int32Value a = 4;", RenderHelper.BuildMessageItem("a", typeof(int), true, true, 4, ""));
-            Assert.Equal("repeated int32 a = 5;", RenderHelper.BuildMessageItem("a", typeof(int), true, false, 5, ""));
+            Assert.Equal("int32 a = 1; // desc", BuilderPart.BuildMessageItem("a", typeof(int), false, false, 1, "desc"));
+            Assert.Equal("int32 a = 2;", BuilderPart.BuildMessageItem("a", typeof(int), false, false, 2, ""));
+            Assert.Equal("google.protobuf.Int32Value a = 3;", BuilderPart.BuildMessageItem("a", typeof(int), false, true, 3, ""));
+            Assert.Equal("repeated google.protobuf.Int32Value a = 4;", BuilderPart.BuildMessageItem("a", typeof(int), true, true, 4, ""));
+            Assert.Equal("repeated int32 a = 5;", BuilderPart.BuildMessageItem("a", typeof(int), true, false, 5, ""));
 
             //string
-            Assert.Equal("string a = 0;", RenderHelper.BuildMessageItem("a", typeof(string), false, false, 0, ""));
-            Assert.Equal("google.protobuf.StringValue a = 0;", RenderHelper.BuildMessageItem("a", typeof(string), false, true, 0, ""));
-            Assert.Equal("repeated google.protobuf.StringValue a = 0;", RenderHelper.BuildMessageItem("a", typeof(string), true, true, 0, ""));
-            Assert.Equal("repeated string a = 0;", RenderHelper.BuildMessageItem("a", typeof(string), true, false, 0, ""));
+            Assert.Equal("string a = 0;", BuilderPart.BuildMessageItem("a", typeof(string), false, false, 0, ""));
+            Assert.Equal("google.protobuf.StringValue a = 0;", BuilderPart.BuildMessageItem("a", typeof(string), false, true, 0, ""));
+            Assert.Equal("repeated google.protobuf.StringValue a = 0;", BuilderPart.BuildMessageItem("a", typeof(string), true, true, 0, ""));
+            Assert.Equal("repeated string a = 0;", BuilderPart.BuildMessageItem("a", typeof(string), true, false, 0, ""));
 
             //class
-            Assert.Equal("GrpcSampleClass a = 0;", RenderHelper.BuildMessageItem("a", typeof(SampleClass), false, false, 0, ""));
-            Assert.Equal("GrpcSampleClass a = 0;", RenderHelper.BuildMessageItem("a", typeof(SampleClass), false, true, 0, ""));
-            Assert.Equal("repeated GrpcSampleClass a = 0;", RenderHelper.BuildMessageItem("a", typeof(SampleClass), true, true, 0, ""));
-            Assert.Equal("repeated GrpcSampleClass a = 0;", RenderHelper.BuildMessageItem("a", typeof(SampleClass), true, false, 0, ""));
+            Assert.Equal("GrpcSampleClass a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleClass), false, false, 0, ""));
+            Assert.Equal("GrpcSampleClass a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleClass), false, true, 0, ""));
+            Assert.Equal("repeated GrpcSampleClass a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleClass), true, true, 0, ""));
+            Assert.Equal("repeated GrpcSampleClass a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleClass), true, false, 0, ""));
 
             //泛型class
             Assert.Equal($"{typeof(TreeNode<SampleClass>).GetGenericClassName().FormatMessageName()} a = 0;",
-                RenderHelper.BuildMessageItem("a", typeof(TreeNode<SampleClass>), false, false, 0, ""));
+                BuilderPart.BuildMessageItem("a", typeof(TreeNode<SampleClass>), false, false, 0, ""));
 
             //struct
-            Assert.Equal("GrpcSampleStruct a = 0;", RenderHelper.BuildMessageItem("a", typeof(SampleStruct), false, false, 0, ""));
-            Assert.Equal("GrpcSampleStruct a = 0;", RenderHelper.BuildMessageItem("a", typeof(SampleStruct), false, true, 0, ""));
-            Assert.Equal("repeated GrpcSampleStruct a = 0;", RenderHelper.BuildMessageItem("a", typeof(SampleStruct), true, true, 0, ""));
-            Assert.Equal("repeated GrpcSampleStruct a = 0;", RenderHelper.BuildMessageItem("a", typeof(SampleStruct), true, false, 0, ""));
+            Assert.Equal("GrpcSampleStruct a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleStruct), false, false, 0, ""));
+            Assert.Equal("GrpcSampleStruct a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleStruct), false, true, 0, ""));
+            Assert.Equal("repeated GrpcSampleStruct a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleStruct), true, true, 0, ""));
+            Assert.Equal("repeated GrpcSampleStruct a = 0;", BuilderPart.BuildMessageItem("a", typeof(SampleStruct), true, false, 0, ""));
 
             //bytes
-            Assert.Equal("bytes a = 0;", RenderHelper.BuildMessageItem("a", typeof(byte[]), false, false, 0, ""));
+            Assert.Equal("bytes a = 0;", BuilderPart.BuildMessageItem("a", typeof(byte[]), false, false, 0, ""));
         }
 
         [Fact]

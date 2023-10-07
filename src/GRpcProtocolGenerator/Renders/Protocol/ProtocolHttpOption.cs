@@ -2,13 +2,14 @@
 using System.ComponentModel;
 using System.Text;
 using GRpcProtocolGenerator.Models.MetaData;
+using GRpcProtocolGenerator.Types;
 
-namespace GRpcProtocolGenerator.Renders
+namespace GRpcProtocolGenerator.Renders.Protocol
 {
     /// <summary>
     /// 生成 Http option
     /// </summary>
-    public class ProtoHttpOption
+    public class ProtocolHttpOption
     {
         public HttpMethod HttpMethod { get; set; }
 
@@ -16,7 +17,7 @@ namespace GRpcProtocolGenerator.Renders
 
         public InterfaceMetaData InterfaceMetaData { get; }
 
-        public ProtoHttpOption(HttpMethod httpMethod, string route, InterfaceMetaData interfaceMetaData)
+        public ProtocolHttpOption(HttpMethod httpMethod, string route, InterfaceMetaData interfaceMetaData)
         {
             HttpMethod = httpMethod;
             Route = route;
@@ -58,7 +59,7 @@ namespace GRpcProtocolGenerator.Renders
         {
             var route = $"{InterfaceMetaData.FormatServiceName()}" + $"{(string.IsNullOrWhiteSpace(Route) ? "" : "/" + Route)}";
 
-            var newRoute = CodeRender.Config.JsonTranscoding.RouteFunc?.Invoke(route);
+            var newRoute = Builder.Config.JsonTranscoding.RouteFunc?.Invoke(route);
             return string.IsNullOrWhiteSpace(newRoute) ? $"\"/api/v1/{route}" + "\"," : $"\"/{newRoute}" + "\",";
         }
     }

@@ -6,7 +6,7 @@ using Scriban.Runtime;
 
 namespace GRpcProtocolGenerator.Renders
 {
-    internal sealed partial class TemplateRender
+    internal sealed partial class ScribanHelper
     {
         public static async Task<string> RenderByTemplate(object data, string template)
         {

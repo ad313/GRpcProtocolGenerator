@@ -1,10 +1,13 @@
 using GRpcProtocolGenerator.Common;
 using GRpcProtocolGenerator.Common.Attributes;
 using GRpcProtocolGenerator.Models.MetaData;
+using GRpcProtocolGenerator.Renders;
+using GRpcProtocolGenerator.Resolve;
 using Sample.Services;
 using Sample.Services.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using GRpcProtocolGenerator.Resolve.Configs;
 
 namespace GRpcProtocolGenerator.Test.Metadatas
 {
@@ -20,10 +23,10 @@ namespace GRpcProtocolGenerator.Test.Metadatas
 
             var basePath = "123";
             var project = "Sample";
-            Handler = new GeneratorHandler(new GeneratorConfig(basePath)
+            Handler = new GeneratorHandler(new Config(basePath)
             {
                 Assemblies = $"{project}.Services",
-                Proto = new ProtoConfig()
+                Proto = new ProtocolConfig()
                 {
                     Output = $"../{project}.Protocol",
                     ProtoDirectory = "protos",
@@ -91,7 +94,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
                     InterfaceFilterFunc = meta => true,
                     MethodFilterFunc = (interfaceMeta, methodMeta) => true
                 },
-                JsonTranscoding = new JsonTranscoding()
+                JsonTranscoding = new JsonTranscodingConfig()
                 {
                     UseJsonTranscoding = true,
                     UseResultWrapper = true,

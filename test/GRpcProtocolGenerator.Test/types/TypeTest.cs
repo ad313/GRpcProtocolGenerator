@@ -1,3 +1,4 @@
+using GRpcProtocolGenerator.Types;
 using Sample.Services.Models;
 using System.Collections.Concurrent;
 
