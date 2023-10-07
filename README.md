@@ -13,6 +13,7 @@ generator grpc protocol from c# interface
 ## 使用限制
 - 不支持 字典：Dictionary<xxx,xxx>
 - 不支持 Task 嵌套 Task
+- 不支持 集合 嵌套 集合
 - 不支持 object 参数
 - 不支持 StringBuilder 参数
 - 枚举会被转换成数字，因为当启用 grpc json 转码时，生成的 swagger 会有问题
@@ -231,5 +232,5 @@ namespace Sample.Server.Implements
 
 ```
 ## 参考文档
-- grpc json 转发，.net 7 的新特性：https://learn.microsoft.com/zh-cn/aspnet/core/grpc/json-transcoding-binding?view=aspnetcore-7.0
+- grpc json 转码，.net 7 的新特性：https://learn.microsoft.com/zh-cn/aspnet/core/grpc/json-transcoding-binding?view=aspnetcore-7.0
 - protobuf 与 C# 字段映射：https://learn.microsoft.com/zh-cn/dotnet/architecture/grpc-for-wcf-developers/protobuf-data-types
