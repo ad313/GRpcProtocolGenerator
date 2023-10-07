@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Version>0.1.0</Version>
+		<Description>GRpc Attribute Config</Description>
+		<PackageProjectUrl>https://github.com/ad313/GRpcProtocolGenerator</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/ad313/GRpcProtocolGenerator</RepositoryUrl>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<NoWarn>1701;1702;1591;</NoWarn>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<NoWarn>1701;1702;1591;</NoWarn>
+	</PropertyGroup>
+</Project>
