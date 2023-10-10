@@ -32,6 +32,11 @@ namespace GRpcProtocolGenerator.Models.Configs
         public string ProjectName { get; private set; }
 
         /// <summary>
+        /// 端口
+        /// </summary>
+        public int Port { get; set; } = 6010;
+
+        /// <summary>
         /// 存放 grpc service 实现
         /// </summary>
         public string ImplementsDirectory { get; set; }
@@ -40,6 +45,11 @@ namespace GRpcProtocolGenerator.Models.Configs
         /// 给 server 附加 属性
         /// </summary>
         public List<string> AppendAttributeToServer { get; set; } = new List<string>();
+
+        /// <summary>
+        /// 给 csproj 附加 包引用
+        /// </summary>
+        public List<string> AppendPackageToCsproj { get; set; } = new List<string>();
 
         /// <summary>
         /// 初始化，传入宿主程序地址，不是bin地址

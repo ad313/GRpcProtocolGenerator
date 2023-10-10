@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GRpcProtocolGenerator.Common;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -51,9 +52,24 @@ namespace GRpcProtocolGenerator.Models.Configs
         public string ReturnMethodName { get; set; } = "Ok";
 
         /// <summary>
+        /// 端口
+        /// </summary>
+        public int Port { get; set; } = 6011;
+
+        /// <summary>
+        /// swagger
+        /// </summary>
+        public SwaggerConfig Swagger { get; set; } = new SwaggerConfig();
+
+        /// <summary>
         /// 给 Controller 附加 属性
         /// </summary>
         public List<string> AppendAttributeToController { get; set; } = new List<string>();
+
+        /// <summary>
+        /// 给 csproj 附加 包引用
+        /// </summary>
+        public List<string> AppendPackageToCsproj { get; set; } = new List<string>();
 
         /// <summary>
         /// 初始化，传入宿主程序地址，不是bin地址

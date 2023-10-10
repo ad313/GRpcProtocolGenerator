@@ -16,6 +16,10 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+
+		{{- for pkg in config.controller.append_package_to_csproj }}
+		<PackageReference Include="{{ pkg }}" Version="*" />
+		{{- end }}
 	</ItemGroup>
 
 	<ItemGroup>

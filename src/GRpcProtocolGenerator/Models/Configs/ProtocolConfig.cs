@@ -42,6 +42,11 @@ namespace GRpcProtocolGenerator.Models.Configs
         public bool UseProtoDirectoryWhenImportPackage { get; set; } = true;
 
         /// <summary>
+        /// 给 csproj 附加 包引用
+        /// </summary>
+        public List<string> AppendPackageToCsproj { get; set; } = new List<string>();
+
+        /// <summary>
         /// 初始化，传入宿主程序地址，不是bin地址
         /// </summary>
         /// <param name="currentPath">宿主程序地址，不是bin地址</param>

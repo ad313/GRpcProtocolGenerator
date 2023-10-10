@@ -1,0 +1,17 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "client_address_key": "https://localhost:{{ config.server.port }}",
+  "Kestrel": {
+    "Endpoints": {
+      "http": {
+        "Url": "http://*:{{ config.controller.port }}"
+      }
+    }
+  }
+}

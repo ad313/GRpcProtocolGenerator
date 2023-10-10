@@ -4,4 +4,8 @@
     <TargetFrameworks>net7.0</TargetFrameworks>
   </PropertyGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\Sample.Protocol\Sample.Protocol.csproj" />
+	</ItemGroup>
+
 </Project>

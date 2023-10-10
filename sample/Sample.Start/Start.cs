@@ -1,7 +1,6 @@
 ﻿using GRpcProtocolGenerator;
 using GRpcProtocolGenerator.Common;
 using GRpcProtocolGenerator.Renders;
-using Microsoft.AspNetCore.Routing;
 using Sample.Services.Models;
 
 namespace Sample.Start
@@ -18,7 +17,7 @@ namespace Sample.Start
             await new GeneratorHandler(basePath, builder =>
             {
                 //配置目标程序集名称
-                builder.SetAssembly($"{project}.Services");
+                builder.SetAssembly($"{project}.Services.dll");
 
                 //配置 protocol
                 builder.SetProtocolConfig(proto =>
@@ -130,10 +129,28 @@ namespace Sample.Start
                     //路由
                     controller.Route = $"{project}/api/v1/[controller]";
 
-                    //
+                    //控制器返回结果包装，返回给前端
                     //controller.ReturnMethodName = "Success";
 
-                    controller.AppendAttributeToController = new List<string>();
+                    controller.AppendAttributeToController = new List<string>() {  };
+
+                    controller.Swagger = new SwaggerConfig()
+                    {
+                        SwaggerConfigType = SwaggerConfigType.IdentityLogin,
+                        Name = "GRpc Client + Restful api",
+                        Title = "gRPC transcoding",
+                        Audience = "attendancesystem",
+                        Scope = new[] { "gateway" },
+                        ClientId = "64057d47d3b24a0001470082",
+                        ClientSecret = "secret",
+                        IdentityUrl = "https://192.168.1.20:8443",
+                        Version = "v1",
+                        DocumentXml = new[]
+                        {
+                            $"{project}.Gateway.xml",
+                            $"{project}.Protocol.xml"
+                        }
+                    };
                 });
 
                 builder.SetFilter(filter =>

@@ -72,6 +72,12 @@ namespace GRpcProtocolGenerator.Renders
                 }
 
                 await BuilderPath.CreateServerRootFile(serverCsprojFileName, serverCsprojString);
+
+
+                //appsettings.json
+                var appSettingsJson = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Server.AppSettings");
+                var appSettingsJsonFileName = "appsettings.json";
+                await BuilderPath.CreateFileAsync(Config.ConfigInstance.Server.OutputFullPath, appSettingsJsonFileName, appSettingsJson, false);
             }
 
             // proto csproj
@@ -181,14 +187,6 @@ namespace GRpcProtocolGenerator.Renders
 
             var interfaces = _assemblyMetaData.InterfaceMetaDataDictionary.Select(d => d.Value).ToList();
 
-            ////生成 GRpcClientExtensions.cs
-            //var extensionString = await ScribanHelper.Render(new { config = Config.ConfigInstance, servers = interfaces }, "Client.Extensions");
-            //await BuilderPath.CreateFileAsync(Config.ConfigInstance.ClientWrapper.OutputFullPath, "GRpcClientExtensions.cs", extensionString, true);
-
-            ////生成 GRpcClientProvider.cs
-            //var providerString = await ScribanHelper.Render(new { config = Config.ConfigInstance, servers = interfaces }, "Client.Provider");
-            //await BuilderPath.CreateFileAsync(Config.ConfigInstance.ClientWrapper.OutputFullPath, "GRpcClientProvider.cs", providerString, true);
-
             //生成服务代理
             foreach (var service in Services)
             {
@@ -203,7 +201,7 @@ namespace GRpcProtocolGenerator.Renders
                         name_space = Config.ConfigInstance.Controller.GetControllerNamespace(),
                         name = name,
                         protoNamespace = Config.ConfigInstance.Proto.GetCSharpNamespace(service.InterfaceMetaData),
-                        description = Config.ConfigInstance.Proto.PropertyDescriptionFunc(service.InterfaceMetaData),
+                        description = Config.ConfigInstance.Proto.PropertyDescriptionFunc(service.InterfaceMetaData) ?? service.InterfaceMetaData.FullName,
                         gRpcServiceName = service.InterfaceMetaData.FormatServiceName(),
                     }
                 }, "Controller.Controller");
@@ -222,6 +220,38 @@ namespace GRpcProtocolGenerator.Renders
             }
 
             await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.OutputFullPath, csprojFileName, csprojString, true);
+
+
+
+
+            // program
+            var controllerProgramString = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Controller.Program");
+            var controllerProgramFileName = "Program.cs";
+
+            // 如果 program.cs 已存在，则生成 programNew.cs，不覆盖原来的 program.cs
+            if (File.Exists(Config.ConfigInstance.Controller.GetProgramFilePath()))
+            {
+                controllerProgramString = "/*" + Environment.NewLine + controllerProgramString + Environment.NewLine + "*/";
+                controllerProgramFileName += "New";
+            }
+
+            await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.OutputFullPath, controllerProgramFileName, controllerProgramString, true);
+
+
+
+            //swagger
+            if (Config.ConfigInstance.Controller.Swagger != null)
+            {
+                var swaggerProgramString = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Controller.Swagger");
+                var swaggerProgramFileName = "SwaggerExtensions.cs";
+                await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.OutputFullPath, swaggerProgramFileName, swaggerProgramString, true);
+            }
+
+
+            //appsettings.json
+            var appSettingsJson = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Controller.AppSettings");
+            var appSettingsJsonFileName = "appsettings.json";
+            await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.OutputFullPath, appSettingsJsonFileName, appSettingsJson, false);
         }
     }
 }

@@ -14,6 +14,9 @@ using {{ config.client_wrapper.project_name }};
 namespace {{ data.name_space }}
 {
     /// {{ data.description }}
+    {{- for p in config.controller.append_attribute_to_controller }}
+    {{ p }}
+    {{- end }}
     [ApiController]
     [Route("{{ config.controller.route }}")]
     [ApiExplorerSettings(GroupName = "{{ data.description }}")]

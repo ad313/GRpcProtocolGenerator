@@ -6,9 +6,18 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.11" />
+	    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.11" />
 		<PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.3.10" />
 		<PackageReference Include="Mapster" Version="7.4.0" />
+
+		{{- for pkg in config.server.append_package_to_csproj }}
+		<PackageReference Include="{{ pkg }}" Version="*" />
+		{{- end }}
 	</ItemGroup>	
+
+	<ItemGroup>
+		<ProjectReference Include="{{ config.proto.output | string.replace '/' '\\' }}\{{ config.proto.project_name }}.csproj" />
+		<ProjectReference Include="..\{{ config.assemblies | string.replace '.dll' '' }}\{{ config.assemblies | string.replace '.dll' '' }}.csproj" />
+	</ItemGroup>
 
 </Project>

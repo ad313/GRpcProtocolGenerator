@@ -13,7 +13,7 @@ namespace Sample.Gateway
     /// <summary>
     /// swagger
     /// </summary>
-    public static class SwaggerExtensions
+    public static partial class SwaggerExtensions
     {
         /// <summary>
         /// 注册 swagger
@@ -100,7 +100,7 @@ namespace Sample.Gateway
                     AddXml(option, xml);
                 }
             });
-            
+
             void AddXml(SwaggerGenOptions c, string name)
             {
                 c.DocInclusionPredicate((_, api) => string.IsNullOrWhiteSpace(api.GroupName) == false);
@@ -119,7 +119,7 @@ namespace Sample.Gateway
         /// <param name="app"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static WebApplication UseCustomSwagger(this WebApplication app, SwaggerConfig config)
+        public static T UseCustomSwagger<T>(this T app, SwaggerConfig config) where T: IApplicationBuilder
         {
             app.UseSwagger();
             app.UseSwaggerUI(c =>

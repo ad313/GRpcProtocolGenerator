@@ -1,11 +1,11 @@
-﻿using GRpcProtocolGenerator.Common;
+using GRpcProtocolGenerator.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 
-namespace Sample.Gateway
+namespace {{ config.controller.project_name }}
 {
     public class Program
     {
@@ -17,22 +17,25 @@ namespace Sample.Gateway
 
             var config = new SwaggerConfig()
             {
-                SwaggerConfigType = SwaggerConfigType.IdentityLogin,
-                Name = "GRpc Server + Restful api",
-                Title = "gRPC transcoding",
-                Audience = "attendancesystem",
+                SwaggerConfigType = SwaggerConfigType.{{ config.controller.swagger.swagger_config_type }},
+                Name = "{{ config.controller.swagger.name }}",
+                Title = "{{ config.controller.swagger.title }}",
+                Audience = "{{ config.controller.swagger.audience }}",
                 Scope = new string[]
                 {
-                    "gateway",
+                    {{- for scope in config.controller.swagger.scope }}
+                    "{{ scope }}",
+                    {{- end }}
                 },
-                ClientId = "64057d47d3b24a0001470082",
-                ClientSecret = "secret",
-                IdentityUrl = "https://192.168.1.20:8443",
-                Version = "v1",
+                ClientId = "{{ config.controller.swagger.client_id }}",
+                ClientSecret = "{{ config.controller.swagger.client_secret }}",
+                IdentityUrl = "{{ config.controller.swagger.identity_url }}",
+                Version = "{{ config.controller.swagger.version }}",
                 DocumentXml = new string[]
                 {
-                    "Sample.Gateway.xml",
-                    "Sample.Protocol.xml",
+                    {{- for xml in config.controller.swagger.document_xml }}
+                    "{{ xml }}",
+                    {{- end }}
                 }
             };
 

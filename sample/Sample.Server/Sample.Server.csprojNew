@@ -11,4 +11,9 @@
 		<PackageReference Include="Mapster" Version="7.4.0" />
 	</ItemGroup>	
 
+	<ItemGroup>
+		<ProjectReference Include="..\Sample.Protocol\Sample.Protocol.csproj" />
+		<ProjectReference Include="..\Sample.Services\Sample.Services.csproj" />
+	</ItemGroup>
+
 </Project>
