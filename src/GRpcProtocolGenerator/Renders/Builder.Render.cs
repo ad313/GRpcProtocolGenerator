@@ -1,9 +1,10 @@
-﻿using GRpcProtocolGenerator.Renders.Protocol;
+﻿using GRpcProtocolGenerator.Models.Configs;
+using GRpcProtocolGenerator.Renders.Protocol;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using GRpcProtocolGenerator.Models.Configs;
+using System.Xml.Linq;
 
 namespace GRpcProtocolGenerator.Renders
 {
@@ -32,7 +33,7 @@ namespace GRpcProtocolGenerator.Renders
                 //server
                 if (Config.ConfigInstance.HasServer)
                 {
-                    var server = new ProtocolServiceImpl(protoContent);
+                    var server = new ServerServiceImpl(protoContent);
                     var serverContent = server.ToContent();
                     await BuilderPath.CreateServerFile(server.ServerName, serverContent);
                     Console.WriteLine(serverContent);
@@ -46,7 +47,7 @@ namespace GRpcProtocolGenerator.Renders
                 await BuilderPath.CreateServerMapperFile("DefaultMapperConfig", mapperString);
 
                 // program
-                var servers = Services.Select(d => new ProtocolServiceImpl(new ProtocolContent(d))).ToList();
+                var servers = Services.Select(d => new ServerServiceImpl(new ProtocolContent(d))).ToList();
                 var serverProgramString = await ScribanHelper.Render(new { config = Config.ConfigInstance, servers = servers }, "Server.Program");
                 var serverProgramFileName = "Program";
 
@@ -107,7 +108,120 @@ namespace GRpcProtocolGenerator.Renders
                 Console.WriteLine(method.DeclaringType?.FullName + "." + method.Name);
             }
 
+            // 生成客户端包装
+            await RenderClientWrapper();
+
+            // 生成控制器
+            await RenderController();
+
             Console.WriteLine("生成完毕");
+        }
+
+        /// <summary>
+        /// 生成客户端包装
+        /// </summary>
+        /// <returns></returns>
+        private async Task RenderClientWrapper()
+        {
+            if (Config.ConfigInstance.ClientWrapper == null)
+                return;
+
+            var interfaces = _assemblyMetaData.InterfaceMetaDataDictionary.Select(d => d.Value).ToList();
+
+            //生成 GRpcClientExtensions.cs
+            var extensionString = await ScribanHelper.Render(new { config = Config.ConfigInstance, servers = interfaces }, "Client.Extensions");
+            await BuilderPath.CreateFileAsync(Config.ConfigInstance.ClientWrapper.OutputFullPath, "GRpcClientExtensions.cs", extensionString, true);
+
+            //生成 GRpcClientProvider.cs
+            var providerString = await ScribanHelper.Render(new { config = Config.ConfigInstance, servers = interfaces }, "Client.Provider");
+            await BuilderPath.CreateFileAsync(Config.ConfigInstance.ClientWrapper.OutputFullPath, "GRpcClientProvider.cs", providerString, true);
+
+            //生成服务代理
+            foreach (var service in Services)
+            {
+                var name = $"GRpc{service.Name.TrimStart('I')}Client";
+
+                var str = await ScribanHelper.Render(new
+                {
+                    config = Config.ConfigInstance,
+                    data = new
+                    {
+                        service = service,
+                        name = name,
+                        protoNamespace= Config.ConfigInstance.Proto.GetCSharpNamespace(service.InterfaceMetaData),
+                        description= Config.ConfigInstance.Proto.PropertyDescriptionFunc(service.InterfaceMetaData),
+                        gRpcServiceName =service.InterfaceMetaData.FormatServiceName(),
+                    }
+                }, "Client.Client");
+                
+                await BuilderPath.CreateFileAsync(Config.ConfigInstance.ClientWrapper.OutputFullPath, $"I{name}.cs", str, true);
+            }
+
+            // csproj
+            var csprojString = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Client.csproj");
+            var csprojFileName = Config.ConfigInstance.ClientWrapper.ProjectName + ".csproj";
+
+            // 如果 csproj 已存在，则生成 csprojNew，不覆盖原来的 csproj
+            if (File.Exists(Config.ConfigInstance.ClientWrapper.GetCsprojFilePath()))
+            {
+                csprojFileName += "New";
+            }
+
+            await BuilderPath.CreateFileAsync(Config.ConfigInstance.ClientWrapper.OutputFullPath, csprojFileName, csprojString, true);
+        }
+
+        /// <summary>
+        /// 生成控制器
+        /// </summary>
+        /// <returns></returns>
+        private async Task RenderController()
+        {
+            if (Config.ConfigInstance.Controller == null)
+                return;
+
+            var interfaces = _assemblyMetaData.InterfaceMetaDataDictionary.Select(d => d.Value).ToList();
+
+            ////生成 GRpcClientExtensions.cs
+            //var extensionString = await ScribanHelper.Render(new { config = Config.ConfigInstance, servers = interfaces }, "Client.Extensions");
+            //await BuilderPath.CreateFileAsync(Config.ConfigInstance.ClientWrapper.OutputFullPath, "GRpcClientExtensions.cs", extensionString, true);
+
+            ////生成 GRpcClientProvider.cs
+            //var providerString = await ScribanHelper.Render(new { config = Config.ConfigInstance, servers = interfaces }, "Client.Provider");
+            //await BuilderPath.CreateFileAsync(Config.ConfigInstance.ClientWrapper.OutputFullPath, "GRpcClientProvider.cs", providerString, true);
+
+            //生成服务代理
+            foreach (var service in Services)
+            {
+                var name = service.Name.FormatGRpcClientName();
+
+                var str = await ScribanHelper.Render(new
+                {
+                    config = Config.ConfigInstance,
+                    data = new
+                    {
+                        service = new ControllerImpl(service),
+                        name_space = Config.ConfigInstance.Controller.GetControllerNamespace(),
+                        name = name,
+                        protoNamespace = Config.ConfigInstance.Proto.GetCSharpNamespace(service.InterfaceMetaData),
+                        description = Config.ConfigInstance.Proto.PropertyDescriptionFunc(service.InterfaceMetaData),
+                        gRpcServiceName = service.InterfaceMetaData.FormatServiceName(),
+                    }
+                }, "Controller.Controller");
+
+                await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.GetControllerFileOutputPath(), $"{service.Name.TrimStart('I')}Controller.cs", str, true);
+            }
+
+            // csproj
+            var csprojString = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Controller.csproj");
+            var csprojFileName = Config.ConfigInstance.Controller.ProjectName + ".csproj";
+
+            // 如果 csproj 已存在，则生成 csprojNew，不覆盖原来的 csproj
+            if (File.Exists(Config.ConfigInstance.Controller.GetCsprojFilePath()))
+            {
+                csprojFileName += "New";
+            }
+
+            await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.OutputFullPath, csprojFileName, csprojString, true);
         }
     }
 }

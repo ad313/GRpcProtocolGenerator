@@ -1,0 +1,51 @@
+/*
+     此代码是自动生成，请勿修改，如果要修改，请继承它再重写方法。
+*/
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Threading;
+using System.Threading.Tasks;
+using {{ data.proto_namespace }};
+using {{ config.client_wrapper.project_name }};
+
+namespace {{ data.name_space }}
+{
+    /// {{ data.description }}
+    [ApiController]
+    [Route("{{ config.controller.route }}")]
+    [ApiExplorerSettings(GroupName = "{{ data.description }}")]
+    public partial class {{ data.service.name }} : {{ config.controller.base_controller }}
+    {
+        private readonly {{ data.service.client_interface }} _client;
+
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="client"></param>
+        public {{ data.service.name }}({{ data.service.client_interface }} client)
+        {
+            _client = client;
+        }
+        
+        {{- for item in data.service.items }}
+        {{}}        
+        /// <summary>
+        /// {{ item.description }}
+        /// </summary>
+        /// <returns></returns>
+        {{ item.http }}
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation("{{ item.description }}")]
+        {{- if item.return_type != "Empty" }}
+        [SwaggerResponse(200, "响应结果", typeof({{ item.return_type }}))]
+        {{- end }}        
+        public virtual async Task<IActionResult> {{ item.name }}({{ item.input_type }}CancellationToken cancellationToken = default)
+        {
+            var result = await _client.{{ item.client_method_name }}({{ item.client_input_type }}, cancellationToken: cancellationToken);
+            return {{ config.controller.return_method_name }}(result);
+        }
+        {{- end }}        
+    }
+}

@@ -50,6 +50,16 @@ namespace GRpcProtocolGenerator.Models.Configs
         public JsonTranscodingConfig JsonTranscoding { get; set; }
 
         /// <summary>
+        /// 客户端包装器
+        /// </summary>
+        public ClientWrapperConfig ClientWrapper { get; set; }
+
+        /// <summary>
+        /// 生成控制器配置
+        /// </summary>
+        public ControllerConfig Controller { get; set; }
+
+        /// <summary>
         /// 初始化，传入宿主程序地址，不是bin地址
         /// </summary>
         /// <param name="currentPath">宿主程序地址，不是bin地址</param>

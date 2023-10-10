@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using GRpcProtocolGenerator.Models.Configs;
+using Scriban.Parsing;
 
 namespace GRpcProtocolGenerator.Renders
 {
@@ -122,6 +124,29 @@ namespace GRpcProtocolGenerator.Renders
 
                 Console.WriteLine($"创建目录：{path}");
             }
+        }
+
+        /// <summary>
+        /// 写入文件
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="name"></param>
+        /// <param name="text"></param>
+        /// <param name="replace">当已存在时，是否替换</param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static async Task CreateFileAsync(string path, string name, string text, bool replace = false, CancellationToken token = default)
+        {
+            var fullPath = Path.Combine(path, name);
+            if (File.Exists(fullPath))
+            {
+                if (!replace) return;
+                File.Delete(fullPath);
+            }
+
+            CreateDirectory(path);
+
+            await File.WriteAllTextAsync(fullPath, text, Encoding.UTF8, token);
         }
     }
 }

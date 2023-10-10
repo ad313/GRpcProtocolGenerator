@@ -50,7 +50,12 @@ namespace GRpcProtocolGenerator.Renders
 
             return Config.ConfigInstance?.Proto?.OriginalClassNameFunc?.Invoke(name) ?? name;
         }
-        
+
+        public static string FormatGRpcClientName(this string name)
+        {
+            return $"GRpc{name.TrimStart('I')}Client";
+        }
+
         public static string ToSnakeString(this string str)
         {
             var builder = new StringBuilder();

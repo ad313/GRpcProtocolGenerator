@@ -11,7 +11,7 @@ namespace Sample.Services
     {
         public void VoidMethodSync()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void MethodWithInputReturnVoidSync(int a)

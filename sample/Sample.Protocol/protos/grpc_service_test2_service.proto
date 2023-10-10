@@ -1,0 +1,41 @@
+﻿syntax = "proto3";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "protos/grpc_service_test.proto";
+option csharp_namespace = "Sample.GRpc.Protocol";
+package _grpc;
+
+//IServiceTest2 Sample.Services.IServiceTest2Service
+service GRpcServiceTest2Service {
+	
+	// Test1
+	rpc Test1(google.protobuf.Empty) returns(google.protobuf.Empty);
+	
+	// 这是修改
+	rpc Test2(GRpcSampleClass) returns(google.protobuf.Empty);
+	
+	// 获取单个
+	rpc GetById(GRpcServiceTest2Service_GetByIdAsync_Request1) returns(GRpcSampleClass);
+	
+	// 查询列表
+	rpc Test4(GRpcSampleClass) returns(GRpcServiceTest2ServiceListSampleClassResponse);
+	
+	// 这是删除
+	rpc Test5(GRpcServiceTest2Service_Test5Async_Request2) returns(GRpcServiceTest2ServiceListSampleClassResponse);
+}
+
+// GRpcServiceTest2Service_GetByIdAsync_Request1
+message GRpcServiceTest2Service_GetByIdAsync_Request1 {
+	int32 id = 1;
+}
+
+// GRpcServiceTest2Service_Test5Async_Request2
+message GRpcServiceTest2Service_Test5Async_Request2 {
+	google.protobuf.StringValue id = 1;
+}
+
+// GRpcServiceTest2ServiceListSampleClassResponse
+message GRpcServiceTest2ServiceListSampleClassResponse {
+	repeated GRpcSampleClass Data = 1;
+}
+

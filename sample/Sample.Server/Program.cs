@@ -5,8 +5,8 @@ using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Sample.Services;
 using System;
 using System.Net.Http;
 using System.Reflection;
@@ -51,7 +51,7 @@ namespace Sample.Server
                 {
                     o.JsonSettings.WriteIndented = true;
                     o.JsonSettings.WriteEnumsAsIntegers = true;
-                });            
+                });
 
             //swagger
             builder.Services.AddGrpcSwagger();
@@ -81,7 +81,10 @@ namespace Sample.Server
                 options.BackchannelHttpHandler = new HttpClientHandler() { ServerCertificateCustomValidationCallback = ((_, _, _, _) => true) };
             });
 
-            var app = builder.Build();     
+            builder.Services.AddScoped<IServiceTest, Service>();
+            builder.Services.AddScoped<IServiceTest2Service, ServiceTest2>();
+
+            var app = builder.Build();
             
             //swagger
             app.UseCustomSwagger(config);
@@ -94,6 +97,7 @@ namespace Sample.Server
             
             //注册 gRpc Server
             app.MapGrpcService<Sample.Server.Implements.GRpcServiceTestImpl>();
+            app.MapGrpcService<Sample.Server.Implements.GRpcServiceTest2ServiceImpl>();
 
             app.Run();
         }

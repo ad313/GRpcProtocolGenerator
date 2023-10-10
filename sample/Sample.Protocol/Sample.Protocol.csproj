@@ -20,4 +20,8 @@
 		<Protobuf Include="protos\*.proto" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="protos\" />
+	</ItemGroup>
+
 </Project>

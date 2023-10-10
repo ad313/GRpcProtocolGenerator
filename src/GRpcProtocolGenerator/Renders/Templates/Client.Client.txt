@@ -1,0 +1,46 @@
+/*
+	 此代码是自动生成，请勿修改，如果要修改，请继承它再重写方法。
+*/
+
+using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using {{ data.proto_namespace }};
+
+namespace {{ config.client_wrapper.project_name }}
+{
+    /// {{ data.description }}
+    public interface I{{data.name}}
+    {    
+        {{- for item in data.service.items }}
+        {{- returnString = get_method_return_string config item }}
+        {{- inString = get_method_in_string item }}
+        /// {{ get_method_description item }}
+        {{ returnString }} {{ item.name }}({{ inString }} request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        {{}}
+        {{- end }}
+    }
+
+    public sealed class {{data.name}} : I{{data.name}}
+    {
+        private readonly Lazy<{{data.g_rpc_service_name}}.{{data.g_rpc_service_name}}Client> _client;
+
+        public {{data.name}}(IGRpcClientProvider clientProvider)
+        {
+            _client = new Lazy<{{data.g_rpc_service_name}}.{{data.g_rpc_service_name}}Client>(clientProvider.CreateClient<{{data.g_rpc_service_name}}.{{data.g_rpc_service_name}}Client>);
+        }
+        
+        {{- for item in data.service.items }}
+        {{- returnString = get_method_return_string config item }}
+        {{- inString = get_method_in_string item }}
+        {{}}
+        /// {{ get_method_description item }}
+        public async {{ returnString }} {{ item.name }}({{ inString }} request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        {
+            return await _client.Value.{{ item.name }}Async(request, header, deadline, cancellationToken);
+        }
+        {{- end }}
+    }
+}

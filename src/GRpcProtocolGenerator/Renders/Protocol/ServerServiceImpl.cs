@@ -5,7 +5,7 @@ using GRpcProtocolGenerator.Models.Configs;
 
 namespace GRpcProtocolGenerator.Renders.Protocol
 {
-    public class ProtocolServiceImpl
+    public class ServerServiceImpl
     {
         private readonly ProtocolContent _protoContent;
 
@@ -35,7 +35,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         /// </summary>
         protected int FailureCode;
 
-        public ProtocolServiceImpl(ProtocolContent protoContent)
+        public ServerServiceImpl(ProtocolContent protoContent)
         {
             _protoContent = protoContent;
 

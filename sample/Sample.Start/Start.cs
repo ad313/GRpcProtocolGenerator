@@ -1,6 +1,7 @@
 ﻿using GRpcProtocolGenerator;
 using GRpcProtocolGenerator.Common;
 using GRpcProtocolGenerator.Renders;
+using Microsoft.AspNetCore.Routing;
 using Sample.Services.Models;
 
 namespace Sample.Start
@@ -82,32 +83,57 @@ namespace Sample.Start
                     server.NamespaceFunc = meta => $"{project}.Server.Implements";
                 });
 
-                //配置json 转码，生成 Restful API
-                builder.SetJsonTranscoding(json =>
+                ////配置json 转码，生成 Restful API
+                //builder.SetJsonTranscoding(json =>
+                //{
+                //    json.UseJsonTranscoding = true;
+                //    json.UseResultWrapper = true;
+                //    json.UseJwtAuthentication = true;
+                //    json.SuccessCode = 1;
+                //    json.ErrorCode = 2;
+                //    json.RouteFunc = route => $"{project}/api/v1/{route}";
+                //    json.Swagger = new SwaggerConfig()
+                //    {
+                //        SwaggerConfigType = SwaggerConfigType.IdentityLogin,
+                //        Name = "GRpc Server + Restful api",
+                //        Title = "gRPC transcoding",
+                //        Audience = "attendancesystem",
+                //        Scope = new[] { "gateway" },
+                //        ClientId = "64057d47d3b24a0001470082",
+                //        ClientSecret = "secret",
+                //        IdentityUrl = "https://192.168.1.20:8443",
+                //        Version = "v1",
+                //        DocumentXml = new[]
+                //        {
+                //            $"{project}.Server.xml",
+                //            $"{project}.Protocol.xml"
+                //        }
+                //    };
+                //});
+
+                // 生成客户端包装
+                builder.SetClientWrapper(client =>
                 {
-                    json.UseJsonTranscoding = true;
-                    json.UseResultWrapper = true;
-                    json.UseJwtAuthentication = true;
-                    json.SuccessCode = 1;
-                    json.ErrorCode = 2;
-                    json.RouteFunc = route => $"{project}/api/v1/{route}";
-                    json.Swagger = new SwaggerConfig()
-                    {
-                        SwaggerConfigType = SwaggerConfigType.IdentityLogin,
-                        Name = "GRpc Server + Restful api",
-                        Title = "gRPC transcoding",
-                        Audience = "attendancesystem",
-                        Scope = new[] { "gateway" },
-                        ClientId = "64057d47d3b24a0001470082",
-                        ClientSecret = "secret",
-                        IdentityUrl = "https://192.168.1.20:8443",
-                        Version = "v1",
-                        DocumentXml = new[]
-                        {
-                            $"{project}.Server.xml",
-                            $"{project}.Protocol.xml"
-                        }
-                    };
+                    client.Output = $"../{project}.ClientWrapper";
+                });
+
+                // 生成控制器配置
+                builder.SetController(controller =>
+                {
+                    controller.Output = $"../{project}.Gateway";
+                    controller.ControllerDirectory = "Controllers//v1";
+
+                    //基类
+                    //controller.BaseController = "SaiLing.AspNetCore.Controllers.ApiControllerBase";
+                    controller.BaseController = "ControllerBase";
+
+                    //路由
+                    controller.Route = $"{project}/api/v1/[controller]";
+
+                    //
+                    //controller.ReturnMethodName = "Success";
+
+                    controller.AppendAttributeToController = new List<string>();
                 });
 
                 builder.SetFilter(filter =>
@@ -115,6 +141,7 @@ namespace Sample.Start
                     filter.InterfaceFilterFunc = meta => true;
                     filter.MethodFilterFunc = (interfaceMeta, methodMeta) => true;
                 });
+
             }).GeneratorAsync();
         }
     }
