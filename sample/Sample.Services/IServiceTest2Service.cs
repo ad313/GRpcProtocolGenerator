@@ -19,7 +19,11 @@ namespace Sample.Services
 
         [Description("这是修改")]
         [HttpPut("aaa/{a}")]
-        Task Test2Async(SampleClass model);
+        Task Test2Async(int a, SampleClass model);
+
+        [Description("这是修改2")]
+        [HttpPut("aaa2/{a}")]
+        Task Test2_2Async(List<SampleClass> model);
 
         [Description("获取单个")]
         [HttpGet("{id}")]
@@ -32,6 +36,12 @@ namespace Sample.Services
         [Description("这是删除")]
         [HttpDelete("aaa/{id}")]
         Task<List<SampleClass>> Test5Async(string id);
+
+        //[HttpGet("Test6")]
+        //Task Test6Async(int a, string b, SampleEnum? c, List<int> d, List<string> e, List<SampleEnum> f, SampleClass h, List<SampleClass> i);
+
+        [HttpGet("Test6")]
+        Task Test6Async(int a, string b, SampleEnum? c);
     }
 
     public class ServiceTest2 : IServiceTest2Service
@@ -41,9 +51,14 @@ namespace Sample.Services
             throw new System.NotImplementedException();
         }
 
-        public async Task Test2Async(SampleClass model)
+        public async Task Test2Async(int a, SampleClass model)
         {
-            throw new System.NotImplementedException();
+            await Task.CompletedTask;
+        }
+
+        public async Task Test2_2Async(List<SampleClass> model)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<SampleClass> GetByIdAsync(int id)
@@ -64,6 +79,11 @@ namespace Sample.Services
         public async Task<List<SampleClass>> Test5Async(string id)
         {
             return new List<SampleClass>();
+        }
+
+        public async Task Test6Async(int a, string b, SampleEnum? c)
+        {
+            throw new NotImplementedException();
         }
     }
 }

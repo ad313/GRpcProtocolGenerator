@@ -18,49 +18,49 @@ namespace Sample.ClientWrapper
         Task<Empty> VoidMethodSync(Empty request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<Empty> MethodWithInputReturnVoidSync(GRpcServiceTest_MethodWithInputReturnVoidSync_Request18 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<Empty> MethodWithInputReturnVoidSync(GRpcServiceTest_MethodWithInputReturnVoidSync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<Empty> MethodWithInputReturnVoid2Sync(GRpcServiceTest_MethodWithInputReturnVoid2Sync_Request15 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<Empty> MethodWithInputReturnVoid2Sync(GRpcServiceTest_MethodWithInputReturnVoid2Sync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
         Task<Empty> MethodWithInputReturnVoid3Sync(GRpcSampleClass request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<Empty> MethodWithInputReturnVoid4Sync(GRpcServiceTest_MethodWithInputReturnVoid4Sync_Request17 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<Empty> MethodWithInputReturnVoid4Sync(GRpcServiceTest_MethodWithInputReturnVoid4Sync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<Empty> MethodWithInputEnumReturnVoid4Sync(GRpcServiceTest_MethodWithInputEnumReturnVoid4Sync_Request2 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<Empty> MethodWithInputEnumReturnVoid4Sync(GRpcServiceTest_MethodWithInputEnumReturnVoid4Sync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<Empty> MethodWithInputTreeReturnVoid5Sync(GRpcServiceTest_MethodWithInputTreeReturnVoid5Sync_Request19 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<Empty> MethodWithInputTreeReturnVoid5Sync(GRpcServiceTest_MethodWithInputTreeReturnVoid5Sync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
         Task<Empty> VoidMethod(Empty request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<Empty> MethodWithInputReturnVoid(GRpcServiceTest_MethodWithInputReturnVoidAsync_Request13 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<Empty> MethodWithInputReturnVoid(GRpcServiceTest_MethodWithInputReturnVoidAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<Empty> MethodWithInputReturnVoid2(GRpcServiceTest_MethodWithInputReturnVoid2Async_Request14 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<Empty> MethodWithInputReturnVoid2(GRpcServiceTest_MethodWithInputReturnVoid2Async_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
         Task<Empty> MethodWithInputReturnVoid3(GRpcSampleClass request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<Empty> MethodWithInputReturnVoid4(GRpcServiceTest_MethodWithInputReturnVoid4Async_Request16 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<Empty> MethodWithInputReturnVoid4(GRpcServiceTest_MethodWithInputReturnVoid4Async_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<Empty> MethodWithInputEnumReturnVoid4(GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request1 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<Empty> MethodWithInputEnumReturnVoid4(GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<GRpcServiceTest_MethodWithInputReturnIntSync_Response5> MethodWithInputReturnIntSync(GRpcServiceTest_MethodWithInputReturnIntSync_Request9 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<GRpcServiceTest_MethodWithInputReturnIntSync_Response> MethodWithInputReturnIntSync(GRpcServiceTest_MethodWithInputReturnIntSync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<GRpcServiceTestStringResponse> MethodWithInputReturnStringSync(GRpcServiceTest_MethodWithInputReturnStringSync_Request12 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<GRpcServiceTestStringResponse> MethodWithInputReturnStringSync(GRpcServiceTest_MethodWithInputReturnStringSync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<GRpcSampleClass> MethodWithInputReturnClassSync(GRpcServiceTest_MethodWithInputReturnClassSync_Request4 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<GRpcSampleClass> MethodWithInputReturnClassSync(GRpcServiceTest_MethodWithInputReturnClassSync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
         Task<GRpcServiceTestListSampleClassResponse> MethodWithInputReturnListClassSync(GRpcSampleClass request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
@@ -69,19 +69,19 @@ namespace Sample.ClientWrapper
         Task<GRpcServiceTestListInt32Response> MethodWithInputReturnListIntSync(GRpcSampleClass request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<GRpcServiceTest_MethodWithInputReturnEnumSync_Response2> MethodWithInputReturnEnumSync(GRpcServiceTest_MethodWithInputReturnEnumSync_Request6 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<GRpcServiceTest_MethodWithInputReturnEnumSync_Response> MethodWithInputReturnEnumSync(GRpcServiceTest_MethodWithInputReturnEnumSync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<GRpcServiceTest_MethodWithInputReturnIntAsync_Response4> MethodWithInputReturnInt(GRpcServiceTest_MethodWithInputReturnIntAsync_Request8 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<GRpcServiceTest_MethodWithInputReturnIntAsync_Response> MethodWithInputReturnInt(GRpcServiceTest_MethodWithInputReturnIntAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<GRpcServiceTestStringResponse> MethodWithInputReturnString(GRpcServiceTest_MethodWithInputReturnStringAsync_Request11 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<GRpcServiceTestStringResponse> MethodWithInputReturnString(GRpcServiceTest_MethodWithInputReturnStringAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<GRpcSampleClass> MethodWithInputReturnClass(GRpcServiceTest_MethodWithInputReturnClassAsync_Request3 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<GRpcSampleClass> MethodWithInputReturnClass(GRpcServiceTest_MethodWithInputReturnClassAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<GRpcNullableClass> MethodWithInputReturnNullableClass(GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request10 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<GRpcNullableClass> MethodWithInputReturnNullableClass(GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
         Task<GRpcServiceTestListSampleClassResponse> MethodWithInputReturnListClass(GRpcSampleClass request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
@@ -90,16 +90,16 @@ namespace Sample.ClientWrapper
         Task<GRpcServiceTestListInt32Response> MethodWithInputReturnListInt(GRpcSampleClass request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<GRpcServiceTest_MethodWithInputReturnEnumAsync_Response1> MethodWithInputReturnEnum(GRpcServiceTest_MethodWithInputReturnEnumAsync_Request5 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<GRpcServiceTest_MethodWithInputReturnEnumAsync_Response> MethodWithInputReturnEnum(GRpcServiceTest_MethodWithInputReturnEnumAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response3> MethodWithInputReturnEnumValueTask(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request7 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response> MethodWithInputReturnEnumValueTask(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
         Task<Empty> TestCancellationToken(Empty request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<Empty> TestCancellationToken2(GRpcServiceTest_TestCancellationToken2_Request20 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<Empty> TestCancellationToken2(GRpcServiceTest_TestCancellationToken2_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
         Task<Empty> TestExtClass2(GRpcExtClass2 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
@@ -122,13 +122,13 @@ namespace Sample.ClientWrapper
         }
         
         /// 
-        public async Task<Empty> MethodWithInputReturnVoidSync(GRpcServiceTest_MethodWithInputReturnVoidSync_Request18 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<Empty> MethodWithInputReturnVoidSync(GRpcServiceTest_MethodWithInputReturnVoidSync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnVoidSyncAsync(request, header, deadline, cancellationToken);
         }
         
         /// 
-        public async Task<Empty> MethodWithInputReturnVoid2Sync(GRpcServiceTest_MethodWithInputReturnVoid2Sync_Request15 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<Empty> MethodWithInputReturnVoid2Sync(GRpcServiceTest_MethodWithInputReturnVoid2Sync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnVoid2SyncAsync(request, header, deadline, cancellationToken);
         }
@@ -140,19 +140,19 @@ namespace Sample.ClientWrapper
         }
         
         /// 
-        public async Task<Empty> MethodWithInputReturnVoid4Sync(GRpcServiceTest_MethodWithInputReturnVoid4Sync_Request17 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<Empty> MethodWithInputReturnVoid4Sync(GRpcServiceTest_MethodWithInputReturnVoid4Sync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnVoid4SyncAsync(request, header, deadline, cancellationToken);
         }
         
         /// 
-        public async Task<Empty> MethodWithInputEnumReturnVoid4Sync(GRpcServiceTest_MethodWithInputEnumReturnVoid4Sync_Request2 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<Empty> MethodWithInputEnumReturnVoid4Sync(GRpcServiceTest_MethodWithInputEnumReturnVoid4Sync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputEnumReturnVoid4SyncAsync(request, header, deadline, cancellationToken);
         }
         
         /// 
-        public async Task<Empty> MethodWithInputTreeReturnVoid5Sync(GRpcServiceTest_MethodWithInputTreeReturnVoid5Sync_Request19 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<Empty> MethodWithInputTreeReturnVoid5Sync(GRpcServiceTest_MethodWithInputTreeReturnVoid5Sync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputTreeReturnVoid5SyncAsync(request, header, deadline, cancellationToken);
         }
@@ -164,13 +164,13 @@ namespace Sample.ClientWrapper
         }
         
         /// 
-        public async Task<Empty> MethodWithInputReturnVoid(GRpcServiceTest_MethodWithInputReturnVoidAsync_Request13 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<Empty> MethodWithInputReturnVoid(GRpcServiceTest_MethodWithInputReturnVoidAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnVoidAsync(request, header, deadline, cancellationToken);
         }
         
         /// 
-        public async Task<Empty> MethodWithInputReturnVoid2(GRpcServiceTest_MethodWithInputReturnVoid2Async_Request14 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<Empty> MethodWithInputReturnVoid2(GRpcServiceTest_MethodWithInputReturnVoid2Async_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnVoid2Async(request, header, deadline, cancellationToken);
         }
@@ -182,31 +182,31 @@ namespace Sample.ClientWrapper
         }
         
         /// 
-        public async Task<Empty> MethodWithInputReturnVoid4(GRpcServiceTest_MethodWithInputReturnVoid4Async_Request16 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<Empty> MethodWithInputReturnVoid4(GRpcServiceTest_MethodWithInputReturnVoid4Async_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnVoid4Async(request, header, deadline, cancellationToken);
         }
         
         /// 
-        public async Task<Empty> MethodWithInputEnumReturnVoid4(GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request1 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<Empty> MethodWithInputEnumReturnVoid4(GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputEnumReturnVoid4Async(request, header, deadline, cancellationToken);
         }
         
         /// 
-        public async Task<GRpcServiceTest_MethodWithInputReturnIntSync_Response5> MethodWithInputReturnIntSync(GRpcServiceTest_MethodWithInputReturnIntSync_Request9 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<GRpcServiceTest_MethodWithInputReturnIntSync_Response> MethodWithInputReturnIntSync(GRpcServiceTest_MethodWithInputReturnIntSync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnIntSyncAsync(request, header, deadline, cancellationToken);
         }
         
         /// 
-        public async Task<GRpcServiceTestStringResponse> MethodWithInputReturnStringSync(GRpcServiceTest_MethodWithInputReturnStringSync_Request12 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<GRpcServiceTestStringResponse> MethodWithInputReturnStringSync(GRpcServiceTest_MethodWithInputReturnStringSync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnStringSyncAsync(request, header, deadline, cancellationToken);
         }
         
         /// 
-        public async Task<GRpcSampleClass> MethodWithInputReturnClassSync(GRpcServiceTest_MethodWithInputReturnClassSync_Request4 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<GRpcSampleClass> MethodWithInputReturnClassSync(GRpcServiceTest_MethodWithInputReturnClassSync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnClassSyncAsync(request, header, deadline, cancellationToken);
         }
@@ -224,31 +224,31 @@ namespace Sample.ClientWrapper
         }
         
         /// 
-        public async Task<GRpcServiceTest_MethodWithInputReturnEnumSync_Response2> MethodWithInputReturnEnumSync(GRpcServiceTest_MethodWithInputReturnEnumSync_Request6 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<GRpcServiceTest_MethodWithInputReturnEnumSync_Response> MethodWithInputReturnEnumSync(GRpcServiceTest_MethodWithInputReturnEnumSync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnEnumSyncAsync(request, header, deadline, cancellationToken);
         }
         
         /// 
-        public async Task<GRpcServiceTest_MethodWithInputReturnIntAsync_Response4> MethodWithInputReturnInt(GRpcServiceTest_MethodWithInputReturnIntAsync_Request8 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<GRpcServiceTest_MethodWithInputReturnIntAsync_Response> MethodWithInputReturnInt(GRpcServiceTest_MethodWithInputReturnIntAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnIntAsync(request, header, deadline, cancellationToken);
         }
         
         /// 
-        public async Task<GRpcServiceTestStringResponse> MethodWithInputReturnString(GRpcServiceTest_MethodWithInputReturnStringAsync_Request11 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<GRpcServiceTestStringResponse> MethodWithInputReturnString(GRpcServiceTest_MethodWithInputReturnStringAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnStringAsync(request, header, deadline, cancellationToken);
         }
         
         /// 
-        public async Task<GRpcSampleClass> MethodWithInputReturnClass(GRpcServiceTest_MethodWithInputReturnClassAsync_Request3 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<GRpcSampleClass> MethodWithInputReturnClass(GRpcServiceTest_MethodWithInputReturnClassAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnClassAsync(request, header, deadline, cancellationToken);
         }
         
         /// 
-        public async Task<GRpcNullableClass> MethodWithInputReturnNullableClass(GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request10 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<GRpcNullableClass> MethodWithInputReturnNullableClass(GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnNullableClassAsync(request, header, deadline, cancellationToken);
         }
@@ -266,13 +266,13 @@ namespace Sample.ClientWrapper
         }
         
         /// 
-        public async Task<GRpcServiceTest_MethodWithInputReturnEnumAsync_Response1> MethodWithInputReturnEnum(GRpcServiceTest_MethodWithInputReturnEnumAsync_Request5 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<GRpcServiceTest_MethodWithInputReturnEnumAsync_Response> MethodWithInputReturnEnum(GRpcServiceTest_MethodWithInputReturnEnumAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnEnumAsync(request, header, deadline, cancellationToken);
         }
         
         /// 
-        public async Task<GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response3> MethodWithInputReturnEnumValueTask(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request7 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response> MethodWithInputReturnEnumValueTask(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnEnumValueTaskAsync(request, header, deadline, cancellationToken);
         }
@@ -284,7 +284,7 @@ namespace Sample.ClientWrapper
         }
         
         /// 
-        public async Task<Empty> TestCancellationToken2(GRpcServiceTest_TestCancellationToken2_Request20 request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<Empty> TestCancellationToken2(GRpcServiceTest_TestCancellationToken2_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.TestCancellationToken2Async(request, header, deadline, cancellationToken);
         }

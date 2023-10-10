@@ -37,14 +37,14 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<Empty> MethodWithInputReturnVoidSync(GRpcServiceTest_MethodWithInputReturnVoidSync_Request18 request, ServerCallContext context)
+		public override async Task<Empty> MethodWithInputReturnVoidSync(GRpcServiceTest_MethodWithInputReturnVoidSync_Request request, ServerCallContext context)
 		{
 			_service.MethodWithInputReturnVoidSync(request.A);
 			return new Empty();
 		}
 
 		/// 
-		public override async Task<Empty> MethodWithInputReturnVoid2Sync(GRpcServiceTest_MethodWithInputReturnVoid2Sync_Request15 request, ServerCallContext context)
+		public override async Task<Empty> MethodWithInputReturnVoid2Sync(GRpcServiceTest_MethodWithInputReturnVoid2Sync_Request request, ServerCallContext context)
 		{
 			_service.MethodWithInputReturnVoid2Sync(request.A, request.B);
 			return new Empty();
@@ -58,21 +58,21 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<Empty> MethodWithInputReturnVoid4Sync(GRpcServiceTest_MethodWithInputReturnVoid4Sync_Request17 request, ServerCallContext context)
+		public override async Task<Empty> MethodWithInputReturnVoid4Sync(GRpcServiceTest_MethodWithInputReturnVoid4Sync_Request request, ServerCallContext context)
 		{
 			_service.MethodWithInputReturnVoid4Sync(request.A.ToList());
 			return new Empty();
 		}
 
 		/// 
-		public override async Task<Empty> MethodWithInputEnumReturnVoid4Sync(GRpcServiceTest_MethodWithInputEnumReturnVoid4Sync_Request2 request, ServerCallContext context)
+		public override async Task<Empty> MethodWithInputEnumReturnVoid4Sync(GRpcServiceTest_MethodWithInputEnumReturnVoid4Sync_Request request, ServerCallContext context)
 		{
 			_service.MethodWithInputEnumReturnVoid4Sync(request.A.Adapt<Sample.Services.ApplicationEnumType>());
 			return new Empty();
 		}
 
 		/// 
-		public override async Task<Empty> MethodWithInputTreeReturnVoid5Sync(GRpcServiceTest_MethodWithInputTreeReturnVoid5Sync_Request19 request, ServerCallContext context)
+		public override async Task<Empty> MethodWithInputTreeReturnVoid5Sync(GRpcServiceTest_MethodWithInputTreeReturnVoid5Sync_Request request, ServerCallContext context)
 		{
 			_service.MethodWithInputTreeReturnVoid5Sync(request.A?.Adapt<Sample.Services.Models.TreeNode<Sample.Services.Models.SampleClass>>(), request.B?.Adapt<Sample.Services.Models.TreeClass>(), request.C?.Adapt<Sample.Services.Models.ExtClass>(), request.D);
 			return new Empty();
@@ -86,14 +86,14 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<Empty> MethodWithInputReturnVoid(GRpcServiceTest_MethodWithInputReturnVoidAsync_Request13 request, ServerCallContext context)
+		public override async Task<Empty> MethodWithInputReturnVoid(GRpcServiceTest_MethodWithInputReturnVoidAsync_Request request, ServerCallContext context)
 		{
 			await _service.MethodWithInputReturnVoidAsync(request.A);
 			return new Empty();
 		}
 
 		/// 
-		public override async Task<Empty> MethodWithInputReturnVoid2(GRpcServiceTest_MethodWithInputReturnVoid2Async_Request14 request, ServerCallContext context)
+		public override async Task<Empty> MethodWithInputReturnVoid2(GRpcServiceTest_MethodWithInputReturnVoid2Async_Request request, ServerCallContext context)
 		{
 			await _service.MethodWithInputReturnVoid2Async(request.A, request.B);
 			return new Empty();
@@ -107,31 +107,31 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<Empty> MethodWithInputReturnVoid4(GRpcServiceTest_MethodWithInputReturnVoid4Async_Request16 request, ServerCallContext context)
+		public override async Task<Empty> MethodWithInputReturnVoid4(GRpcServiceTest_MethodWithInputReturnVoid4Async_Request request, ServerCallContext context)
 		{
 			await _service.MethodWithInputReturnVoid4Async(request.A.ToList());
 			return new Empty();
 		}
 
 		/// 
-		public override async Task<Empty> MethodWithInputEnumReturnVoid4(GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request1 request, ServerCallContext context)
+		public override async Task<Empty> MethodWithInputEnumReturnVoid4(GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request request, ServerCallContext context)
 		{
 			await _service.MethodWithInputEnumReturnVoid4Async(request.A.Adapt<Sample.Services.ApplicationEnumType>());
 			return new Empty();
 		}
 
 		/// 
-		public override async Task<GRpcServiceTest_MethodWithInputReturnIntSync_Response5> MethodWithInputReturnIntSync(GRpcServiceTest_MethodWithInputReturnIntSync_Request9 request, ServerCallContext context)
+		public override async Task<GRpcServiceTest_MethodWithInputReturnIntSync_Response> MethodWithInputReturnIntSync(GRpcServiceTest_MethodWithInputReturnIntSync_Request request, ServerCallContext context)
 		{
 			var data = _service.MethodWithInputReturnIntSync(request.A);
-			return new GRpcServiceTest_MethodWithInputReturnIntSync_Response5
+			return new GRpcServiceTest_MethodWithInputReturnIntSync_Response
 			{
 				Data = data
 			};
 		}
 
 		/// 
-		public override async Task<GRpcServiceTestStringResponse> MethodWithInputReturnStringSync(GRpcServiceTest_MethodWithInputReturnStringSync_Request12 request, ServerCallContext context)
+		public override async Task<GRpcServiceTestStringResponse> MethodWithInputReturnStringSync(GRpcServiceTest_MethodWithInputReturnStringSync_Request request, ServerCallContext context)
 		{
 			var data = _service.MethodWithInputReturnStringSync(request.A, request.B);
 			return new GRpcServiceTestStringResponse
@@ -141,7 +141,7 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<GRpcSampleClass> MethodWithInputReturnClassSync(GRpcServiceTest_MethodWithInputReturnClassSync_Request4 request, ServerCallContext context)
+		public override async Task<GRpcSampleClass> MethodWithInputReturnClassSync(GRpcServiceTest_MethodWithInputReturnClassSync_Request request, ServerCallContext context)
 		{
 			var data = _service.MethodWithInputReturnClassSync(request.A, request.B);
 			return data.Adapt<GRpcSampleClass>();
@@ -168,27 +168,27 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<GRpcServiceTest_MethodWithInputReturnEnumSync_Response2> MethodWithInputReturnEnumSync(GRpcServiceTest_MethodWithInputReturnEnumSync_Request6 request, ServerCallContext context)
+		public override async Task<GRpcServiceTest_MethodWithInputReturnEnumSync_Response> MethodWithInputReturnEnumSync(GRpcServiceTest_MethodWithInputReturnEnumSync_Request request, ServerCallContext context)
 		{
 			var data = _service.MethodWithInputReturnEnumSync(request.A.Adapt<Sample.Services.ApplicationEnumType>());
-			return new GRpcServiceTest_MethodWithInputReturnEnumSync_Response2
+			return new GRpcServiceTest_MethodWithInputReturnEnumSync_Response
 			{
 				Data = (int)data
 			};
 		}
 
 		/// 
-		public override async Task<GRpcServiceTest_MethodWithInputReturnIntAsync_Response4> MethodWithInputReturnInt(GRpcServiceTest_MethodWithInputReturnIntAsync_Request8 request, ServerCallContext context)
+		public override async Task<GRpcServiceTest_MethodWithInputReturnIntAsync_Response> MethodWithInputReturnInt(GRpcServiceTest_MethodWithInputReturnIntAsync_Request request, ServerCallContext context)
 		{
 			var data = await _service.MethodWithInputReturnIntAsync(request.A);
-			return new GRpcServiceTest_MethodWithInputReturnIntAsync_Response4
+			return new GRpcServiceTest_MethodWithInputReturnIntAsync_Response
 			{
 				Data = data
 			};
 		}
 
 		/// 
-		public override async Task<GRpcServiceTestStringResponse> MethodWithInputReturnString(GRpcServiceTest_MethodWithInputReturnStringAsync_Request11 request, ServerCallContext context)
+		public override async Task<GRpcServiceTestStringResponse> MethodWithInputReturnString(GRpcServiceTest_MethodWithInputReturnStringAsync_Request request, ServerCallContext context)
 		{
 			var data = await _service.MethodWithInputReturnStringAsync(request.A, request.B);
 			return new GRpcServiceTestStringResponse
@@ -198,14 +198,14 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<GRpcSampleClass> MethodWithInputReturnClass(GRpcServiceTest_MethodWithInputReturnClassAsync_Request3 request, ServerCallContext context)
+		public override async Task<GRpcSampleClass> MethodWithInputReturnClass(GRpcServiceTest_MethodWithInputReturnClassAsync_Request request, ServerCallContext context)
 		{
 			var data = await _service.MethodWithInputReturnClassAsync(request.A, request.B);
 			return data.Adapt<GRpcSampleClass>();
 		}
 
 		/// 
-		public override async Task<GRpcNullableClass> MethodWithInputReturnNullableClass(GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request10 request, ServerCallContext context)
+		public override async Task<GRpcNullableClass> MethodWithInputReturnNullableClass(GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request request, ServerCallContext context)
 		{
 			var data = await _service.MethodWithInputReturnNullableClassAsync(request.A, request.B);
 			return data.Adapt<GRpcNullableClass>();
@@ -232,20 +232,20 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<GRpcServiceTest_MethodWithInputReturnEnumAsync_Response1> MethodWithInputReturnEnum(GRpcServiceTest_MethodWithInputReturnEnumAsync_Request5 request, ServerCallContext context)
+		public override async Task<GRpcServiceTest_MethodWithInputReturnEnumAsync_Response> MethodWithInputReturnEnum(GRpcServiceTest_MethodWithInputReturnEnumAsync_Request request, ServerCallContext context)
 		{
 			var data = await _service.MethodWithInputReturnEnumAsync(request.A.Adapt<Sample.Services.ApplicationEnumType>());
-			return new GRpcServiceTest_MethodWithInputReturnEnumAsync_Response1
+			return new GRpcServiceTest_MethodWithInputReturnEnumAsync_Response
 			{
 				Data = (int)data
 			};
 		}
 
 		/// 
-		public override async Task<GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response3> MethodWithInputReturnEnumValueTask(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request7 request, ServerCallContext context)
+		public override async Task<GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response> MethodWithInputReturnEnumValueTask(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request request, ServerCallContext context)
 		{
 			var data = await _service.MethodWithInputReturnEnumValueTaskAsync(request.A.Adapt<Sample.Services.ApplicationEnumType>());
-			return new GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response3
+			return new GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response
 			{
 				Data = (int)data
 			};
@@ -259,7 +259,7 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<Empty> TestCancellationToken2(GRpcServiceTest_TestCancellationToken2_Request20 request, ServerCallContext context)
+		public override async Task<Empty> TestCancellationToken2(GRpcServiceTest_TestCancellationToken2_Request request, ServerCallContext context)
 		{
 			_service.TestCancellationToken2(request.A, context.CancellationToken);
 			return new Empty();

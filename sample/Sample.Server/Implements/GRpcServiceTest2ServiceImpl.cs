@@ -37,14 +37,21 @@ namespace Sample.Server.Implements
 		}
 
 		/// 这是修改
-		public override async Task<Empty> Test2(GRpcSampleClass request, ServerCallContext context)
+		public override async Task<Empty> Test2(GRpcServiceTest2Service_Test2Async_Request request, ServerCallContext context)
 		{
-			await _service.Test2Async(request?.Adapt<Sample.Services.Models.SampleClass>());
+			await _service.Test2Async(request.A, request.Model?.Adapt<Sample.Services.Models.SampleClass>());
+			return new Empty();
+		}
+
+		/// 这是修改2
+		public override async Task<Empty> Test2_2(GRpcServiceTest2Service_Test2_2Async_Request request, ServerCallContext context)
+		{
+			await _service.Test2_2Async(request.Model?.Adapt<List<Sample.Services.Models.SampleClass>>());
 			return new Empty();
 		}
 
 		/// 获取单个
-		public override async Task<GRpcSampleClass> GetById(GRpcServiceTest2Service_GetByIdAsync_Request1 request, ServerCallContext context)
+		public override async Task<GRpcSampleClass> GetById(GRpcServiceTest2Service_GetByIdAsync_Request request, ServerCallContext context)
 		{
 			var data = await _service.GetByIdAsync(request.Id);
 			return data.Adapt<GRpcSampleClass>();
@@ -61,13 +68,20 @@ namespace Sample.Server.Implements
 		}
 
 		/// 这是删除
-		public override async Task<GRpcServiceTest2ServiceListSampleClassResponse> Test5(GRpcServiceTest2Service_Test5Async_Request2 request, ServerCallContext context)
+		public override async Task<GRpcServiceTest2ServiceListSampleClassResponse> Test5(GRpcServiceTest2Service_Test5Async_Request request, ServerCallContext context)
 		{
 			var data = await _service.Test5Async(request.Id);
 			return new GRpcServiceTest2ServiceListSampleClassResponse
 			{
 				Data = { data.Adapt<List<GRpcSampleClass>>() }
 			};
+		}
+
+		/// 
+		public override async Task<Empty> Test6(GRpcServiceTest2Service_Test6Async_Request request, ServerCallContext context)
+		{
+			await _service.Test6Async(request.A, request.B, request.C?.Adapt<Sample.Services.Models.SampleEnum>());
+			return new Empty();
 		}
 
 	}

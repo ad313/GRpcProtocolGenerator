@@ -35,7 +35,7 @@ namespace Sample.Services
 
         void MethodWithInputEnumReturnVoid4Sync(ApplicationEnumType a);
 
-        [HttpPost("MethodWithInputTreeReturnVoid5Sync")]
+        [HttpGet("MethodWithInputTreeReturnVoid5Sync")]
         void MethodWithInputTreeReturnVoid5Sync(TreeNode<SampleClass> a, TreeClass b, ExtClass c, int d);
 
         #endregion

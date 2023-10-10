@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using GRpcProtocolGenerator.Common;
+﻿using GRpcProtocolGenerator.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Sample.Gateway
 {
@@ -100,13 +100,7 @@ namespace Sample.Gateway
                     AddXml(option, xml);
                 }
             });
-
-            //void AddXml(SwaggerGenOptions c, string name)
-            //{
-            //    var filePath = Path.Combine(AppContext.BaseDirectory, name);
-            //    c.IncludeXmlComments(filePath);
-            //}
-
+            
             void AddXml(SwaggerGenOptions c, string name)
             {
                 c.DocInclusionPredicate((_, api) => string.IsNullOrWhiteSpace(api.GroupName) == false);
@@ -114,7 +108,6 @@ namespace Sample.Gateway
 
                 var filePath = Path.Combine(AppContext.BaseDirectory, name);
                 c.IncludeXmlComments(filePath);
-                //c.IncludeGrpcXmlComments(filePath, includeControllerXmlComments: true);
             }
 
             return services;

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using {{ data.proto_namespace }};
 using {{ config.client_wrapper.project_name }};
 

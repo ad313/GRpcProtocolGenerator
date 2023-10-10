@@ -15,12 +15,14 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
             Items = protocolService.Items.Select(d => new ControllerImplItem(d)).ToList();
 
+            //如果以 Service 结尾，则去掉 Service
+            var flag = "Service";
             Name = protocolService.InterfaceMetaData.Name.TrimStart('I');
-            if (Name.Length > "Service".Length)
+            if (Name.Length > flag.Length)
             {
-                if (Name.Substring(Name.Length - "Service".Length) == "Service")
+                if (Name.Substring(Name.Length - flag.Length) == flag)
                 {
-                    Name = Name.Substring(0, Name.Length - "Service".Length) ;
+                    Name = Name.Substring(0, Name.Length - flag.Length);
                 }
             }
 
@@ -29,28 +31,28 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             ClientInterface = $"I{ProtocolService.Name.FormatGRpcClientName()}";
         }
 
-        public List<ControllerImplItem> Items { get;  }
+        public List<ControllerImplItem> Items { get; }
 
-        public string Name { get;  }
+        /// <summary>
+        /// 控制器名称
+        /// </summary>
+        public string Name { get; }
 
+        /// <summary>
+        /// GRpc 接口名称
+        /// </summary>
         public string ClientInterface { get; set; }
-
-        
     }
 
-    public class ControllerImplItem: ProtoServiceItem
+    public class ControllerImplItem
     {
         public ProtoServiceItem Item { get; }
-
+        
         public ControllerImplItem(ProtoServiceItem protoServiceItem)
         {
             Item = protoServiceItem;
 
-            HttpType = Item.HttpOption.HttpMethod;
-            IsPost = Item.HttpOption.HttpMethod == HttpMethod.Post || Item.HttpOption.HttpMethod == HttpMethod.Put ||
-                     Item.HttpOption.HttpMethod == HttpMethod.Patch;
-
-            switch (HttpType)
+            switch (Item.HttpOption.HttpMethod)
             {
                 case HttpMethod.Get:
                     Http = string.IsNullOrWhiteSpace(Item.HttpOption.Route) ? "[HttpGet]" : $"[HttpGet(\"{Item.HttpOption.Route}\")]";
@@ -71,15 +73,78 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                     throw new ArgumentOutOfRangeException();
             }
 
-            ParamFlag = IsPost ? "[FromBody]" : "[FromQuery]";
+            //参数修饰符
+            ParamFlag = Item.HttpOption.HttpMethod == HttpMethod.Post || Item.HttpOption.HttpMethod == HttpMethod.Put || Item.HttpOption.HttpMethod == HttpMethod.Patch
+                ? "[FromBody]"
+                : "[FromQuery]";
 
+            //方法注释
             Description = FilterFunctions.GetMethodDescription(Item);
 
-            //输入参数
-            if (Item.MethodMetaData.InParamMetaDataListFilter().Count > 0)
+            //全部有效的输入参数集合
+            //处理控制器方法输入参数
+            var inParamList = Item.MethodMetaData.InParamMetaDataListFilter();
+            if (inParamList.Count > 0)
             {
-                InputType =$"{ParamFlag} {FilterFunctions.GetMethodInString(Item)} request, ";
-                ClientInputType = "request";
+                InputType = "";
+                foreach (var prop in inParamList)
+                {
+                    if (prop.ClassMetaData != null)
+                    {
+                        var gRpcTypeName = prop.ClassMetaData.Name.FormatMessageName();
+
+                        InputType += prop.TypeWrapper.IsArray
+                            ? $"{ParamFlag} List<{gRpcTypeName}> {prop.Name}, "
+                            : $"{ParamFlag} {gRpcTypeName} {prop.Name}, ";
+                    }
+                    else
+                    {
+                        //判断枚举
+                        var type = prop.EnumMetaData != null ? "System.Int32" : prop.TypeWrapper.Type.FullName;
+
+                        //判断可为空
+                        if (prop.TypeWrapper.IsNullable) type += "?";
+
+                        //判断集合
+                        if (prop.TypeWrapper.IsArray) type = $"List<{type}>";
+
+                        //组装
+                        InputType += $"{type} {prop.Name}, ";
+                    }
+                }
+            }
+
+            //gRpc 方法原始输入参数名称
+            var modelName = FilterFunctions.GetMethodInString(Item);
+
+            //特殊处理单个参数，且是 class
+            if (inParamList.Count == 1 && inParamList.First().ClassMetaData != null)
+            {
+                InputType = $"{ParamFlag} {modelName} clientInput, ";
+            }
+
+            //处理 gRpc client 方法输入参数
+            if (inParamList.Count > 0)
+            {
+                //特殊处理单个参数，且是 class
+                if (inParamList.Count == 1 && inParamList.First().ClassMetaData != null)
+                {
+                    ClientInputType = "clientInput";
+                }
+                else
+                {
+                    ClientInputType = $"new {modelName}() " + "{ ";
+
+                    foreach (var prop in inParamList)
+                    {
+                        ClientInputType += prop.Name.ToFirstUpString() +
+                                           (prop.TypeWrapper.IsArray
+                                               ? " = { " + prop.Name + " }, "
+                                               : $" = {prop.Name}, ");
+                    }
+
+                    ClientInputType = ClientInputType.Trim().TrimEnd(',') + " }";
+                }
             }
             else
             {
@@ -87,38 +152,47 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             }
 
             ReturnType = FilterFunctions.GetMethodReturnType(Config.ConfigInstance, Item);
-
-            Name = Item.MethodMetaData.Name;
-            ClientMethodName = Item.Name;
         }
-
+        
+        /// <summary>
+        /// 方法 http 类型，包含路由
+        /// </summary>
         public string Http { get; set; }
 
-        public HttpMethod HttpType { get; set; }
+        /// <summary>
+        /// 控制器 Action 方法名称
+        /// </summary>
+        public string Name => Item.MethodMetaData.Name;
 
-        public bool IsPost { get; set; }
-
+        /// <summary>
+        /// 方法输入参数修饰符
+        /// </summary>
         public string ParamFlag { get; set; }
 
+        /// <summary>
+        /// 方法返回参数强类型，用于swagger
+        /// </summary>
         public string ReturnType { get; set; }
 
+        /// <summary>
+        /// 方法注释
+        /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// 输入参数
+        /// 方法输入参数
         /// </summary>
         public string InputType { get; set; }
+        
+
+        /// <summary>
+        /// 对应的 GRpc 接口方法名称
+        /// </summary>
+        public string ClientMethodName => Item.Name;
 
         /// <summary>
         /// 客户端输入参数
         /// </summary>
         public string ClientInputType { get; set; }
-
-        public string Name { get; set; }
-
-
-        public string ClientMethodName { get; set; }
-
-        
     }
 }
