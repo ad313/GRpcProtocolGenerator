@@ -1,5 +1,4 @@
-﻿using GRpcProtocolGenerator.Models.MetaData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -85,14 +84,7 @@ namespace GRpcProtocolGenerator.Models.Configs
         }
 
         #region 命名空间
-
-        public Func<InterfaceMetaData, string> NamespaceFunc { get; set; }
-
-        public string GetNamespace(InterfaceMetaData meta)
-        {
-            return NamespaceFunc?.Invoke(meta) ?? meta.Namespace;
-        }
-
+        
         public string GetCsprojFilePath()
         {
             return Path.GetFullPath(Path.Combine(OutputFullPath, ProjectName + ".csproj"));
@@ -103,7 +95,7 @@ namespace GRpcProtocolGenerator.Models.Configs
             return Path.GetFullPath(Path.Combine(OutputFullPath, "Program.cs"));
         }
 
-        public string GetServerNamespace()
+        public string GetServiceImplNamespace()
         {
             return $"{ProjectName}.{ImplementsDirectory}";
         }

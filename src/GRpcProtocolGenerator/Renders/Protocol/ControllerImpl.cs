@@ -90,7 +90,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                     else
                     {
                         //判断枚举
-                        var type = prop.EnumMetaData != null ? "System.Int32" : prop.TypeWrapper.Type.FullName;
+                        var type = prop.EnumMetaData != null ? typeof(int).FullName : prop.TypeWrapper.Type.FullName;
 
                         //判断可为空
                         if (prop.TypeWrapper.IsNullable) type += "?";

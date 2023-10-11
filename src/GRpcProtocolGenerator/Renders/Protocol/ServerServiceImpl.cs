@@ -41,7 +41,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
             _gRpcServiceName = _protoContent.ProtoService.InterfaceMetaData.FormatServiceName();
             ServerName = $"{_gRpcServiceName}Impl";
-            FullName = $"{Config.ConfigInstance.Server?.GetServerNamespace()}.{ServerName}";
+            FullName = $"{Config.ConfigInstance.Server?.GetServiceImplNamespace()}.{ServerName}";
             _interfaceName = _protoContent.ProtoService.InterfaceMetaData.Name;
 
             Using = new List<string>
@@ -93,7 +93,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
         private void CreateClassBegin()
         {
-            _sb.AppendLine($"namespace {Config.ConfigInstance.Server?.GetNamespace(_protoContent.ProtoService.InterfaceMetaData)}");
+            _sb.AppendLine($"namespace {Config.ConfigInstance.Server?.GetServiceImplNamespace()}");
             _sb.AppendLine("{");
 
             //接口注释

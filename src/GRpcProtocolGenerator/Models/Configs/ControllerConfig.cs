@@ -39,7 +39,7 @@ namespace GRpcProtocolGenerator.Models.Configs
         /// <summary>
         /// Controller 基类
         /// </summary>
-        public string BaseController { get; set; }
+        public string BaseController { get; set; } = "ControllerBase";
 
         /// <summary>
         /// 定义控制器的路由
