@@ -97,6 +97,12 @@ namespace Sample.Services
 
         #endregion
 
+        #region todo 支持
+
+        void ChangeToSupportMethod7(object a);
+
+        #endregion
+
         #region 不支持的方法：字典、嵌套列表、嵌套 Task、GRpcIgnore、object、StringBuilder
 
         Dictionary<int, int> NotSupportMethod1(int a);
@@ -111,9 +117,7 @@ namespace Sample.Services
 
         [GRpcIgnore]
         void NotSupportMethod6(Dictionary<int, int> a);
-
-        void NotSupportMethod7(object a);
-
+        
         StringBuilder NotSupportMethod8();
 
         #endregion

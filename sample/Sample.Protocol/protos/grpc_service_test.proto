@@ -89,6 +89,9 @@ service GRpcServiceTest {
 	rpc MethodWithInputReturnEnumValueTask(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request) returns(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response);
 	
 	// 
+	rpc ChangeToSupportMethod7(GRpcServiceTest_ChangeToSupportMethod7_Request) returns(google.protobuf.Empty);
+	
+	// 
 	rpc TestCancellationToken(google.protobuf.Empty) returns(google.protobuf.Empty);
 	
 	// 
@@ -156,6 +159,11 @@ message GRpcExtClass2 {
 	GRpcSampleClass ClassColumn = 13; // ClassColumn
 	int32 EnumColumn = 14; // EnumColumn
 	GRpcSampleStruct StructColumn = 15; // StructColumn
+}
+
+// GRpcServiceTest_ChangeToSupportMethod7_Request
+message GRpcServiceTest_ChangeToSupportMethod7_Request {
+	google.protobuf.StringValue a = 1;
 }
 
 // GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request

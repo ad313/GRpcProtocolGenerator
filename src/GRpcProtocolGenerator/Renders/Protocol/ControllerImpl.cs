@@ -127,10 +127,21 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
                     foreach (var prop in inParamList)
                     {
-                        ClientInputType += prop.Name.ToFirstUpString() +
-                                           (prop.TypeWrapper.IsArray
-                                               ? " = { " + prop.Name + " }, "
-                                               : $" = {prop.Name}, ");
+                        //todo object
+                        if (prop.TypeWrapper.Type == typeof(object))
+                        {
+                            ClientInputType += prop.Name.ToFirstUpString() +
+                                               (prop.TypeWrapper.IsArray
+                                                   ? " = { " + prop.Name + ".ToString() }, "
+                                                   : $" = {prop.Name}.ToString(), ");
+                        }
+                        else
+                        {
+                            ClientInputType += prop.Name.ToFirstUpString() +
+                                               (prop.TypeWrapper.IsArray
+                                                   ? " = { " + prop.Name + " }, "
+                                                   : $" = {prop.Name}, ");
+                        }
                     }
 
                     ClientInputType = ClientInputType.Trim().TrimEnd(',') + " }";

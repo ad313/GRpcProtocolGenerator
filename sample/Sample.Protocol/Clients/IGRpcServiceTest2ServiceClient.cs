@@ -35,6 +35,9 @@ namespace Sample.Protocol.Clients
         /// 
         Task<GRpcServiceTest2Service_Test6Async_Response> Test6(GRpcServiceTest2Service_Test6Async_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
+        /// 
+        Task<Empty> Test7(GRpcServiceTest2ServiceIdRequest request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        
     }
 
     /// IServiceTest2
@@ -91,6 +94,12 @@ namespace Sample.Protocol.Clients
         public async Task<GRpcServiceTest2Service_Test6Async_Response> Test6(GRpcServiceTest2Service_Test6Async_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.Test6Async(request, header, deadline, cancellationToken);
+        }
+        
+        /// 
+        public async Task<Empty> Test7(GRpcServiceTest2ServiceIdRequest request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        {
+            return await _client.Value.Test7Async(request, header, deadline, cancellationToken);
         }
     }
 }

@@ -252,6 +252,13 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
+		public override async Task<Empty> ChangeToSupportMethod7(GRpcServiceTest_ChangeToSupportMethod7_Request request, ServerCallContext context)
+		{
+			_service.ChangeToSupportMethod7(request.A);
+			return new Empty();
+		}
+
+		/// 
 		public override async Task<Empty> TestCancellationToken(Empty request, ServerCallContext context)
 		{
 			_service.TestCancellationToken(context.CancellationToken);

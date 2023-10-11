@@ -123,6 +123,19 @@ namespace Sample.Gateway.Controllers.v1
         {
             var result = await _client.Test6(new GRpcServiceTest2Service_Test6Async_Request() { A = a, B = b, C = c }, cancellationToken: cancellationToken);
             return Ok(result.Data);
+        }
+                
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Test7")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation("")]        
+        public virtual async Task<IActionResult> Test7(System.Object id, CancellationToken cancellationToken = default)
+        {
+            var result = await _client.Test7(new GRpcServiceTest2ServiceIdRequest() { Id = id.ToString() }, cancellationToken: cancellationToken);
+            return Ok(result);
         }        
     }
 }

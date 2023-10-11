@@ -181,11 +181,11 @@ namespace Sample.Services
             throw new NotImplementedException();
         }
 
-        public void NotSupportMethod7(object a)
+        public void ChangeToSupportMethod7(object a)
         {
             throw new NotImplementedException();
         }
-
+        
         public StringBuilder NotSupportMethod8()
         {
             throw new NotImplementedException();

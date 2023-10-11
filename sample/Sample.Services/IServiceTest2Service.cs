@@ -42,6 +42,9 @@ namespace Sample.Services
 
         [HttpGet("Test6")]
         Task<int> Test6Async(int a, string b, SampleEnum? c);
+
+        [HttpGet("Test7")]
+        Task Test7(object id);
     }
 
     public class ServiceTest2 : IServiceTest2Service
@@ -82,6 +85,11 @@ namespace Sample.Services
         }
 
         public async Task<int> Test6Async(int a, string b, SampleEnum? c)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task Test7(object id)
         {
             throw new NotImplementedException();
         }

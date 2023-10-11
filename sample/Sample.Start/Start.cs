@@ -50,6 +50,9 @@ namespace Sample.Start
                         if (type == typeof(byte[]))
                             return "google.protobuf.StringValue";
 
+                        if (type == typeof(object))
+                            return "google.protobuf.StringValue";
+
                         return null;
                     };
 

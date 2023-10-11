@@ -92,11 +92,11 @@ namespace GRpcProtocolGenerator.Types
             if (IsVoid)
                 return;
 
-            if (source == typeof(object))
-            {
-                SetValid("不支持 object 类型");
-                return;
-            }
+            //if (source == typeof(object))
+            //{
+            //    SetValid("不支持 object 类型");
+            //    return;
+            //}
 
             if (source == typeof(StringBuilder))
             {

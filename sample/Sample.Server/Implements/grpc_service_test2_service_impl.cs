@@ -87,5 +87,12 @@ namespace Sample.Server.Implements
 			};
 		}
 
+		/// 
+		public override async Task<Empty> Test7(GRpcServiceTest2ServiceIdRequest request, ServerCallContext context)
+		{
+			await _service.Test7(request.Id);
+			return new Empty();
+		}
+
 	}
 }

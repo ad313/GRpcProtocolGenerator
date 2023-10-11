@@ -399,6 +399,19 @@ namespace Sample.Gateway.Controllers.v1
         /// 
         /// </summary>
         /// <returns></returns>
+        [HttpGet("ChangeToSupportMethod7")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation("")]        
+        public virtual async Task<IActionResult> ChangeToSupportMethod7(System.Object a, CancellationToken cancellationToken = default)
+        {
+            var result = await _client.ChangeToSupportMethod7(new GRpcServiceTest_ChangeToSupportMethod7_Request() { A = a.ToString() }, cancellationToken: cancellationToken);
+            return Ok(result);
+        }
+                
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("TestCancellationToken")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("")]        

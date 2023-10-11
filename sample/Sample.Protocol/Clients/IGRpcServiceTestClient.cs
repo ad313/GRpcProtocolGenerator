@@ -96,6 +96,9 @@ namespace Sample.Protocol.Clients
         Task<GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response> MethodWithInputReturnEnumValueTask(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
+        Task<Empty> ChangeToSupportMethod7(GRpcServiceTest_ChangeToSupportMethod7_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        
+        /// 
         Task<Empty> TestCancellationToken(Empty request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
@@ -280,6 +283,12 @@ namespace Sample.Protocol.Clients
         public async Task<GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response> MethodWithInputReturnEnumValueTask(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.MethodWithInputReturnEnumValueTaskAsync(request, header, deadline, cancellationToken);
+        }
+        
+        /// 
+        public async Task<Empty> ChangeToSupportMethod7(GRpcServiceTest_ChangeToSupportMethod7_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        {
+            return await _client.Value.ChangeToSupportMethod7Async(request, header, deadline, cancellationToken);
         }
         
         /// 
