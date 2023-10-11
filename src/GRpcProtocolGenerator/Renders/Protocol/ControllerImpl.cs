@@ -16,17 +16,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             Items = protocolService.Items.Select(d => new ControllerImplItem(d)).ToList();
 
             //如果以 Service 结尾，则去掉 Service
-            var flag = "Service";
-            Name = protocolService.InterfaceMetaData.Name.TrimStart('I');
-            if (Name.Length > flag.Length)
-            {
-                if (Name.Substring(Name.Length - flag.Length) == flag)
-                {
-                    Name = Name.Substring(0, Name.Length - flag.Length);
-                }
-            }
-
-            Name += "Controller";
+            Name = protocolService.InterfaceMetaData.Name.TrimStart('I').TrimLastString("Service") + "Controller";
 
             ClientInterface = $"I{ProtocolService.Name.FormatGRpcClientName()}";
         }
@@ -151,7 +141,42 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                 ClientInputType = "new Google.Protobuf.WellKnownTypes.Empty()";
             }
 
+            //返回值强类型：1、如果是原始类，则返回类；否则返回具体类型，如 int string ，List 等
             ReturnType = FilterFunctions.GetMethodReturnType(Config.ConfigInstance, Item);
+            var firstParam = Item.MethodMetaData.OutParamMetaDataList.FirstOrDefault();
+            if (firstParam!= null)
+            {
+                if (!Item.OutParam.IsOriginalClass)
+                {
+                    if (firstParam.EnumMetaData != null)
+                    {
+                        ReturnType = typeof(int).FullName;
+                    }
+                    else if (firstParam.ClassMetaData != null)
+                    {
+                        ReturnType = firstParam.TypeWrapper.Type.Name.FormatMessageName();
+                    }
+                    else
+                    {
+                        ReturnType = firstParam.TypeWrapper.Type.FullName;
+                    }
+
+                    if (firstParam.TypeWrapper.IsArray)
+                    {
+                        ReturnType = $"List<{ReturnType}>";
+                    }
+                }
+            }
+
+            //返回值：1、如果是原始类，则返回 result；则去掉包装
+            ReturnResult = "result";
+            if (firstParam != null)
+            {
+                if (!Item.OutParam.IsOriginalClass)
+                {
+                    ReturnResult = "result.Data";
+                }
+            }
         }
         
         /// <summary>
@@ -173,6 +198,11 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         /// 方法返回参数强类型，用于swagger
         /// </summary>
         public string ReturnType { get; set; }
+
+        /// <summary>
+        /// 方法返回值，默认 result
+        /// </summary>
+        public string ReturnResult { get; set; }
 
         /// <summary>
         /// 方法注释

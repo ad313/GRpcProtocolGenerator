@@ -206,11 +206,11 @@ namespace Sample.Gateway.Controllers.v1
         [HttpGet("MethodWithInputReturnIntSync")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("")]
-        [SwaggerResponse(200, "响应结果", typeof(GRpcServiceTest_MethodWithInputReturnIntSync_Response))]        
+        [SwaggerResponse(200, "响应结果", typeof(System.Int32))]        
         public virtual async Task<IActionResult> MethodWithInputReturnIntSync(System.Int32 a, CancellationToken cancellationToken = default)
         {
             var result = await _client.MethodWithInputReturnIntSync(new GRpcServiceTest_MethodWithInputReturnIntSync_Request() { A = a }, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok(result.Data);
         }
                 
         /// <summary>
@@ -220,11 +220,11 @@ namespace Sample.Gateway.Controllers.v1
         [HttpGet("MethodWithInputReturnStringSync")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("")]
-        [SwaggerResponse(200, "响应结果", typeof(GRpcServiceTestStringResponse))]        
+        [SwaggerResponse(200, "响应结果", typeof(System.String))]        
         public virtual async Task<IActionResult> MethodWithInputReturnStringSync(System.Int32 a, System.String? b, CancellationToken cancellationToken = default)
         {
             var result = await _client.MethodWithInputReturnStringSync(new GRpcServiceTest_MethodWithInputReturnStringSync_Request() { A = a, B = b }, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok(result.Data);
         }
                 
         /// <summary>
@@ -248,11 +248,11 @@ namespace Sample.Gateway.Controllers.v1
         [HttpPost("MethodWithInputReturnListClassSync")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("")]
-        [SwaggerResponse(200, "响应结果", typeof(GRpcServiceTestListSampleClassResponse))]        
+        [SwaggerResponse(200, "响应结果", typeof(List<GRpcSampleClass>))]        
         public virtual async Task<IActionResult> MethodWithInputReturnListClassSync([FromBody] GRpcSampleClass clientInput, CancellationToken cancellationToken = default)
         {
             var result = await _client.MethodWithInputReturnListClassSync(clientInput, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok(result.Data);
         }
                 
         /// <summary>
@@ -262,11 +262,11 @@ namespace Sample.Gateway.Controllers.v1
         [HttpPost("MethodWithInputReturnListIntSync")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("")]
-        [SwaggerResponse(200, "响应结果", typeof(GRpcServiceTestListInt32Response))]        
+        [SwaggerResponse(200, "响应结果", typeof(List<System.Int32>))]        
         public virtual async Task<IActionResult> MethodWithInputReturnListIntSync([FromBody] GRpcSampleClass clientInput, CancellationToken cancellationToken = default)
         {
             var result = await _client.MethodWithInputReturnListIntSync(clientInput, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok(result.Data);
         }
                 
         /// <summary>
@@ -276,11 +276,11 @@ namespace Sample.Gateway.Controllers.v1
         [HttpGet("MethodWithInputReturnEnumSync")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("")]
-        [SwaggerResponse(200, "响应结果", typeof(GRpcServiceTest_MethodWithInputReturnEnumSync_Response))]        
+        [SwaggerResponse(200, "响应结果", typeof(System.Int32))]        
         public virtual async Task<IActionResult> MethodWithInputReturnEnumSync(System.Int32 a, CancellationToken cancellationToken = default)
         {
             var result = await _client.MethodWithInputReturnEnumSync(new GRpcServiceTest_MethodWithInputReturnEnumSync_Request() { A = a }, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok(result.Data);
         }
                 
         /// <summary>
@@ -290,11 +290,11 @@ namespace Sample.Gateway.Controllers.v1
         [HttpGet("MethodWithInputReturnInt")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("")]
-        [SwaggerResponse(200, "响应结果", typeof(GRpcServiceTest_MethodWithInputReturnIntAsync_Response))]        
+        [SwaggerResponse(200, "响应结果", typeof(System.Int32))]        
         public virtual async Task<IActionResult> MethodWithInputReturnIntAsync(System.Int32 a, CancellationToken cancellationToken = default)
         {
             var result = await _client.MethodWithInputReturnInt(new GRpcServiceTest_MethodWithInputReturnIntAsync_Request() { A = a }, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok(result.Data);
         }
                 
         /// <summary>
@@ -304,11 +304,11 @@ namespace Sample.Gateway.Controllers.v1
         [HttpGet("MethodWithInputReturnString")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("")]
-        [SwaggerResponse(200, "响应结果", typeof(GRpcServiceTestStringResponse))]        
+        [SwaggerResponse(200, "响应结果", typeof(System.String))]        
         public virtual async Task<IActionResult> MethodWithInputReturnStringAsync(System.Int32 a, System.String? b, CancellationToken cancellationToken = default)
         {
             var result = await _client.MethodWithInputReturnString(new GRpcServiceTest_MethodWithInputReturnStringAsync_Request() { A = a, B = b }, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok(result.Data);
         }
                 
         /// <summary>
@@ -346,11 +346,11 @@ namespace Sample.Gateway.Controllers.v1
         [HttpPost("MethodWithInputReturnListClassAsync")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("")]
-        [SwaggerResponse(200, "响应结果", typeof(GRpcServiceTestListSampleClassResponse))]        
+        [SwaggerResponse(200, "响应结果", typeof(List<GRpcSampleClass>))]        
         public virtual async Task<IActionResult> MethodWithInputReturnListClassAsync([FromBody] GRpcSampleClass clientInput, CancellationToken cancellationToken = default)
         {
             var result = await _client.MethodWithInputReturnListClass(clientInput, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok(result.Data);
         }
                 
         /// <summary>
@@ -360,11 +360,11 @@ namespace Sample.Gateway.Controllers.v1
         [HttpPost("MethodWithInputReturnListIntAsync")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("")]
-        [SwaggerResponse(200, "响应结果", typeof(GRpcServiceTestListInt32Response))]        
+        [SwaggerResponse(200, "响应结果", typeof(List<System.Int32>))]        
         public virtual async Task<IActionResult> MethodWithInputReturnListIntAsync([FromBody] GRpcSampleClass clientInput, CancellationToken cancellationToken = default)
         {
             var result = await _client.MethodWithInputReturnListInt(clientInput, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok(result.Data);
         }
                 
         /// <summary>
@@ -374,11 +374,11 @@ namespace Sample.Gateway.Controllers.v1
         [HttpGet("MethodWithInputReturnEnum")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("")]
-        [SwaggerResponse(200, "响应结果", typeof(GRpcServiceTest_MethodWithInputReturnEnumAsync_Response))]        
+        [SwaggerResponse(200, "响应结果", typeof(System.Int32))]        
         public virtual async Task<IActionResult> MethodWithInputReturnEnumAsync(System.Int32 a, CancellationToken cancellationToken = default)
         {
             var result = await _client.MethodWithInputReturnEnum(new GRpcServiceTest_MethodWithInputReturnEnumAsync_Request() { A = a }, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok(result.Data);
         }
                 
         /// <summary>
@@ -388,11 +388,11 @@ namespace Sample.Gateway.Controllers.v1
         [HttpGet("MethodWithInputReturnEnumValueTask")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("")]
-        [SwaggerResponse(200, "响应结果", typeof(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response))]        
+        [SwaggerResponse(200, "响应结果", typeof(System.Int32))]        
         public virtual async Task<IActionResult> MethodWithInputReturnEnumValueTaskAsync(System.Int32 a, CancellationToken cancellationToken = default)
         {
             var result = await _client.MethodWithInputReturnEnumValueTask(new GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request() { A = a }, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok(result.Data);
         }
                 
         /// <summary>

@@ -78,10 +78,13 @@ namespace Sample.Server.Implements
 		}
 
 		/// 
-		public override async Task<Empty> Test6(GRpcServiceTest2Service_Test6Async_Request request, ServerCallContext context)
+		public override async Task<GRpcServiceTest2Service_Test6Async_Response> Test6(GRpcServiceTest2Service_Test6Async_Request request, ServerCallContext context)
 		{
-			await _service.Test6Async(request.A, request.B, request.C?.Adapt<Sample.Services.Models.SampleEnum>());
-			return new Empty();
+			var data = await _service.Test6Async(request.A, request.B, request.C?.Adapt<Sample.Services.Models.SampleEnum>());
+			return new GRpcServiceTest2Service_Test6Async_Response
+			{
+				Data = data
+			};
 		}
 
 	}

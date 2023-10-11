@@ -4,7 +4,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace GRpcProtocolGenerator.Renders
 {
@@ -35,7 +34,7 @@ namespace GRpcProtocolGenerator.Renders
                 {
                     var server = new ServerServiceImpl(protoContent);
                     var serverContent = server.ToContent();
-                    await BuilderPath.CreateServerFile(server.ServerName, serverContent);
+                    await BuilderPath.CreateServerFile(server.ServerName.ToSnakeString(), serverContent);
                     Console.WriteLine(serverContent);
                 }
             }
@@ -184,9 +183,7 @@ namespace GRpcProtocolGenerator.Renders
         {
             if (Config.ConfigInstance.Controller == null)
                 return;
-
-            var interfaces = _assemblyMetaData.InterfaceMetaDataDictionary.Select(d => d.Value).ToList();
-
+            
             //生成服务代理
             foreach (var service in Services)
             {
@@ -206,7 +203,7 @@ namespace GRpcProtocolGenerator.Renders
                     }
                 }, "Controller.Controller");
 
-                await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.GetControllerFileOutputPath(), $"{service.Name.TrimStart('I')}Controller.cs", str, true);
+                await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.GetControllerFileOutputPath(), $"{service.Name.TrimStart('I').TrimLastString("Service")}Controller.cs", str, true);
             }
 
             // csproj

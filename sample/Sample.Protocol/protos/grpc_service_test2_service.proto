@@ -27,7 +27,7 @@ service GRpcServiceTest2Service {
 	rpc Test5(GRpcServiceTest2Service_Test5Async_Request) returns(GRpcServiceTest2ServiceListSampleClassResponse);
 	
 	// 
-	rpc Test6(GRpcServiceTest2Service_Test6Async_Request) returns(google.protobuf.Empty);
+	rpc Test6(GRpcServiceTest2Service_Test6Async_Request) returns(GRpcServiceTest2Service_Test6Async_Response);
 }
 
 // GRpcServiceTest2Service_GetByIdAsync_Request
@@ -56,6 +56,11 @@ message GRpcServiceTest2Service_Test6Async_Request {
 	int32 a = 1;
 	google.protobuf.StringValue b = 2;
 	google.protobuf.Int32Value c = 3;
+}
+
+// GRpcServiceTest2Service_Test6Async_Response
+message GRpcServiceTest2Service_Test6Async_Response {
+	int32 Data = 1;
 }
 
 // GRpcServiceTest2ServiceListSampleClassResponse

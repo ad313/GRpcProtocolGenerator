@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using GRpcProtocolGenerator.Common.Attributes;
+﻿using GRpcProtocolGenerator.Common.Attributes;
 using Sample.Services.Models;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
@@ -41,7 +41,7 @@ namespace Sample.Services
         //Task Test6Async(int a, string b, SampleEnum? c, List<int> d, List<string> e, List<SampleEnum> f, SampleClass h, List<SampleClass> i);
 
         [HttpGet("Test6")]
-        Task Test6Async(int a, string b, SampleEnum? c);
+        Task<int> Test6Async(int a, string b, SampleEnum? c);
     }
 
     public class ServiceTest2 : IServiceTest2Service
@@ -81,7 +81,7 @@ namespace Sample.Services
             return new List<SampleClass>();
         }
 
-        public async Task Test6Async(int a, string b, SampleEnum? c)
+        public async Task<int> Test6Async(int a, string b, SampleEnum? c)
         {
             throw new NotImplementedException();
         }

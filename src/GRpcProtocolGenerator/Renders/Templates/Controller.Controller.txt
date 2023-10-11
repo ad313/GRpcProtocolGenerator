@@ -48,7 +48,7 @@ namespace {{ data.name_space }}
         public virtual async Task<IActionResult> {{ item.name }}({{ item.input_type }}CancellationToken cancellationToken = default)
         {
             var result = await _client.{{ item.client_method_name }}({{ item.client_input_type }}, cancellationToken: cancellationToken);
-            return {{ config.controller.return_method_name }}(result);
+            return {{ config.controller.return_method_name }}({{ item.return_result }});
         }
         {{- end }}        
     }

@@ -90,11 +90,11 @@ namespace Sample.Gateway.Controllers.v1
         [HttpGet("aaa")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("查询列表")]
-        [SwaggerResponse(200, "响应结果", typeof(GRpcServiceTest2ServiceListSampleClassResponse))]        
+        [SwaggerResponse(200, "响应结果", typeof(List<GRpcSampleClass>))]        
         public virtual async Task<IActionResult> Test4Async([FromQuery] GRpcSampleClass clientInput, CancellationToken cancellationToken = default)
         {
             var result = await _client.Test4(clientInput, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok(result.Data);
         }
                 
         /// <summary>
@@ -104,11 +104,11 @@ namespace Sample.Gateway.Controllers.v1
         [HttpDelete("aaa/{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("这是删除")]
-        [SwaggerResponse(200, "响应结果", typeof(GRpcServiceTest2ServiceListSampleClassResponse))]        
+        [SwaggerResponse(200, "响应结果", typeof(List<GRpcSampleClass>))]        
         public virtual async Task<IActionResult> Test5Async(System.String? id, CancellationToken cancellationToken = default)
         {
             var result = await _client.Test5(new GRpcServiceTest2Service_Test5Async_Request() { Id = id }, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok(result.Data);
         }
                 
         /// <summary>
@@ -117,11 +117,12 @@ namespace Sample.Gateway.Controllers.v1
         /// <returns></returns>
         [HttpGet("Test6")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [SwaggerOperation("")]        
+        [SwaggerOperation("")]
+        [SwaggerResponse(200, "响应结果", typeof(System.Int32))]        
         public virtual async Task<IActionResult> Test6Async(System.Int32 a, System.String? b, System.Int32? c, CancellationToken cancellationToken = default)
         {
             var result = await _client.Test6(new GRpcServiceTest2Service_Test6Async_Request() { A = a, B = b, C = c }, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok(result.Data);
         }        
     }
 }

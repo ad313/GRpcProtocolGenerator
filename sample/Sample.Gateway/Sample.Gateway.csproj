@@ -17,4 +17,8 @@
 		<ProjectReference Include="..\Sample.ClientWrapper\Sample.ClientWrapper.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Controllers\v1\" />
+	</ItemGroup>
+
 </Project>

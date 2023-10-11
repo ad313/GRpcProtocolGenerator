@@ -33,7 +33,7 @@ namespace Sample.ClientWrapper
         Task<GRpcServiceTest2ServiceListSampleClassResponse> Test5(GRpcServiceTest2Service_Test5Async_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
         /// 
-        Task<Empty> Test6(GRpcServiceTest2Service_Test6Async_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        Task<GRpcServiceTest2Service_Test6Async_Response> Test6(GRpcServiceTest2Service_Test6Async_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         
     }
 
@@ -83,7 +83,7 @@ namespace Sample.ClientWrapper
         }
         
         /// 
-        public async Task<Empty> Test6(GRpcServiceTest2Service_Test6Async_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async Task<GRpcServiceTest2Service_Test6Async_Response> Test6(GRpcServiceTest2Service_Test6Async_Request request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.Test6Async(request, header, deadline, cancellationToken);
         }

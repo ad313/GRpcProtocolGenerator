@@ -3,6 +3,7 @@ using GRpcProtocolGenerator.Models.MetaData;
 using GRpcProtocolGenerator.Renders.Protocol;
 using System;
 using System.Text;
+using System.Xml.Linq;
 
 namespace GRpcProtocolGenerator.Renders
 {
@@ -81,6 +82,25 @@ namespace GRpcProtocolGenerator.Renders
                 }
             }
             return builder.ToString();
+        }
+
+        /// <summary>
+        /// 去掉末尾的指定字符串
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="flag"></param>
+        /// <returns></returns>
+        public static string TrimLastString(this string source, string flag)
+        {
+            if (source.Length > flag.Length)
+            {
+                if (source.Substring(source.Length - flag.Length) == flag)
+                {
+                    source = source.Substring(0, source.Length - flag.Length);
+                }
+            }
+
+            return source;
         }
 
         public static string ToFirstLowString(this string str)
