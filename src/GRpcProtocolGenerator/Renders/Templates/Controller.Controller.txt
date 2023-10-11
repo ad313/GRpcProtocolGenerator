@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using {{ data.proto_namespace }};
-using {{ config.client_wrapper.project_name }};
+using {{ config.proto.project_name }}.{{ config.proto.clients_directory }};
 
 namespace {{ data.name_space }}
 {

@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using {{ data.proto_namespace }};
 
-namespace {{ config.client_wrapper.project_name }}
+namespace {{ config.proto.project_name }}.{{ config.proto.clients_directory }}
 {
     /// {{ data.description }}
     public interface I{{data.name}}
@@ -23,10 +23,15 @@ namespace {{ config.client_wrapper.project_name }}
         {{- end }}
     }
 
+    /// {{ data.description }}
     public sealed class {{data.name}} : I{{data.name}}
     {
         private readonly Lazy<{{data.g_rpc_service_name}}.{{data.g_rpc_service_name}}Client> _client;
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="clientProvider"></param>
         public {{data.name}}(IGRpcClientProvider clientProvider)
         {
             _client = new Lazy<{{data.g_rpc_service_name}}.{{data.g_rpc_service_name}}Client>(clientProvider.CreateClient<{{data.g_rpc_service_name}}.{{data.g_rpc_service_name}}Client>);

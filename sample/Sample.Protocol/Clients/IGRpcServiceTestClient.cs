@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Sample.GRpc.Protocol;
 
-namespace Sample.ClientWrapper
+namespace Sample.Protocol.Clients
 {
     /// desc from Description
     public interface IGRpcServiceTestClient
@@ -106,10 +106,15 @@ namespace Sample.ClientWrapper
         
     }
 
+    /// desc from Description
     public sealed class GRpcServiceTestClient : IGRpcServiceTestClient
     {
         private readonly Lazy<GRpcServiceTest.GRpcServiceTestClient> _client;
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="clientProvider"></param>
         public GRpcServiceTestClient(IGRpcClientProvider clientProvider)
         {
             _client = new Lazy<GRpcServiceTest.GRpcServiceTestClient>(clientProvider.CreateClient<GRpcServiceTest.GRpcServiceTestClient>);

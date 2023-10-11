@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="{{ config.client_wrapper.output | string.replace '/' '\\' }}\{{ config.client_wrapper.project_name }}.csproj" />
+		<ProjectReference Include="{{ config.proto.output | string.replace '/' '\\' }}\{{ config.proto.project_name }}.csproj" />
 	</ItemGroup>
 
 </Project>

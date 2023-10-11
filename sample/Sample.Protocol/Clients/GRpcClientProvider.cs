@@ -8,7 +8,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Reflection.Emit;
 
-namespace Sample.ClientWrapper
+namespace Sample.Protocol.Clients
 {
     /// <summary>
     /// GRpc客户端服务提供者
@@ -28,12 +28,29 @@ namespace Sample.ClientWrapper
     /// </summary>
     public class GRpcClientProvider : IGRpcClientProvider
     {
+        /// <summary>
+        /// 远程gRpc 地址
+        /// </summary>
         protected readonly string GRpcAddress;
+
+        /// <summary>
+        /// gRpcChannel
+        /// </summary>
         protected Lazy<GrpcChannel> Channel;
+
+        /// <summary>
+        /// 缓存客户端创建委托
+        /// </summary>
         protected ConcurrentDictionary<Type, Delegate> ClientDelegateDictionary = new ConcurrentDictionary<Type, Delegate>();
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
         public GRpcClientProvider() { }
 
+        /// <summary>
+        /// 带地址初始化
+        /// </summary>
         public GRpcClientProvider(string gRpcAddress)
         {
             GRpcAddress = gRpcAddress;

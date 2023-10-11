@@ -10,15 +10,11 @@
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="*" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.11" />
+		<PackageReference Include="GRpcProtocolGenerator.Common" Version="*" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\GRpcProtocolGenerator.Common\GRpcProtocolGenerator.Common.csproj" />
-		<ProjectReference Include="..\Sample.ClientWrapper\Sample.ClientWrapper.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Controllers\v1\" />
+		<ProjectReference Include="..\Sample.Protocol\Sample.Protocol.csproj" />
 	</ItemGroup>
 
 </Project>

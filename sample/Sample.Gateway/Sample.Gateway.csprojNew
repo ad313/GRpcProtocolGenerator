@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Sample.ClientWrapper\Sample.ClientWrapper.csproj" />
+		<ProjectReference Include="..\Sample.Protocol\Sample.Protocol.csproj" />
 	</ItemGroup>
 
 </Project>

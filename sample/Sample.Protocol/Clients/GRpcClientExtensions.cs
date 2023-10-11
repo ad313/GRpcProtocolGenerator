@@ -3,6 +3,7 @@
 */
 
 using System;
+using Sample.Protocol.Clients;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -19,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
             ArgumentException.ThrowIfNullOrEmpty(address, nameof(address));
 
             //GRpc 客户端服务提供者
-            services.AddSingleton<Sample.ClientWrapper.IGRpcClientProvider>(new Sample.ClientWrapper.GRpcClientProvider(address));
+            services.AddSingleton<IGRpcClientProvider>(new GRpcClientProvider(address));
 
             return services.RegisterClientService();
         }
@@ -29,19 +30,19 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection RegisterClient<TGRpcClientProvider>(this IServiceCollection services) where TGRpcClientProvider : class, Sample.ClientWrapper.IGRpcClientProvider
+        public static IServiceCollection RegisterClient<TGRpcClientProvider>(this IServiceCollection services) where TGRpcClientProvider : class, IGRpcClientProvider
         {
             //GRpc 客户端服务提供者
-            services.AddSingleton<Sample.ClientWrapper.IGRpcClientProvider, TGRpcClientProvider>();
+            services.AddSingleton<IGRpcClientProvider, TGRpcClientProvider>();
 
             return services.RegisterClientService();
         }
 
         // GRpc 代理服务
         private static IServiceCollection RegisterClientService(this IServiceCollection services)
-        {           
-            services.AddScoped<Sample.ClientWrapper.IGRpcServiceTestClient, Sample.ClientWrapper.GRpcServiceTestClient>();           
-            services.AddScoped<Sample.ClientWrapper.IGRpcServiceTest2ServiceClient, Sample.ClientWrapper.GRpcServiceTest2ServiceClient>();            
+        {
+            services.AddScoped<IGRpcServiceTestClient, GRpcServiceTestClient>();
+            services.AddScoped<IGRpcServiceTest2ServiceClient, GRpcServiceTest2ServiceClient>();            
 
             return services;
         }

@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Sample.GRpc.Protocol;
-using Sample.ClientWrapper;
+using Sample.Protocol.Clients;
 
 namespace Sample.Gateway.Controllers.v1
 {

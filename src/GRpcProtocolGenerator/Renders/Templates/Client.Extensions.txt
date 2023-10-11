@@ -3,7 +3,7 @@
 */
 
 using System;
-using {{ config.client_wrapper.project_name }};
+using {{ config.proto.project_name }}.{{ config.proto.clients_directory }};
 
 namespace Microsoft.Extensions.DependencyInjection
 {

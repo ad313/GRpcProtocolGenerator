@@ -71,22 +71,6 @@ namespace GRpcProtocolGenerator.Resolve
         }
 
         /// <summary>
-        /// 生成客户端包装
-        /// </summary>
-        /// <param name="clientWrapperAction"></param>
-        /// <returns></returns>
-        public ConfigBuilder SetClientWrapper(Action<ClientWrapperConfig> clientWrapperAction)
-        {
-            ArgumentNullException.ThrowIfNull(clientWrapperAction, nameof(clientWrapperAction));
-
-            Config.ClientWrapper = new ClientWrapperConfig(Config.CurrentPath);
-
-            clientWrapperAction.Invoke(Config.ClientWrapper);
-
-            return this;
-        }
-
-        /// <summary>
         /// 生成控制器配置
         /// </summary>
         /// <param name="controllerConfig"></param>
