@@ -21,7 +21,7 @@ generator grpc protocol from c# interface
 - 待补充
 
 ## 怎么使用？
-- 1、新建一个空白项目，用做生成代码的宿主程序，例子中是 Sample.Start，此时这个项目目录作为基准地址，可以使用相对路径来配置代码生成后的存放位置。参考：https://github.com/ad313/GRpcProtocolGenerator/tree/develop/sample/Sample.Start
+- 1、新建一个空白项目，用做生成代码的宿主程序，例子中是 Sample.Start，此时这个项目目录作为基准地址，可以使用相对路径来配置代码生成后的存放位置。参考：https://github.com/ad313/GRpcProtocolGenerator/blob/develop/sample/Sample.Start/Start.cs
 ```
     //引入相关包
     <PackageReference Include="GRpcProtocolGenerator" Version="0.2.4" />
