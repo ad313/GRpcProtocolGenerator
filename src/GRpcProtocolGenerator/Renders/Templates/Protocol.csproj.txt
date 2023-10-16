@@ -18,7 +18,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 
-		{{- for pkg in config.controller.append_package_to_csproj }}
+		{{- for pkg in config.proto.append_package_to_csproj }}
 		<PackageReference Include="{{ pkg }}" Version="*" />
 		{{- end }}
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
