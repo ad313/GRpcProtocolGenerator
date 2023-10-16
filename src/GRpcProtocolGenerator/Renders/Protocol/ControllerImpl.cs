@@ -229,7 +229,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         /// <summary>
         /// 对应的 GRpc 接口方法名称
         /// </summary>
-        public string ClientMethodName => Item.Name;
+        public string ClientMethodName => Item.MethodMetaData.Name;
 
         /// <summary>
         /// 客户端输入参数

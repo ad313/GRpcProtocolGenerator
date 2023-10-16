@@ -80,6 +80,16 @@ namespace Sample.Gateway
             app.MapControllers();
 
             app.Run();
+                   
+            //配置文件
+            //"client_address_key": "https://localhost:6010",
+            //"Kestrel": {
+            //  "Endpoints": {
+            //    "http": {
+            //      "Url": "http://*:6011"
+            //    }
+            //  }
+            //}            
         }
     }    
 }

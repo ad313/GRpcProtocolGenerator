@@ -18,7 +18,7 @@ namespace {{ config.proto.project_name }}.{{ config.proto.clients_directory }}
         {{- returnString = get_method_return_string config item }}
         {{- inString = get_method_in_string item }}
         /// {{ get_method_description item }}
-        {{ returnString }} {{ item.name }}({{ inString }} request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        {{ returnString }} {{ item.method_meta_data.name }}({{ inString }} request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
         {{}}
         {{- end }}
     }
@@ -42,7 +42,7 @@ namespace {{ config.proto.project_name }}.{{ config.proto.clients_directory }}
         {{- inString = get_method_in_string item }}
         {{}}
         /// {{ get_method_description item }}
-        public async {{ returnString }} {{ item.name }}({{ inString }} request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        public async {{ returnString }} {{ item.method_meta_data.name }}({{ inString }} request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
         {
             return await _client.Value.{{ item.name }}Async(request, header, deadline, cancellationToken);
         }

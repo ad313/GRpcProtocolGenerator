@@ -54,7 +54,7 @@ namespace GRpcProtocolGenerator.Renders
                 if (File.Exists(Config.ConfigInstance.Server.GetProgramFilePath()))
                 {
                     serverProgramString = "/*" + Environment.NewLine + serverProgramString + Environment.NewLine + "*/";
-                    serverProgramFileName += "New";
+                    serverProgramFileName += ".g";
                 }
 
                 await BuilderPath.CreateServerRootFile(serverProgramFileName + ".cs", serverProgramString);
@@ -64,32 +64,27 @@ namespace GRpcProtocolGenerator.Renders
                 var serverCsprojString = await ScribanHelper.Render(new { config = Config.ConfigInstance, servers = Services }, "Server.csproj");
                 var serverCsprojFileName = Config.ConfigInstance.Server.ProjectName + ".csproj";
 
-                // 如果 csproj 已存在，则生成 csprojNew，不覆盖原来的 csproj
-                if (File.Exists(Config.ConfigInstance.Server.GetCsprojFilePath()))
+                // 如果 csproj 已存在，则跳过
+                if (!File.Exists(Config.ConfigInstance.Server.GetCsprojFilePath()))
                 {
-                    serverCsprojFileName += "New";
+                    await BuilderPath.CreateServerRootFile(serverCsprojFileName, serverCsprojString);
                 }
-
-                await BuilderPath.CreateServerRootFile(serverCsprojFileName, serverCsprojString);
-
-
-                //appsettings.json
-                var appSettingsJson = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Server.AppSettings");
-                var appSettingsJsonFileName = "appsettings.json";
-                await BuilderPath.CreateFileAsync(Config.ConfigInstance.Server.OutputFullPath, appSettingsJsonFileName, appSettingsJson, false);
+                
+                ////appsettings.json
+                //var appSettingsJson = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Server.AppSettings");
+                //var appSettingsJsonFileName = "appsettings.json";
+                //await BuilderPath.CreateFileAsync(Config.ConfigInstance.Server.OutputFullPath, appSettingsJsonFileName, appSettingsJson, false);
             }
 
             // proto csproj
             var protoCsprojString = await ScribanHelper.Render(new { config = Config.ConfigInstance, servers = Services }, "Protocol.csproj");
             var protoCsprojFileName = Config.ConfigInstance.Proto.ProjectName + ".csproj";
 
-            // 如果 csproj 已存在，则生成 csprojNew，不覆盖原来的 csproj
-            if (File.Exists(Config.ConfigInstance.Proto.GetCsprojFilePath()))
+            // 如果 csproj 已存在，则跳过
+            if (!File.Exists(Config.ConfigInstance.Proto.GetCsprojFilePath()))
             {
-                protoCsprojFileName += "New";
+                await BuilderPath.CreateProtoRootFile(protoCsprojFileName, protoCsprojString);
             }
-
-            await BuilderPath.CreateProtoRootFile(protoCsprojFileName, protoCsprojString);
 
             //google api
             if (Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding)
@@ -153,9 +148,9 @@ namespace GRpcProtocolGenerator.Renders
                     {
                         service = service,
                         name = name,
-                        protoNamespace= Config.ConfigInstance.Proto.GetCSharpNamespace(service.InterfaceMetaData),
-                        description= Config.ConfigInstance.Proto.PropertyDescriptionFunc(service.InterfaceMetaData),
-                        gRpcServiceName =service.InterfaceMetaData.FormatServiceName(),
+                        protoNamespace = Config.ConfigInstance.Proto.GetCSharpNamespace(service.InterfaceMetaData),
+                        description = Config.ConfigInstance.Proto.PropertyDescriptionFunc(service.InterfaceMetaData),
+                        gRpcServiceName = service.InterfaceMetaData.FormatServiceName(),
                     }
                 }, "Client.Client");
                 
@@ -210,29 +205,24 @@ namespace GRpcProtocolGenerator.Renders
             var csprojString = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Controller.csproj");
             var csprojFileName = Config.ConfigInstance.Controller.ProjectName + ".csproj";
 
-            // 如果 csproj 已存在，则生成 csprojNew，不覆盖原来的 csproj
-            if (File.Exists(Config.ConfigInstance.Controller.GetCsprojFilePath()))
+            // 如果 csproj 已存在，则跳过
+            if (!File.Exists(Config.ConfigInstance.Controller.GetCsprojFilePath()))
             {
-                csprojFileName += "New";
+                await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.OutputFullPath, csprojFileName, csprojString, true);
             }
-
-            await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.OutputFullPath, csprojFileName, csprojString, true);
-
-
-
 
             // program
             var controllerProgramString = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Controller.Program");
-            var controllerProgramFileName = "Program.cs";
+            var controllerProgramFileName = "Program";
 
             // 如果 program.cs 已存在，则生成 programNew.cs，不覆盖原来的 program.cs
             if (File.Exists(Config.ConfigInstance.Controller.GetProgramFilePath()))
             {
                 controllerProgramString = "/*" + Environment.NewLine + controllerProgramString + Environment.NewLine + "*/";
-                controllerProgramFileName += "New";
+                controllerProgramFileName += ".g";
             }
 
-            await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.OutputFullPath, controllerProgramFileName, controllerProgramString, true);
+            await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.OutputFullPath, controllerProgramFileName + ".cs", controllerProgramString, true);
 
 
 
@@ -245,10 +235,10 @@ namespace GRpcProtocolGenerator.Renders
             }
 
 
-            //appsettings.json
-            var appSettingsJson = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Controller.AppSettings");
-            var appSettingsJsonFileName = "appsettings.json";
-            await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.OutputFullPath, appSettingsJsonFileName, appSettingsJson, false);
+            ////appsettings.json
+            //var appSettingsJson = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Controller.AppSettings");
+            //var appSettingsJsonFileName = "appsettings.json";
+            //await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.OutputFullPath, appSettingsJsonFileName, appSettingsJson, false);
         }
     }
 }

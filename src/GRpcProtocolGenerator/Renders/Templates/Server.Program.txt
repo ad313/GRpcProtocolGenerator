@@ -113,6 +113,16 @@ namespace {{ config.server.project_name }}
             {{- end }}
 
             app.Run();
+
+            //配置文件
+            //"Kestrel": {
+            //  "Endpoints": {
+            //    "Grpc": {
+            //      "Url": "https://*:{{ config.server.port }}",
+            //      "Protocols": "Http1AndHttp2"
+            //    }
+            //  }
+            //}
         }
     }
     {{}}

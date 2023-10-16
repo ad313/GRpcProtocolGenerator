@@ -130,7 +130,7 @@ namespace Sample.Gateway.Controllers.v1
         [SwaggerOperation("")]        
         public virtual async Task<IActionResult> VoidMethodAsync(CancellationToken cancellationToken = default)
         {
-            var result = await _client.VoidMethod(new Google.Protobuf.WellKnownTypes.Empty(), cancellationToken: cancellationToken);
+            var result = await _client.VoidMethodAsync(new Google.Protobuf.WellKnownTypes.Empty(), cancellationToken: cancellationToken);
             return Ok(result);
         }
                 
@@ -143,7 +143,7 @@ namespace Sample.Gateway.Controllers.v1
         [SwaggerOperation("")]        
         public virtual async Task<IActionResult> MethodWithInputReturnVoidAsync(System.Int32 a, CancellationToken cancellationToken = default)
         {
-            var result = await _client.MethodWithInputReturnVoid(new GRpcServiceTest_MethodWithInputReturnVoidAsync_Request() { A = a }, cancellationToken: cancellationToken);
+            var result = await _client.MethodWithInputReturnVoidAsync(new GRpcServiceTest_MethodWithInputReturnVoidAsync_Request() { A = a }, cancellationToken: cancellationToken);
             return Ok(result);
         }
                 
@@ -156,7 +156,7 @@ namespace Sample.Gateway.Controllers.v1
         [SwaggerOperation("")]        
         public virtual async Task<IActionResult> MethodWithInputReturnVoid2Async(System.Int32 a, System.String? b, CancellationToken cancellationToken = default)
         {
-            var result = await _client.MethodWithInputReturnVoid2(new GRpcServiceTest_MethodWithInputReturnVoid2Async_Request() { A = a, B = b }, cancellationToken: cancellationToken);
+            var result = await _client.MethodWithInputReturnVoid2Async(new GRpcServiceTest_MethodWithInputReturnVoid2Async_Request() { A = a, B = b }, cancellationToken: cancellationToken);
             return Ok(result);
         }
                 
@@ -169,7 +169,7 @@ namespace Sample.Gateway.Controllers.v1
         [SwaggerOperation("")]        
         public virtual async Task<IActionResult> MethodWithInputReturnVoid3Async([FromBody] GRpcSampleClass clientInput, CancellationToken cancellationToken = default)
         {
-            var result = await _client.MethodWithInputReturnVoid3(clientInput, cancellationToken: cancellationToken);
+            var result = await _client.MethodWithInputReturnVoid3Async(clientInput, cancellationToken: cancellationToken);
             return Ok(result);
         }
                 
@@ -182,7 +182,7 @@ namespace Sample.Gateway.Controllers.v1
         [SwaggerOperation("")]        
         public virtual async Task<IActionResult> MethodWithInputReturnVoid4Async(List<System.Int32> a, CancellationToken cancellationToken = default)
         {
-            var result = await _client.MethodWithInputReturnVoid4(new GRpcServiceTest_MethodWithInputReturnVoid4Async_Request() { A = { a } }, cancellationToken: cancellationToken);
+            var result = await _client.MethodWithInputReturnVoid4Async(new GRpcServiceTest_MethodWithInputReturnVoid4Async_Request() { A = { a } }, cancellationToken: cancellationToken);
             return Ok(result);
         }
                 
@@ -195,7 +195,7 @@ namespace Sample.Gateway.Controllers.v1
         [SwaggerOperation("")]        
         public virtual async Task<IActionResult> MethodWithInputEnumReturnVoid4Async(System.Int32 a, CancellationToken cancellationToken = default)
         {
-            var result = await _client.MethodWithInputEnumReturnVoid4(new GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request() { A = a }, cancellationToken: cancellationToken);
+            var result = await _client.MethodWithInputEnumReturnVoid4Async(new GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request() { A = a }, cancellationToken: cancellationToken);
             return Ok(result);
         }
                 
@@ -293,7 +293,7 @@ namespace Sample.Gateway.Controllers.v1
         [SwaggerResponse(200, "响应结果", typeof(System.Int32))]        
         public virtual async Task<IActionResult> MethodWithInputReturnIntAsync(System.Int32 a, CancellationToken cancellationToken = default)
         {
-            var result = await _client.MethodWithInputReturnInt(new GRpcServiceTest_MethodWithInputReturnIntAsync_Request() { A = a }, cancellationToken: cancellationToken);
+            var result = await _client.MethodWithInputReturnIntAsync(new GRpcServiceTest_MethodWithInputReturnIntAsync_Request() { A = a }, cancellationToken: cancellationToken);
             return Ok(result.Data);
         }
                 
@@ -307,7 +307,7 @@ namespace Sample.Gateway.Controllers.v1
         [SwaggerResponse(200, "响应结果", typeof(System.String))]        
         public virtual async Task<IActionResult> MethodWithInputReturnStringAsync(System.Int32 a, System.String? b, CancellationToken cancellationToken = default)
         {
-            var result = await _client.MethodWithInputReturnString(new GRpcServiceTest_MethodWithInputReturnStringAsync_Request() { A = a, B = b }, cancellationToken: cancellationToken);
+            var result = await _client.MethodWithInputReturnStringAsync(new GRpcServiceTest_MethodWithInputReturnStringAsync_Request() { A = a, B = b }, cancellationToken: cancellationToken);
             return Ok(result.Data);
         }
                 
@@ -321,7 +321,7 @@ namespace Sample.Gateway.Controllers.v1
         [SwaggerResponse(200, "响应结果", typeof(GRpcSampleClass))]        
         public virtual async Task<IActionResult> MethodWithInputReturnClassAsync(System.Int32 a, System.String? b, CancellationToken cancellationToken = default)
         {
-            var result = await _client.MethodWithInputReturnClass(new GRpcServiceTest_MethodWithInputReturnClassAsync_Request() { A = a, B = b }, cancellationToken: cancellationToken);
+            var result = await _client.MethodWithInputReturnClassAsync(new GRpcServiceTest_MethodWithInputReturnClassAsync_Request() { A = a, B = b }, cancellationToken: cancellationToken);
             return Ok(result);
         }
                 
@@ -335,7 +335,7 @@ namespace Sample.Gateway.Controllers.v1
         [SwaggerResponse(200, "响应结果", typeof(GRpcNullableClass))]        
         public virtual async Task<IActionResult> MethodWithInputReturnNullableClassAsync(System.Int32 a, System.String? b, CancellationToken cancellationToken = default)
         {
-            var result = await _client.MethodWithInputReturnNullableClass(new GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request() { A = a, B = b }, cancellationToken: cancellationToken);
+            var result = await _client.MethodWithInputReturnNullableClassAsync(new GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request() { A = a, B = b }, cancellationToken: cancellationToken);
             return Ok(result);
         }
                 
@@ -349,7 +349,7 @@ namespace Sample.Gateway.Controllers.v1
         [SwaggerResponse(200, "响应结果", typeof(List<GRpcSampleClass>))]        
         public virtual async Task<IActionResult> MethodWithInputReturnListClassAsync([FromBody] GRpcSampleClass clientInput, CancellationToken cancellationToken = default)
         {
-            var result = await _client.MethodWithInputReturnListClass(clientInput, cancellationToken: cancellationToken);
+            var result = await _client.MethodWithInputReturnListClassAsync(clientInput, cancellationToken: cancellationToken);
             return Ok(result.Data);
         }
                 
@@ -363,7 +363,7 @@ namespace Sample.Gateway.Controllers.v1
         [SwaggerResponse(200, "响应结果", typeof(List<System.Int32>))]        
         public virtual async Task<IActionResult> MethodWithInputReturnListIntAsync([FromBody] GRpcSampleClass clientInput, CancellationToken cancellationToken = default)
         {
-            var result = await _client.MethodWithInputReturnListInt(clientInput, cancellationToken: cancellationToken);
+            var result = await _client.MethodWithInputReturnListIntAsync(clientInput, cancellationToken: cancellationToken);
             return Ok(result.Data);
         }
                 
@@ -377,7 +377,7 @@ namespace Sample.Gateway.Controllers.v1
         [SwaggerResponse(200, "响应结果", typeof(System.Int32))]        
         public virtual async Task<IActionResult> MethodWithInputReturnEnumAsync(System.Int32 a, CancellationToken cancellationToken = default)
         {
-            var result = await _client.MethodWithInputReturnEnum(new GRpcServiceTest_MethodWithInputReturnEnumAsync_Request() { A = a }, cancellationToken: cancellationToken);
+            var result = await _client.MethodWithInputReturnEnumAsync(new GRpcServiceTest_MethodWithInputReturnEnumAsync_Request() { A = a }, cancellationToken: cancellationToken);
             return Ok(result.Data);
         }
                 
@@ -391,7 +391,7 @@ namespace Sample.Gateway.Controllers.v1
         [SwaggerResponse(200, "响应结果", typeof(System.Int32))]        
         public virtual async Task<IActionResult> MethodWithInputReturnEnumValueTaskAsync(System.Int32 a, CancellationToken cancellationToken = default)
         {
-            var result = await _client.MethodWithInputReturnEnumValueTask(new GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request() { A = a }, cancellationToken: cancellationToken);
+            var result = await _client.MethodWithInputReturnEnumValueTaskAsync(new GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request() { A = a }, cancellationToken: cancellationToken);
             return Ok(result.Data);
         }
                 

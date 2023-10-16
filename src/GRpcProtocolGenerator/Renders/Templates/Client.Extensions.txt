@@ -17,7 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection RegisterClient(this IServiceCollection services, string address)
         {
-            ArgumentException.ThrowIfNullOrEmpty(address, nameof(address));
+            ArgumentNullException.ThrowIfNull(address,nameof(address));
 
             //GRpc 客户端服务提供者
             services.AddSingleton<IGRpcClientProvider>(new GRpcClientProvider(address));

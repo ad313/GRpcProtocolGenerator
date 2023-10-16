@@ -83,6 +83,16 @@ namespace {{ config.controller.project_name }}
             app.MapControllers();
 
             app.Run();
+                   
+            //配置文件
+            //"client_address_key": "https://localhost:{{ config.server.port }}",
+            //"Kestrel": {
+            //  "Endpoints": {
+            //    "http": {
+            //      "Url": "http://*:{{ config.controller.port }}"
+            //    }
+            //  }
+            //}            
         }
     }    
 }

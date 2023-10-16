@@ -52,6 +52,16 @@ namespace Sample.Server
             app.MapGrpcService<Sample.Server.Implements.GRpcServiceTest2ServiceImpl>();
 
             app.Run();
+
+            //配置文件
+            //"Kestrel": {
+            //  "Endpoints": {
+            //    "Grpc": {
+            //      "Url": "https://*:6010",
+            //      "Protocols": "Http1AndHttp2"
+            //    }
+            //  }
+            //}
         }
     }
     
