@@ -88,7 +88,6 @@ namespace GRpcProtocolGenerator.Test.Metadatas
                 {
                     server.Output = $"../{project}.Server";
                     server.ImplementsDirectory = "Implements";
-                    server.NamespaceFunc = meta => $"{project}.Server.Implements";
                 });
 
                 builder.SetJsonTranscoding(json =>

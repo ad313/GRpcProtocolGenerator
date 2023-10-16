@@ -4,7 +4,7 @@ using GRpcProtocolGenerator.Types;
 
 namespace GRpcProtocolGenerator.Renders
 {
-    public class BuilderPart
+    public partial class BuilderPart
     {
         #region MapTo
 

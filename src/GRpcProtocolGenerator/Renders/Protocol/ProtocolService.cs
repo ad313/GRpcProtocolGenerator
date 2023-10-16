@@ -70,6 +70,8 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
         public MethodMetaData MethodMetaData { get; set; }
 
+        public ProtocolHttpOption HttpOption { get; set; }
+
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
@@ -78,22 +80,21 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             sb.AppendLine();
             sb.AppendLine($"\t// {Config.ConfigInstance.Proto.PropertyDescriptionFunc(MethodMetaData)}");
 
+            HttpOption = GetHttpOption(HttpMethod.Get, typeof(HttpGetAttribute)) ??
+                         GetHttpOption(HttpMethod.Post, typeof(HttpPostAttribute)) ??
+                         GetHttpOption(HttpMethod.Put, typeof(HttpPutAttribute)) ??
+                         GetHttpOption(HttpMethod.Delete, typeof(HttpDeleteAttribute)) ??
+                         GetHttpOption(HttpMethod.Patch, typeof(HttpPatchAttribute));
+
+            if (HttpOption == null)
+            {
+                HttpOption = GetDefaultHttpOption();
+            }
+
             if (Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding)
             {
                 sb.Append($"\trpc {Name}({InParam.GetGRpcName()}) returns({OutParam.GetGRpcName()})");
-
-                var httpOption = GetHttpOption(HttpMethod.Get, typeof(HttpGetAttribute)) ??
-                                 GetHttpOption(HttpMethod.Post, typeof(HttpPostAttribute)) ??
-                                 GetHttpOption(HttpMethod.Put, typeof(HttpPutAttribute)) ??
-                                 GetHttpOption(HttpMethod.Delete, typeof(HttpDeleteAttribute)) ??
-                                 GetHttpOption(HttpMethod.Patch, typeof(HttpPatchAttribute));
-
-                if (httpOption == null)
-                {
-                    httpOption = GetDefaultHttpOption();
-                }
-
-                sb.Append(httpOption.ToString());
+                sb.Append(HttpOption.ToString());
             }
             else
             {

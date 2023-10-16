@@ -5,7 +5,7 @@ using GRpcProtocolGenerator.Models.Configs;
 
 namespace GRpcProtocolGenerator.Renders.Protocol
 {
-    public class ProtocolServiceImpl
+    public class ServerServiceImpl
     {
         private readonly ProtocolContent _protoContent;
 
@@ -35,13 +35,13 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         /// </summary>
         protected int FailureCode;
 
-        public ProtocolServiceImpl(ProtocolContent protoContent)
+        public ServerServiceImpl(ProtocolContent protoContent)
         {
             _protoContent = protoContent;
 
             _gRpcServiceName = _protoContent.ProtoService.InterfaceMetaData.FormatServiceName();
             ServerName = $"{_gRpcServiceName}Impl";
-            FullName = $"{Config.ConfigInstance.Server?.GetServerNamespace()}.{ServerName}";
+            FullName = $"{Config.ConfigInstance.Server?.GetServiceImplNamespace()}.{ServerName}";
             _interfaceName = _protoContent.ProtoService.InterfaceMetaData.Name;
 
             Using = new List<string>
@@ -93,7 +93,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
         private void CreateClassBegin()
         {
-            _sb.AppendLine($"namespace {Config.ConfigInstance.Server?.GetNamespace(_protoContent.ProtoService.InterfaceMetaData)}");
+            _sb.AppendLine($"namespace {Config.ConfigInstance.Server?.GetServiceImplNamespace()}");
             _sb.AppendLine("{");
 
             //接口注释

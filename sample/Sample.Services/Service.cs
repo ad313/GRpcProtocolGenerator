@@ -11,7 +11,7 @@ namespace Sample.Services
     {
         public void VoidMethodSync()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void MethodWithInputReturnVoidSync(int a)
@@ -181,11 +181,11 @@ namespace Sample.Services
             throw new NotImplementedException();
         }
 
-        public void NotSupportMethod7(object a)
+        public void ChangeToSupportMethod7(object a)
         {
             throw new NotImplementedException();
         }
-
+        
         public StringBuilder NotSupportMethod8()
         {
             throw new NotImplementedException();

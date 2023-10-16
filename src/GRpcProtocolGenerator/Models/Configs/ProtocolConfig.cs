@@ -37,9 +37,19 @@ namespace GRpcProtocolGenerator.Models.Configs
         public string ProtoDirectory { get; set; }
 
         /// <summary>
+        /// 存放 生成的客户端接口 的文件夹
+        /// </summary>
+        public string ClientsDirectory { get; set; } = "Clients";
+
+        /// <summary>
         /// 引用包时是否加上 ProtoDirectory
         /// </summary>
         public bool UseProtoDirectoryWhenImportPackage { get; set; } = true;
+
+        /// <summary>
+        /// 给 csproj 附加 包引用
+        /// </summary>
+        public List<string> AppendPackageToCsproj { get; set; } = new List<string>();
 
         /// <summary>
         /// 初始化，传入宿主程序地址，不是bin地址
@@ -79,6 +89,15 @@ namespace GRpcProtocolGenerator.Models.Configs
         public string GetCsprojFilePath()
         {
             return Path.GetFullPath(Path.Combine(OutputFullPath, ProjectName + ".csproj"));
+        }
+
+        /// <summary>
+        /// 获取客户端文件夹
+        /// </summary>
+        /// <returns></returns>
+        public string GetClientsFilePath()
+        {
+            return Path.GetFullPath(Path.Combine(OutputFullPath, ClientsDirectory));
         }
 
         #region 包名

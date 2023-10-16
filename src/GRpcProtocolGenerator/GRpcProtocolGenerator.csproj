@@ -3,10 +3,12 @@
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>0.1.0</Version>
+		<Version>0.2.4</Version>
 		<Description>C# GRpc to proto  server  restfulapi  swagger</Description>
 		<PackageProjectUrl>https://github.com/ad313/GRpcProtocolGenerator</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/ad313/GRpcProtocolGenerator</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Authors>ad313</Authors>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<NoWarn>1701;1702;1591</NoWarn>
@@ -15,6 +17,33 @@
 		<NoWarn>1701;1702;1591</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Renders\Templates\Client.Client.txt" />
+	  <None Remove="Renders\Templates\Client.csproj.txt" />
+	  <None Remove="Renders\Templates\Client.Extensions.txt" />
+	  <None Remove="Renders\Templates\Client.Provider.txt" />
+	  <None Remove="Renders\Templates\Controller.AppSettings.txt" />
+	  <None Remove="Renders\Templates\Controller.Controller.txt" />
+	  <None Remove="Renders\Templates\Controller.csproj.txt" />
+	  <None Remove="Renders\Templates\Controller.Program.txt" />
+	  <None Remove="Renders\Templates\Controller.Swagger.txt" />
+	  <None Remove="Renders\Templates\Server.AppSettings.txt" />
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Renders\Templates\Controller.csproj.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Renders\Templates\Controller.Controller.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Renders\Templates\Client.csproj.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Renders\Templates\Client.Client.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Renders\Templates\Client.Provider.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
 		<EmbeddedResource Include="Renders\Templates\google.api.annotations.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</EmbeddedResource>
@@ -23,6 +52,21 @@
 		</EmbeddedResource>
 		<EmbeddedResource Include="Renders\Templates\Protocol.csproj.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Renders\Templates\Client.Extensions.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Renders\Templates\Controller.Program.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Renders\Templates\Controller.Swagger.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Renders\Templates\Controller.AppSettings.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Renders\Templates\Server.AppSettings.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</EmbeddedResource>
 		<EmbeddedResource Include="Renders\Templates\Server.Swagger.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>

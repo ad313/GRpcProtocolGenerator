@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using GRpcProtocolGenerator.Models.Configs;
+using GRpcProtocolGenerator.Renders.Protocol;
 using Scriban;
 using Scriban.Runtime;
 
@@ -34,7 +36,31 @@ namespace GRpcProtocolGenerator.Renders
 
     public class FilterFunctions : ScriptObject
     {
-       
+        public static string GetMethodReturnString(Config config, ProtoServiceItem item)
+        {
+            return BuilderPart.BuildMethodReturnType(config.JsonTranscoding.UseResultWrapper,
+                item.MethodMetaData.OutParamMetaDataList.Count == 0,
+                item.OutParam.GetGRpcName(),
+                "Empty").Substring(6);
+        }
+
+        public static string GetMethodReturnType(Config config, ProtoServiceItem item)
+        {
+            var str = GetMethodReturnString(config, item);
+            return str.Substring(5).TrimEnd('>');
+        }
+
+        public static string GetMethodInString(ProtoServiceItem item)
+        {
+            return item.MethodMetaData.InParamMetaDataListFilter().Count == 0
+                ? "Empty"
+                : item.InParam.GetGRpcName();
+        }
+
+        public static string GetMethodDescription(ProtoServiceItem item)
+        {
+            return Config.ConfigInstance.Proto.PropertyDescriptionFunc(item.MethodMetaData);
+        }
     }
 
     /// <summary>

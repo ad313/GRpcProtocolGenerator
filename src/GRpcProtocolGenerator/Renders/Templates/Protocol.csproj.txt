@@ -10,12 +10,18 @@
 		{{- if config.json_transcoding.use_json_transcoding }}
 		<PackageReference Include="Google.Api.Gax.Grpc" Version="4.4.0" />
 		{{- end }}		
-		<PackageReference Include="Google.Protobuf" Version="3.23.4" />
-		<PackageReference Include="Grpc.Net.Common" Version="2.55.0" />
-		<PackageReference Include="Grpc.Tools" Version="2.56.2">
+		<PackageReference Include="Google.Protobuf" Version="3.24.4" />		
+		<PackageReference Include="Grpc.Net.Client" Version="2.57.0" />
+		<PackageReference Include="Grpc.Net.Common" Version="2.57.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.58.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+
+		{{- for pkg in config.proto.append_package_to_csproj }}
+		<PackageReference Include="{{ pkg }}" Version="*" />
+		{{- end }}
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

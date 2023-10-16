@@ -48,6 +48,11 @@ namespace GRpcProtocolGenerator.Models.Configs
         /// Json 转码 为 gRPC 服务创建 RESTful JSON API 
         /// </summary>
         public JsonTranscodingConfig JsonTranscoding { get; set; }
+        
+        /// <summary>
+        /// 生成控制器配置
+        /// </summary>
+        public ControllerConfig Controller { get; set; }
 
         /// <summary>
         /// 初始化，传入宿主程序地址，不是bin地址

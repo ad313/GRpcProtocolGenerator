@@ -195,7 +195,8 @@ namespace GRpcProtocolGenerator.Renders
             }
 
             //新建类，不加入字典，就放在当前服务内
-            var newName = $"{interfaceMetaData.FormatServiceName()}_{methodMetaData.Name}_{append}{index}";
+            //var newName = $"{interfaceMetaData.FormatServiceName()}_{methodMetaData.Name}_{append}{index}";
+            var newName = $"{interfaceMetaData.FormatServiceName()}_{methodMetaData.Name}_{append}";
 
             //重新生成名称
             if (paramList.Count > 0)

@@ -223,7 +223,7 @@ namespace GRpcProtocolGenerator.Test.types
             Assert.False(result.IsValid);
 
             result = typeof(object).ToTypeWrapper();
-            Assert.False(result.IsValid);
+            Assert.True(result.IsValid);
 
             result = typeof(StringBuilder).ToTypeWrapper();
             Assert.False(result.IsValid);

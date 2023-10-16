@@ -7,14 +7,14 @@ generator grpc protocol from c# interface
 - 接口方法 生成 proto 中的 service
 - 方法参数 生成 proto 中的 message
 - 每个 proto 的 service 生成对应的实现
-- 生成 Restful API
+- 生成 controller Restful API or grpc JsonTranscoding Restful API
 - 生成 Swagger
 
 ## 使用限制
 - 不支持 字典：Dictionary<xxx,xxx>
 - 不支持 Task 嵌套 Task
 - 不支持 集合 嵌套 集合
-- 不支持 object 参数
+- 不支持 object 参数，但是可以手动配置字段映射
 - 不支持 StringBuilder 参数
 - 枚举会被转换成数字，因为当启用 grpc json 转码时，生成的 swagger 会有问题
 - C# 的 时间 会被转换成 protobuf 的 string 字符串
@@ -24,14 +24,14 @@ generator grpc protocol from c# interface
 - 1、新建一个空白项目，用做生成代码的宿主程序，例子中是 Sample.Start，此时这个项目目录作为基准地址，可以使用相对路径来配置代码生成后的存放位置。参考：https://github.com/ad313/GRpcProtocolGenerator/tree/develop/sample/Sample.Start
 ```
     //引入相关包
-    <PackageReference Include="GRpcProtocolGenerator" Version="0.1.0" />
+    <PackageReference Include="GRpcProtocolGenerator" Version="0.2.4" />
 ```
 - 2、在接口上打标记 [GRpcGenerator]，只有加了这个标记的接口才会被扫描到
   - Description、Display 和 DisplayName 这三个特性会被读取为 注释
   - 使用特性 [GRpcIgnore] 忽略方法或模型中的字段
 ```
 //引入特性包
-<PackageReference Include="GRpcProtocolGenerator.Common" Version="0.1.0" />
+<PackageReference Include="GRpcProtocolGenerator.Common" Version="0.2.2" />
 
 [Description("desc from Description")]
 [GRpcGenerator]
@@ -171,7 +171,7 @@ service GRpcServiceTest {
 
 ```
 
-### service 实现
+### grpc 实现
 ```
 /*
 	 此代码是自动生成，请勿修改，如果要修改，请继承它再重写方法。

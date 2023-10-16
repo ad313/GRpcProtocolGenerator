@@ -13,7 +13,7 @@ namespace {{ config.server.project_name }}
     /// <summary>
     /// swagger
     /// </summary>
-    public static class SwaggerExtensions
+    public static partial class SwaggerExtensions
     {
         /// <summary>
         /// 注册 swagger

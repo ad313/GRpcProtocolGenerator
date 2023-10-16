@@ -1,4 +1,4 @@
-﻿using GRpcProtocolGenerator.Common;
+using GRpcProtocolGenerator.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -8,12 +8,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Sample.Server
+namespace {{ config.controller.project_name }}
 {
     /// <summary>
     /// swagger
     /// </summary>
-    public static class SwaggerExtensions
+    public static partial class SwaggerExtensions
     {
         /// <summary>
         /// 注册 swagger
@@ -103,9 +103,11 @@ namespace Sample.Server
 
             void AddXml(SwaggerGenOptions c, string name)
             {
+                c.DocInclusionPredicate((_, api) => string.IsNullOrWhiteSpace(api.GroupName) == false);
+                c.SwaggerGeneratorOptions.TagsSelector = (api) => new[] { api.GroupName };
+
                 var filePath = Path.Combine(AppContext.BaseDirectory, name);
                 c.IncludeXmlComments(filePath);
-                c.IncludeGrpcXmlComments(filePath, includeControllerXmlComments: true);
             }
 
             return services;
@@ -117,7 +119,7 @@ namespace Sample.Server
         /// <param name="app"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static WebApplication UseCustomSwagger(this WebApplication app, SwaggerConfig config)
+        public static T UseCustomSwagger<T>(this T app, SwaggerConfig config) where T: IApplicationBuilder
         {
             app.UseSwagger();
             app.UseSwaggerUI(c =>

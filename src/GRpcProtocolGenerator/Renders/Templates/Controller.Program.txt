@@ -1,0 +1,98 @@
+using GRpcProtocolGenerator.Common;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
+
+namespace {{ config.controller.project_name }}
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddControllers();
+
+            var config = new SwaggerConfig()
+            {
+                SwaggerConfigType = SwaggerConfigType.{{ config.controller.swagger.swagger_config_type }},
+                Name = "{{ config.controller.swagger.name }}",
+                Title = "{{ config.controller.swagger.title }}",
+                Audience = "{{ config.controller.swagger.audience }}",
+                Scope = new string[]
+                {
+                    {{- for scope in config.controller.swagger.scope }}
+                    "{{ scope }}",
+                    {{- end }}
+                },
+                ClientId = "{{ config.controller.swagger.client_id }}",
+                ClientSecret = "{{ config.controller.swagger.client_secret }}",
+                IdentityUrl = "{{ config.controller.swagger.identity_url }}",
+                Version = "{{ config.controller.swagger.version }}",
+                DocumentXml = new string[]
+                {
+                    {{- for xml in config.controller.swagger.document_xml }}
+                    "{{ xml }}",
+                    {{- end }}
+                }
+            };
+
+            //swagger
+            builder.Services.AddCustomSwagger(config);
+
+            builder.Services.AddCors(option => option.AddPolicy("cors", policy =>
+               policy.AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .WithExposedHeaders("Content-Disposition")
+                   .AllowAnyOrigin()));
+
+            //认证授权
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy =>
+                {
+                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+                    policy.RequireClaim("sub");
+                });
+            });
+
+            builder.Services.AddAuthentication("Bearer").AddJwtBearer(options =>
+            {
+                options.Audience = config.Audience;
+                options.Authority = config.IdentityUrl;
+                options.RequireHttpsMetadata = false;
+                options.BackchannelHttpHandler = new HttpClientHandler() { ServerCertificateCustomValidationCallback = ((_, _, _, _) => true) };
+            });
+
+            //注册 gRpc 客户端
+            builder.Services.RegisterClient(builder.Configuration.GetSection("client_address_key").Get<string>());
+
+            var app = builder.Build();
+
+            //swagger
+            app.UseCustomSwagger(config);
+
+            app.UseRouting();
+            app.UseCors("cors");
+
+            app.UseAuthentication();
+            app.UseAuthorization();       
+
+            app.MapControllers();
+
+            app.Run();
+                   
+            //配置文件
+            //"client_address_key": "https://localhost:{{ config.server.port }}",
+            //"Kestrel": {
+            //  "Endpoints": {
+            //    "http": {
+            //      "Url": "http://*:{{ config.controller.port }}"
+            //    }
+            //  }
+            //}            
+        }
+    }    
+}

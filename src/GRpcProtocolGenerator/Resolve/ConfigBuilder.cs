@@ -71,6 +71,22 @@ namespace GRpcProtocolGenerator.Resolve
         }
 
         /// <summary>
+        /// 生成控制器配置
+        /// </summary>
+        /// <param name="controllerConfig"></param>
+        /// <returns></returns>
+        public ConfigBuilder SetController(Action<ControllerConfig> controllerConfig)
+        {
+            ArgumentNullException.ThrowIfNull(controllerConfig, nameof(controllerConfig));
+
+            Config.Controller = new ControllerConfig(Config.CurrentPath);
+
+            controllerConfig.Invoke(Config.Controller);
+
+            return this;
+        }
+
+        /// <summary>
         /// 元数据过滤
         /// </summary>
         /// <param name="filterAction"></param>

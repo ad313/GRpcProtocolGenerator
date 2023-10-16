@@ -6,14 +6,15 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Google.Api.Gax.Grpc" Version="4.4.0" />
-		<PackageReference Include="Google.Protobuf" Version="3.23.4" />
-		<PackageReference Include="Grpc.Net.Common" Version="2.55.0" />
-		<PackageReference Include="Grpc.Tools" Version="2.56.2">
+	<ItemGroup>		
+		<PackageReference Include="Google.Protobuf" Version="3.24.4" />		
+		<PackageReference Include="Grpc.Net.Client" Version="2.57.0" />
+		<PackageReference Include="Grpc.Net.Common" Version="2.57.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.58.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,5 +1,4 @@
-﻿using GRpcProtocolGenerator.Models.MetaData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,6 +31,11 @@ namespace GRpcProtocolGenerator.Models.Configs
         public string ProjectName { get; private set; }
 
         /// <summary>
+        /// 端口
+        /// </summary>
+        public int Port { get; set; } = 6010;
+
+        /// <summary>
         /// 存放 grpc service 实现
         /// </summary>
         public string ImplementsDirectory { get; set; }
@@ -40,6 +44,11 @@ namespace GRpcProtocolGenerator.Models.Configs
         /// 给 server 附加 属性
         /// </summary>
         public List<string> AppendAttributeToServer { get; set; } = new List<string>();
+
+        /// <summary>
+        /// 给 csproj 附加 包引用
+        /// </summary>
+        public List<string> AppendPackageToCsproj { get; set; } = new List<string>();
 
         /// <summary>
         /// 初始化，传入宿主程序地址，不是bin地址
@@ -75,14 +84,7 @@ namespace GRpcProtocolGenerator.Models.Configs
         }
 
         #region 命名空间
-
-        public Func<InterfaceMetaData, string> NamespaceFunc { get; set; }
-
-        public string GetNamespace(InterfaceMetaData meta)
-        {
-            return NamespaceFunc?.Invoke(meta) ?? meta.Namespace;
-        }
-
+        
         public string GetCsprojFilePath()
         {
             return Path.GetFullPath(Path.Combine(OutputFullPath, ProjectName + ".csproj"));
@@ -93,7 +95,7 @@ namespace GRpcProtocolGenerator.Models.Configs
             return Path.GetFullPath(Path.Combine(OutputFullPath, "Program.cs"));
         }
 
-        public string GetServerNamespace()
+        public string GetServiceImplNamespace()
         {
             return $"{ProjectName}.{ImplementsDirectory}";
         }

@@ -60,6 +60,7 @@ namespace GRpcProtocolGenerator
             _config.Check();
             _config.Proto.Check();
             _config.Server?.Check();
+            _config.Controller?.Check();
 
             //获取当前作用域内所有程序集
             var allAssemblies = AppDomain.CurrentDomain.GetAssemblies();

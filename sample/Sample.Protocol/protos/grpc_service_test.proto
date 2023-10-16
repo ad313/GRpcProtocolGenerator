@@ -1,7 +1,6 @@
 ﻿syntax = "proto3";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
-import "google/api/annotations.proto";
 option csharp_namespace = "Sample.GRpc.Protocol";
 package _grpc;
 
@@ -9,519 +8,363 @@ package _grpc;
 service GRpcServiceTest {
 	
 	// title from Display attr
-	rpc VoidMethodSync(google.protobuf.Empty) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/VoidMethodSync",
-		};
-	}
+	rpc VoidMethodSync(google.protobuf.Empty) returns(google.protobuf.Empty);
 	
 	// 
-	rpc MethodWithInputReturnVoidSync(GRpcServiceTest_MethodWithInputReturnVoidSync_Request18) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnVoidSync",
-		};
-	}
+	rpc MethodWithInputReturnVoidSync(GRpcServiceTest_MethodWithInputReturnVoidSync_Request) returns(google.protobuf.Empty);
 	
 	// 
-	rpc MethodWithInputReturnVoid2Sync(GRpcServiceTest_MethodWithInputReturnVoid2Sync_Request15) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnVoid2Sync",
-		};
-	}
+	rpc MethodWithInputReturnVoid2Sync(GRpcServiceTest_MethodWithInputReturnVoid2Sync_Request) returns(google.protobuf.Empty);
 	
 	// 
-	rpc MethodWithInputReturnVoid3Sync(GRpcSampleClass) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			post:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnVoid3Sync",
-			body:"*"
-		};
-	}
+	rpc MethodWithInputReturnVoid3Sync(GRpcSampleClass) returns(google.protobuf.Empty);
 	
 	// 
-	rpc MethodWithInputReturnVoid4Sync(GRpcServiceTest_MethodWithInputReturnVoid4Sync_Request17) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnVoid4Sync",
-		};
-	}
+	rpc MethodWithInputReturnVoid4Sync(GRpcServiceTest_MethodWithInputReturnVoid4Sync_Request) returns(google.protobuf.Empty);
 	
 	// 
-	rpc MethodWithInputEnumReturnVoid4Sync(GRpcServiceTest_MethodWithInputEnumReturnVoid4Sync_Request2) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputEnumReturnVoid4Sync",
-		};
-	}
+	rpc MethodWithInputEnumReturnVoid4Sync(GRpcServiceTest_MethodWithInputEnumReturnVoid4Sync_Request) returns(google.protobuf.Empty);
 	
 	// 
-	rpc MethodWithInputTreeReturnVoid5Sync(GRpcServiceTest_MethodWithInputTreeReturnVoid5Sync_Request19) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			post:"/Sample/api/v1/GRpcServiceTest/MethodWithInputTreeReturnVoid5Sync",
-			body:"*"
-		};
-	}
+	rpc MethodWithInputTreeReturnVoid5Sync(GRpcServiceTest_MethodWithInputTreeReturnVoid5Sync_Request) returns(google.protobuf.Empty);
 	
 	// 
-	rpc VoidMethod(google.protobuf.Empty) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/VoidMethod",
-		};
-	}
+	rpc VoidMethod(google.protobuf.Empty) returns(google.protobuf.Empty);
 	
 	// 
-	rpc MethodWithInputReturnVoid(GRpcServiceTest_MethodWithInputReturnVoidAsync_Request13) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnVoid",
-		};
-	}
+	rpc MethodWithInputReturnVoid(GRpcServiceTest_MethodWithInputReturnVoidAsync_Request) returns(google.protobuf.Empty);
 	
 	// 
-	rpc MethodWithInputReturnVoid2(GRpcServiceTest_MethodWithInputReturnVoid2Async_Request14) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnVoid2",
-		};
-	}
+	rpc MethodWithInputReturnVoid2(GRpcServiceTest_MethodWithInputReturnVoid2Async_Request) returns(google.protobuf.Empty);
 	
 	// 
-	rpc MethodWithInputReturnVoid3(GRpcSampleClass) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			post:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnVoid3Async",
-			body:"*"
-		};
-	}
+	rpc MethodWithInputReturnVoid3(GRpcSampleClass) returns(google.protobuf.Empty);
 	
 	// 
-	rpc MethodWithInputReturnVoid4(GRpcServiceTest_MethodWithInputReturnVoid4Async_Request16) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnVoid4",
-		};
-	}
+	rpc MethodWithInputReturnVoid4(GRpcServiceTest_MethodWithInputReturnVoid4Async_Request) returns(google.protobuf.Empty);
 	
 	// 
-	rpc MethodWithInputEnumReturnVoid4(GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request1) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputEnumReturnVoid4",
-		};
-	}
+	rpc MethodWithInputEnumReturnVoid4(GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request) returns(google.protobuf.Empty);
 	
 	// 
-	rpc MethodWithInputReturnIntSync(GRpcServiceTest_MethodWithInputReturnIntSync_Request9) returns(GRpcServiceTest_MethodWithInputReturnIntSync_Response5) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnIntSync",
-		};
-	}
+	rpc MethodWithInputReturnIntSync(GRpcServiceTest_MethodWithInputReturnIntSync_Request) returns(GRpcServiceTest_MethodWithInputReturnIntSync_Response);
 	
 	// 
-	rpc MethodWithInputReturnStringSync(GRpcServiceTest_MethodWithInputReturnStringSync_Request12) returns(GRpcServiceTestStringResponse) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnStringSync",
-		};
-	}
+	rpc MethodWithInputReturnStringSync(GRpcServiceTest_MethodWithInputReturnStringSync_Request) returns(GRpcServiceTestStringResponse);
 	
 	// 
-	rpc MethodWithInputReturnClassSync(GRpcServiceTest_MethodWithInputReturnClassSync_Request4) returns(GRpcServiceTest_GRpcSampleClassWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnClassSync",
-		};
-	}
+	rpc MethodWithInputReturnClassSync(GRpcServiceTest_MethodWithInputReturnClassSync_Request) returns(GRpcSampleClass);
 	
 	// 
-	rpc MethodWithInputReturnListClassSync(GRpcSampleClass) returns(GRpcServiceTestListSampleClassResponse) {
-		option (google.api.http) = {
-			post:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnListClassSync",
-			body:"*"
-		};
-	}
+	rpc MethodWithInputReturnListClassSync(GRpcSampleClass) returns(GRpcServiceTestListSampleClassResponse);
 	
 	// 
-	rpc MethodWithInputReturnListIntSync(GRpcSampleClass) returns(GRpcServiceTestListInt32Response) {
-		option (google.api.http) = {
-			post:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnListIntSync",
-			body:"*"
-		};
-	}
+	rpc MethodWithInputReturnListIntSync(GRpcSampleClass) returns(GRpcServiceTestListInt32Response);
 	
 	// 
-	rpc MethodWithInputReturnEnumSync(GRpcServiceTest_MethodWithInputReturnEnumSync_Request6) returns(GRpcServiceTest_MethodWithInputReturnEnumSync_Response2) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnEnumSync",
-		};
-	}
+	rpc MethodWithInputReturnEnumSync(GRpcServiceTest_MethodWithInputReturnEnumSync_Request) returns(GRpcServiceTest_MethodWithInputReturnEnumSync_Response);
 	
 	// 
-	rpc MethodWithInputReturnInt(GRpcServiceTest_MethodWithInputReturnIntAsync_Request8) returns(GRpcServiceTest_MethodWithInputReturnIntAsync_Response4) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnInt",
-		};
-	}
+	rpc MethodWithInputReturnInt(GRpcServiceTest_MethodWithInputReturnIntAsync_Request) returns(GRpcServiceTest_MethodWithInputReturnIntAsync_Response);
 	
 	// 
-	rpc MethodWithInputReturnString(GRpcServiceTest_MethodWithInputReturnStringAsync_Request11) returns(GRpcServiceTestStringResponse) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnString",
-		};
-	}
+	rpc MethodWithInputReturnString(GRpcServiceTest_MethodWithInputReturnStringAsync_Request) returns(GRpcServiceTestStringResponse);
 	
 	// 
-	rpc MethodWithInputReturnClass(GRpcServiceTest_MethodWithInputReturnClassAsync_Request3) returns(GRpcServiceTest_GRpcSampleClassWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnClass",
-		};
-	}
+	rpc MethodWithInputReturnClass(GRpcServiceTest_MethodWithInputReturnClassAsync_Request) returns(GRpcSampleClass);
 	
 	// 
-	rpc MethodWithInputReturnNullableClass(GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request10) returns(GRpcServiceTest_GRpcNullableClassWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnNullableClass",
-		};
-	}
+	rpc MethodWithInputReturnNullableClass(GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request) returns(GRpcNullableClass);
 	
 	// 
-	rpc MethodWithInputReturnListClass(GRpcSampleClass) returns(GRpcServiceTestListSampleClassResponse) {
-		option (google.api.http) = {
-			post:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnListClassAsync",
-			body:"*"
-		};
-	}
+	rpc MethodWithInputReturnListClass(GRpcSampleClass) returns(GRpcServiceTestListSampleClassResponse);
 	
 	// 
-	rpc MethodWithInputReturnListInt(GRpcSampleClass) returns(GRpcServiceTestListInt32Response) {
-		option (google.api.http) = {
-			post:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnListIntAsync",
-			body:"*"
-		};
-	}
+	rpc MethodWithInputReturnListInt(GRpcSampleClass) returns(GRpcServiceTestListInt32Response);
 	
 	// 
-	rpc MethodWithInputReturnEnum(GRpcServiceTest_MethodWithInputReturnEnumAsync_Request5) returns(GRpcServiceTest_MethodWithInputReturnEnumAsync_Response1) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnEnum",
-		};
-	}
+	rpc MethodWithInputReturnEnum(GRpcServiceTest_MethodWithInputReturnEnumAsync_Request) returns(GRpcServiceTest_MethodWithInputReturnEnumAsync_Response);
 	
 	// 
-	rpc MethodWithInputReturnEnumValueTask(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request7) returns(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response3) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/MethodWithInputReturnEnumValueTask",
-		};
-	}
+	rpc MethodWithInputReturnEnumValueTask(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request) returns(GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response);
 	
 	// 
-	rpc TestCancellationToken(google.protobuf.Empty) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/TestCancellationToken",
-		};
-	}
+	rpc ChangeToSupportMethod7(GRpcServiceTest_ChangeToSupportMethod7_Request) returns(google.protobuf.Empty);
 	
 	// 
-	rpc TestCancellationToken2(GRpcServiceTest_TestCancellationToken2_Request20) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			get:"/Sample/api/v1/GRpcServiceTest/TestCancellationToken2",
-		};
-	}
+	rpc TestCancellationToken(google.protobuf.Empty) returns(google.protobuf.Empty);
 	
 	// 
-	rpc TestExtClass2(GRpcExtClass2) returns(GRpcServiceTest_EmptyWrapper) {
-		option (google.api.http) = {
-			post:"/Sample/api/v1/GRpcServiceTest/TestExtClass2",
-			body:"*"
-		};
-	}
+	rpc TestCancellationToken2(GRpcServiceTest_TestCancellationToken2_Request) returns(google.protobuf.Empty);
+	
+	// 
+	rpc TestExtClass2(GRpcExtClass2) returns(google.protobuf.Empty);
 }
 
 //SampleStruct Sample.Services.Models.SampleStruct
 message GRpcSampleStruct {
-	int32 intColumn = 1; // IntColumn
-	int64 longColumn = 2; // LongColumn
-	double decimalColumn = 3; // DecimalColumn
-	double doubleColumn = 4; // DoubleColumn
-	float floatColumn = 5; // FloatColumn
-	uint32 uintColumn = 6; // UintColumn
-	uint64 ulongColumn = 7; // UlongColumn
-	google.protobuf.StringValue stringColumn = 8; // StringColumn
-	bool boolColumn = 9; // BoolColumn
-	string guidColumn = 10; // GuidColumn
-	string dateTimeColumn = 11; // DateTimeColumn
-	int32 byteColumn = 12; // ByteColumn
+	int32 IntColumn = 1; // IntColumn
+	int64 LongColumn = 2; // LongColumn
+	double DecimalColumn = 3; // DecimalColumn
+	double DoubleColumn = 4; // DoubleColumn
+	float FloatColumn = 5; // FloatColumn
+	uint32 UintColumn = 6; // UintColumn
+	uint64 UlongColumn = 7; // UlongColumn
+	google.protobuf.StringValue StringColumn = 8; // StringColumn
+	bool BoolColumn = 9; // BoolColumn
+	string GuidColumn = 10; // GuidColumn
+	string DateTimeColumn = 11; // DateTimeColumn
+	int32 ByteColumn = 12; // ByteColumn
 }
 
 //SampleClass Sample.Services.Models.SampleClass
 message GRpcSampleClass {
-	int32 intColumn = 1; // IntColumn
-	int64 longColumn = 2; // LongColumn
-	double decimalColumn = 3; // DecimalColumn
-	double doubleColumn = 4; // DoubleColumn
-	float floatColumn = 5; // FloatColumn
-	uint32 uintColumn = 6; // UintColumn
-	uint64 ulongColumn = 7; // UlongColumn
-	google.protobuf.StringValue stringColumn = 8; // StringColumn
-	bool boolColumn = 9; // BoolColumn
-	string dateTimeColumn = 10; // DateTimeColumn
-	int32 byteColumn = 11; // ByteColumn
-	GRpcSampleClass classColumn = 12; // ClassColumn
-	int32 enumColumn = 13; // EnumColumn
-	GRpcSampleStruct structColumn = 14; // StructColumn
+	int32 IntColumn = 1; // IntColumn
+	int64 LongColumn = 2; // LongColumn
+	double DecimalColumn = 3; // DecimalColumn
+	double DoubleColumn = 4; // DoubleColumn
+	float FloatColumn = 5; // FloatColumn
+	uint32 UintColumn = 6; // UintColumn
+	uint64 UlongColumn = 7; // UlongColumn
+	google.protobuf.StringValue StringColumn = 8; // StringColumn
+	bool BoolColumn = 9; // BoolColumn
+	string DateTimeColumn = 10; // DateTimeColumn
+	int32 ByteColumn = 11; // ByteColumn
+	GRpcSampleClass ClassColumn = 12; // ClassColumn
+	int32 EnumColumn = 13; // EnumColumn
+	GRpcSampleStruct StructColumn = 14; // StructColumn
 }
 
 // Sample.Services.Models.TreeNode`1_ExtClass2
 message GRpcTreeNode_ExtClass2 {
-	google.protobuf.StringValue key = 1;
-	google.protobuf.StringValue parent = 2;
-	repeated GRpcExtClass2 children = 3;
+	google.protobuf.StringValue Key = 1;
+	google.protobuf.StringValue Parent = 2;
+	repeated GRpcExtClass2 Children = 3;
 }
 
 // Sample.Services.Models.ExtClass2
 message GRpcExtClass2 {
-	GRpcTreeNode_ExtClass2 genericClass = 1; // GenericClass
-	int32 intColumn = 2; // IntColumn
-	int64 longColumn = 3; // LongColumn
-	double decimalColumn = 4; // DecimalColumn
-	double doubleColumn = 5; // DoubleColumn
-	float floatColumn = 6; // FloatColumn
-	uint32 uintColumn = 7; // UintColumn
-	uint64 ulongColumn = 8; // UlongColumn
-	google.protobuf.StringValue stringColumn = 9; // StringColumn
-	bool boolColumn = 10; // BoolColumn
-	string dateTimeColumn = 11; // DateTimeColumn
-	int32 byteColumn = 12; // ByteColumn
-	GRpcSampleClass classColumn = 13; // ClassColumn
-	int32 enumColumn = 14; // EnumColumn
-	GRpcSampleStruct structColumn = 15; // StructColumn
+	GRpcTreeNode_ExtClass2 GenericClass = 1; // GenericClass
+	int32 IntColumn = 2; // IntColumn
+	int64 LongColumn = 3; // LongColumn
+	double DecimalColumn = 4; // DecimalColumn
+	double DoubleColumn = 5; // DoubleColumn
+	float FloatColumn = 6; // FloatColumn
+	uint32 UintColumn = 7; // UintColumn
+	uint64 UlongColumn = 8; // UlongColumn
+	google.protobuf.StringValue StringColumn = 9; // StringColumn
+	bool BoolColumn = 10; // BoolColumn
+	string DateTimeColumn = 11; // DateTimeColumn
+	int32 ByteColumn = 12; // ByteColumn
+	GRpcSampleClass ClassColumn = 13; // ClassColumn
+	int32 EnumColumn = 14; // EnumColumn
+	GRpcSampleStruct StructColumn = 15; // StructColumn
 }
 
-// GRpcServiceTest_EmptyWrapper
-message GRpcServiceTest_EmptyWrapper {
-	int32 code = 1;
-	google.protobuf.StringValue message = 2;
+// GRpcServiceTest_ChangeToSupportMethod7_Request
+message GRpcServiceTest_ChangeToSupportMethod7_Request {
+	google.protobuf.StringValue a = 1;
 }
 
-// Sample.Services.Models.NullableClass
-message GRpcNullableClass {
-	google.protobuf.Int32Value nullableIntColumn = 1;
-	google.protobuf.Int64Value nullableLongColumn = 2;
-	google.protobuf.DoubleValue nullableDecimalColumn = 3;
-	google.protobuf.DoubleValue nullableDoubleColumn = 4;
-	google.protobuf.FloatValue nullableFloatColumn = 5;
-	google.protobuf.UInt32Value nullableUintColumn = 6;
-	google.protobuf.UInt64Value nullableUlongColumn = 7;
-	google.protobuf.StringValue nullableStringColumn = 8;
-	google.protobuf.BoolValue nullableBoolColumn = 9;
-	google.protobuf.StringValue nullableGuidColumn = 10;
-	google.protobuf.StringValue nullableDateTimeColumn = 11;
-	google.protobuf.Int32Value nullableByteColumn = 12;
-	GRpcNullableClass nullableClassColumn = 13;
-	google.protobuf.Int32Value nullableEnumColumn = 14;
-	GRpcSampleStruct nullableStructColumn = 15;
-}
-
-// GRpcServiceTest_GRpcNullableClassWrapper
-message GRpcServiceTest_GRpcNullableClassWrapper {
-	int32 code = 1;
-	google.protobuf.StringValue message = 2;
-	GRpcNullableClass data = 3;
-}
-
-// GRpcServiceTest_GRpcSampleClassWrapper
-message GRpcServiceTest_GRpcSampleClassWrapper {
-	int32 code = 1;
-	google.protobuf.StringValue message = 2;
-	GRpcSampleClass data = 3; // SampleClass
-}
-
-// GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request1
-message GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request1 {
+// GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request
+message GRpcServiceTest_MethodWithInputEnumReturnVoid4Async_Request {
 	int32 a = 1;
 }
 
-// GRpcServiceTest_MethodWithInputEnumReturnVoid4Sync_Request2
-message GRpcServiceTest_MethodWithInputEnumReturnVoid4Sync_Request2 {
+// GRpcServiceTest_MethodWithInputEnumReturnVoid4Sync_Request
+message GRpcServiceTest_MethodWithInputEnumReturnVoid4Sync_Request {
 	int32 a = 1;
 }
 
-// GRpcServiceTest_MethodWithInputReturnClassAsync_Request3
-message GRpcServiceTest_MethodWithInputReturnClassAsync_Request3 {
+// GRpcServiceTest_MethodWithInputReturnClassAsync_Request
+message GRpcServiceTest_MethodWithInputReturnClassAsync_Request {
 	int32 a = 1;
 	google.protobuf.StringValue b = 2;
 }
 
-// GRpcServiceTest_MethodWithInputReturnClassSync_Request4
-message GRpcServiceTest_MethodWithInputReturnClassSync_Request4 {
+// GRpcServiceTest_MethodWithInputReturnClassSync_Request
+message GRpcServiceTest_MethodWithInputReturnClassSync_Request {
 	int32 a = 1;
 	google.protobuf.StringValue b = 2;
 }
 
-// GRpcServiceTest_MethodWithInputReturnEnumAsync_Request5
-message GRpcServiceTest_MethodWithInputReturnEnumAsync_Request5 {
+// GRpcServiceTest_MethodWithInputReturnEnumAsync_Request
+message GRpcServiceTest_MethodWithInputReturnEnumAsync_Request {
 	int32 a = 1;
 }
 
-// GRpcServiceTest_MethodWithInputReturnEnumAsync_Response1
-message GRpcServiceTest_MethodWithInputReturnEnumAsync_Response1 {
-	int32 code = 1;
-	google.protobuf.StringValue message = 2;
-	int32 data = 3;
+// GRpcServiceTest_MethodWithInputReturnEnumAsync_Response
+message GRpcServiceTest_MethodWithInputReturnEnumAsync_Response {
+	int32 Data = 1;
 }
 
-// GRpcServiceTest_MethodWithInputReturnEnumSync_Request6
-message GRpcServiceTest_MethodWithInputReturnEnumSync_Request6 {
+// GRpcServiceTest_MethodWithInputReturnEnumSync_Request
+message GRpcServiceTest_MethodWithInputReturnEnumSync_Request {
 	int32 a = 1;
 }
 
-// GRpcServiceTest_MethodWithInputReturnEnumSync_Response2
-message GRpcServiceTest_MethodWithInputReturnEnumSync_Response2 {
-	int32 code = 1;
-	google.protobuf.StringValue message = 2;
-	int32 data = 3;
+// GRpcServiceTest_MethodWithInputReturnEnumSync_Response
+message GRpcServiceTest_MethodWithInputReturnEnumSync_Response {
+	int32 Data = 1;
 }
 
-// GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request7
-message GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request7 {
+// GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request
+message GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Request {
 	int32 a = 1;
 }
 
-// GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response3
-message GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response3 {
-	int32 code = 1;
-	google.protobuf.StringValue message = 2;
-	int32 data = 3;
+// GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response
+message GRpcServiceTest_MethodWithInputReturnEnumValueTaskAsync_Response {
+	int32 Data = 1;
 }
 
-// GRpcServiceTest_MethodWithInputReturnIntAsync_Request8
-message GRpcServiceTest_MethodWithInputReturnIntAsync_Request8 {
+// GRpcServiceTest_MethodWithInputReturnIntAsync_Request
+message GRpcServiceTest_MethodWithInputReturnIntAsync_Request {
 	int32 a = 1;
 }
 
-// GRpcServiceTest_MethodWithInputReturnIntAsync_Response4
-message GRpcServiceTest_MethodWithInputReturnIntAsync_Response4 {
-	int32 code = 1;
-	google.protobuf.StringValue message = 2;
-	int32 data = 3;
+// GRpcServiceTest_MethodWithInputReturnIntAsync_Response
+message GRpcServiceTest_MethodWithInputReturnIntAsync_Response {
+	int32 Data = 1;
 }
 
-// GRpcServiceTest_MethodWithInputReturnIntSync_Request9
-message GRpcServiceTest_MethodWithInputReturnIntSync_Request9 {
+// GRpcServiceTest_MethodWithInputReturnIntSync_Request
+message GRpcServiceTest_MethodWithInputReturnIntSync_Request {
 	int32 a = 1;
 }
 
-// GRpcServiceTest_MethodWithInputReturnIntSync_Response5
-message GRpcServiceTest_MethodWithInputReturnIntSync_Response5 {
-	int32 code = 1;
-	google.protobuf.StringValue message = 2;
-	int32 data = 3;
+// GRpcServiceTest_MethodWithInputReturnIntSync_Response
+message GRpcServiceTest_MethodWithInputReturnIntSync_Response {
+	int32 Data = 1;
 }
 
-// GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request10
-message GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request10 {
+// GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request
+message GRpcServiceTest_MethodWithInputReturnNullableClassAsync_Request {
 	int32 a = 1;
 	google.protobuf.StringValue b = 2;
 }
 
-// GRpcServiceTest_MethodWithInputReturnStringAsync_Request11
-message GRpcServiceTest_MethodWithInputReturnStringAsync_Request11 {
+// GRpcServiceTest_MethodWithInputReturnStringAsync_Request
+message GRpcServiceTest_MethodWithInputReturnStringAsync_Request {
 	int32 a = 1;
 	google.protobuf.StringValue b = 2;
 }
 
-// GRpcServiceTest_MethodWithInputReturnStringSync_Request12
-message GRpcServiceTest_MethodWithInputReturnStringSync_Request12 {
+// GRpcServiceTest_MethodWithInputReturnStringSync_Request
+message GRpcServiceTest_MethodWithInputReturnStringSync_Request {
 	int32 a = 1;
 	google.protobuf.StringValue b = 2;
 }
 
-// GRpcServiceTest_MethodWithInputReturnVoid2Async_Request14
-message GRpcServiceTest_MethodWithInputReturnVoid2Async_Request14 {
+// GRpcServiceTest_MethodWithInputReturnVoid2Async_Request
+message GRpcServiceTest_MethodWithInputReturnVoid2Async_Request {
 	int32 a = 1;
 	google.protobuf.StringValue b = 2;
 }
 
-// GRpcServiceTest_MethodWithInputReturnVoid2Sync_Request15
-message GRpcServiceTest_MethodWithInputReturnVoid2Sync_Request15 {
+// GRpcServiceTest_MethodWithInputReturnVoid2Sync_Request
+message GRpcServiceTest_MethodWithInputReturnVoid2Sync_Request {
 	int32 a = 1;
 	google.protobuf.StringValue b = 2;
 }
 
-// GRpcServiceTest_MethodWithInputReturnVoid4Async_Request16
-message GRpcServiceTest_MethodWithInputReturnVoid4Async_Request16 {
+// GRpcServiceTest_MethodWithInputReturnVoid4Async_Request
+message GRpcServiceTest_MethodWithInputReturnVoid4Async_Request {
 	repeated int32 a = 1;
 }
 
-// GRpcServiceTest_MethodWithInputReturnVoid4Sync_Request17
-message GRpcServiceTest_MethodWithInputReturnVoid4Sync_Request17 {
+// GRpcServiceTest_MethodWithInputReturnVoid4Sync_Request
+message GRpcServiceTest_MethodWithInputReturnVoid4Sync_Request {
 	repeated int32 a = 1;
 }
 
-// GRpcServiceTest_MethodWithInputReturnVoidAsync_Request13
-message GRpcServiceTest_MethodWithInputReturnVoidAsync_Request13 {
+// GRpcServiceTest_MethodWithInputReturnVoidAsync_Request
+message GRpcServiceTest_MethodWithInputReturnVoidAsync_Request {
 	int32 a = 1;
 }
 
-// GRpcServiceTest_MethodWithInputReturnVoidSync_Request18
-message GRpcServiceTest_MethodWithInputReturnVoidSync_Request18 {
+// GRpcServiceTest_MethodWithInputReturnVoidSync_Request
+message GRpcServiceTest_MethodWithInputReturnVoidSync_Request {
 	int32 a = 1;
 }
 
 // Sample.Services.Models.TreeNode`1_SampleClass
 message GRpcTreeNode_SampleClass {
-	google.protobuf.StringValue key = 1;
-	google.protobuf.StringValue parent = 2;
-	repeated GRpcSampleClass children = 3;
+	google.protobuf.StringValue Key = 1;
+	google.protobuf.StringValue Parent = 2;
+	repeated GRpcSampleClass Children = 3;
 }
 
 // Sample.Services.Models.ExtClass
 message GRpcExtClass {
-	GRpcTreeNode_SampleClass genericClass = 1; // GenericClass
-	int32 intColumn = 2; // IntColumn
-	int64 longColumn = 3; // LongColumn
-	double decimalColumn = 4; // DecimalColumn
-	double doubleColumn = 5; // DoubleColumn
-	float floatColumn = 6; // FloatColumn
-	uint32 uintColumn = 7; // UintColumn
-	uint64 ulongColumn = 8; // UlongColumn
-	google.protobuf.StringValue stringColumn = 9; // StringColumn
-	bool boolColumn = 10; // BoolColumn
-	string dateTimeColumn = 11; // DateTimeColumn
-	int32 byteColumn = 12; // ByteColumn
-	GRpcSampleClass classColumn = 13; // ClassColumn
-	int32 enumColumn = 14; // EnumColumn
-	GRpcSampleStruct structColumn = 15; // StructColumn
+	GRpcTreeNode_SampleClass GenericClass = 1; // GenericClass
+	int32 IntColumn = 2; // IntColumn
+	int64 LongColumn = 3; // LongColumn
+	double DecimalColumn = 4; // DecimalColumn
+	double DoubleColumn = 5; // DoubleColumn
+	float FloatColumn = 6; // FloatColumn
+	uint32 UintColumn = 7; // UintColumn
+	uint64 UlongColumn = 8; // UlongColumn
+	google.protobuf.StringValue StringColumn = 9; // StringColumn
+	bool BoolColumn = 10; // BoolColumn
+	string DateTimeColumn = 11; // DateTimeColumn
+	int32 ByteColumn = 12; // ByteColumn
+	GRpcSampleClass ClassColumn = 13; // ClassColumn
+	int32 EnumColumn = 14; // EnumColumn
+	GRpcSampleStruct StructColumn = 15; // StructColumn
 }
 
 // Sample.Services.Models.TreeClass
 message GRpcTreeClass {
-	google.protobuf.StringValue key = 1;
-	google.protobuf.StringValue parent = 2;
-	repeated GRpcTreeClass children = 3;
+	google.protobuf.StringValue Key = 1;
+	google.protobuf.StringValue Parent = 2;
+	repeated GRpcTreeClass Children = 3;
 }
 
-// GRpcServiceTest_MethodWithInputTreeReturnVoid5Sync_Request19
-message GRpcServiceTest_MethodWithInputTreeReturnVoid5Sync_Request19 {
+// GRpcServiceTest_MethodWithInputTreeReturnVoid5Sync_Request
+message GRpcServiceTest_MethodWithInputTreeReturnVoid5Sync_Request {
 	GRpcTreeNode_SampleClass a = 1;
 	GRpcTreeClass b = 2;
 	GRpcExtClass c = 3;
 	int32 d = 4;
 }
 
-// GRpcServiceTest_TestCancellationToken2_Request20
-message GRpcServiceTest_TestCancellationToken2_Request20 {
+// GRpcServiceTest_TestCancellationToken2_Request
+message GRpcServiceTest_TestCancellationToken2_Request {
 	int32 a = 1;
 }
 
 // GRpcServiceTestListInt32Response
 message GRpcServiceTestListInt32Response {
-	int32 code = 1;
-	google.protobuf.StringValue message = 2;
-	repeated int32 data = 3;
+	repeated int32 Data = 1;
 }
 
 // GRpcServiceTestListSampleClassResponse
 message GRpcServiceTestListSampleClassResponse {
-	int32 code = 1;
-	google.protobuf.StringValue message = 2;
-	repeated GRpcSampleClass data = 3;
+	repeated GRpcSampleClass Data = 1;
 }
 
 // GRpcServiceTestStringResponse
 message GRpcServiceTestStringResponse {
-	int32 code = 1;
-	google.protobuf.StringValue message = 2;
-	google.protobuf.StringValue data = 3;
+	google.protobuf.StringValue Data = 1;
+}
+
+// Sample.Services.Models.NullableClass
+message GRpcNullableClass {
+	google.protobuf.Int32Value NullableIntColumn = 1;
+	google.protobuf.Int64Value NullableLongColumn = 2;
+	google.protobuf.DoubleValue NullableDecimalColumn = 3;
+	google.protobuf.DoubleValue NullableDoubleColumn = 4;
+	google.protobuf.FloatValue NullableFloatColumn = 5;
+	google.protobuf.UInt32Value NullableUintColumn = 6;
+	google.protobuf.UInt64Value NullableUlongColumn = 7;
+	google.protobuf.StringValue NullableStringColumn = 8;
+	google.protobuf.BoolValue NullableBoolColumn = 9;
+	google.protobuf.StringValue NullableGuidColumn = 10;
+	google.protobuf.StringValue NullableDateTimeColumn = 11;
+	google.protobuf.Int32Value NullableByteColumn = 12;
+	GRpcNullableClass NullableClassColumn = 13;
+	google.protobuf.Int32Value NullableEnumColumn = 14;
+	GRpcSampleStruct NullableStructColumn = 15;
 }
 

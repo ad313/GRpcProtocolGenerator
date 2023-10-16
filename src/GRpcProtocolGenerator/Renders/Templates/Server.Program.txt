@@ -22,6 +22,8 @@ namespace {{ config.server.project_name }}
 
             var builder = WebApplication.CreateBuilder(args);
 
+            {{}}
+            {{- if config.json_transcoding.use_json_transcoding }}
             var config = new SwaggerConfig()
             {
                 SwaggerConfigType = SwaggerConfigType.{{ config.json_transcoding.swagger.swagger_config_type }},
@@ -45,8 +47,7 @@ namespace {{ config.server.project_name }}
                     {{- end }}
                 }
             };
-            {{}}
-            {{- if config.json_transcoding.use_json_transcoding }}
+
             builder.Services.AddGrpc(option =>
                 {
                     option.Interceptors.Add<ErrorInterceptor>();
@@ -113,6 +114,16 @@ namespace {{ config.server.project_name }}
             {{- end }}
 
             app.Run();
+
+            //配置文件
+            //"Kestrel": {
+            //  "Endpoints": {
+            //    "Grpc": {
+            //      "Url": "https://*:{{ config.server.port }}",
+            //      "Protocols": "Http2"
+            //    }
+            //  }
+            //}
         }
     }
     {{}}
