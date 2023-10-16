@@ -23,23 +23,6 @@ namespace Sample.Server
 
             var builder = WebApplication.CreateBuilder(args);
 
-            var config = new SwaggerConfig()
-            {
-                SwaggerConfigType = SwaggerConfigType.None,
-                Name = "",
-                Title = "",
-                Audience = "",
-                Scope = new string[]
-                {
-                },
-                ClientId = "",
-                ClientSecret = "",
-                IdentityUrl = "",
-                Version = "",
-                DocumentXml = new string[]
-                {
-                }
-            };
             
             builder.Services.AddGrpc();         
             
@@ -58,7 +41,7 @@ namespace Sample.Server
             //  "Endpoints": {
             //    "Grpc": {
             //      "Url": "https://*:6010",
-            //      "Protocols": "Http1AndHttp2"
+            //      "Protocols": "Http2"
             //    }
             //  }
             //}
