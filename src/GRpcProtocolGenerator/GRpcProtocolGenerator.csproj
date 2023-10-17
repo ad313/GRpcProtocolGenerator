@@ -3,8 +3,8 @@
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>0.2.4</Version>
-		<Description>C# GRpc to proto  server  restfulapi  swagger</Description>
+		<Version>0.3.0</Version>
+		<Description>use C# interface to generate grpc protocol file、server、controller、restfulapi、swagger、ts model</Description>
 		<PackageProjectUrl>https://github.com/ad313/GRpcProtocolGenerator</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/ad313/GRpcProtocolGenerator</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -27,8 +27,16 @@
 	  <None Remove="Renders\Templates\Controller.Program.txt" />
 	  <None Remove="Renders\Templates\Controller.Swagger.txt" />
 	  <None Remove="Renders\Templates\Server.AppSettings.txt" />
+	  <None Remove="Renders\Templates\Ui.Enum.txt" />
+	  <None Remove="Renders\Templates\Ui.Model.txt" />
 	</ItemGroup>
 	<ItemGroup>
+		<EmbeddedResource Include="Renders\Templates\Ui.Enum.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Renders\Templates\Ui.Model.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
 		<EmbeddedResource Include="Renders\Templates\Controller.csproj.txt">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</EmbeddedResource>

@@ -87,6 +87,22 @@ namespace GRpcProtocolGenerator.Resolve
         }
 
         /// <summary>
+        /// 生成UI配置
+        /// </summary>
+        /// <param name="uiConfig"></param>
+        /// <returns></returns>
+        public ConfigBuilder SetUi(Action<UiConfig> uiConfig)
+        {
+            ArgumentNullException.ThrowIfNull(uiConfig, nameof(uiConfig));
+
+            Config.UiConfig = new UiConfig(Config.CurrentPath);
+
+            uiConfig.Invoke(Config.UiConfig);
+
+            return this;
+        }
+
+        /// <summary>
         /// 元数据过滤
         /// </summary>
         /// <param name="filterAction"></param>

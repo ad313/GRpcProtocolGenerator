@@ -204,6 +204,16 @@ namespace Sample.Start
                     };
                 });
 
+                // 生成Ui，目前只支持生成ts模型
+                builder.SetUi(ui =>
+                {
+                    //指定输出的根目录
+                    ui.Output = $"../{project}.Ui";
+
+                    //指定ts model 存放目录，生成 model 和 枚举
+                    ui.TsModelFileDirectory = "models";
+                });
+
                 //对元数据进行过滤
                 builder.SetFilter(filter =>
                 {

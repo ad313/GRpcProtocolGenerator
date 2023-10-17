@@ -55,6 +55,11 @@ namespace GRpcProtocolGenerator.Models.Configs
         public ControllerConfig Controller { get; set; }
 
         /// <summary>
+        /// Ui 配置
+        /// </summary>
+        public UiConfig UiConfig { get; set; }
+
+        /// <summary>
         /// 初始化，传入宿主程序地址，不是bin地址
         /// </summary>
         /// <param name="currentPath">宿主程序地址，不是bin地址</param>
