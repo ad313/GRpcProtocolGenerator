@@ -9,6 +9,7 @@ generator grpc protocol from c# interface
 - 每个 proto 的 service 生成对应的实现
 - 生成 controller Restful API or grpc JsonTranscoding Restful API
 - 生成 Swagger
+- 生成 ts 模型
 
 ## 使用限制
 - 不支持 字典：Dictionary<xxx,xxx>

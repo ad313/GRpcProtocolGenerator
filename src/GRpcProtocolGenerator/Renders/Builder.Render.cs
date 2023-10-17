@@ -1,8 +1,11 @@
 ﻿using GRpcProtocolGenerator.Models.Configs;
 using GRpcProtocolGenerator.Renders.Protocol;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GRpcProtocolGenerator.Renders
@@ -69,7 +72,7 @@ namespace GRpcProtocolGenerator.Renders
                 {
                     await BuilderPath.CreateServerRootFile(serverCsprojFileName, serverCsprojString);
                 }
-                
+
                 ////appsettings.json
                 //var appSettingsJson = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Server.AppSettings");
                 //var appSettingsJsonFileName = "appsettings.json";
@@ -114,6 +117,9 @@ namespace GRpcProtocolGenerator.Renders
             // 生成控制器
             await RenderController();
 
+            // 生成Ui
+            await RenderUi();
+
             Console.WriteLine("生成完毕");
         }
 
@@ -153,7 +159,7 @@ namespace GRpcProtocolGenerator.Renders
                         gRpcServiceName = service.InterfaceMetaData.FormatServiceName(),
                     }
                 }, "Client.Client");
-                
+
                 await BuilderPath.CreateFileAsync(Config.ConfigInstance.Proto.GetClientsFilePath(), $"I{name}.cs", str, true);
             }
 
@@ -178,7 +184,7 @@ namespace GRpcProtocolGenerator.Renders
         {
             if (Config.ConfigInstance.Controller == null)
                 return;
-            
+
             //生成服务代理
             foreach (var service in Services)
             {
@@ -239,6 +245,117 @@ namespace GRpcProtocolGenerator.Renders
             //var appSettingsJson = await ScribanHelper.Render(new { config = Config.ConfigInstance }, "Controller.AppSettings");
             //var appSettingsJsonFileName = "appsettings.json";
             //await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.OutputFullPath, appSettingsJsonFileName, appSettingsJson, false);
+        }
+
+        /// <summary>
+        /// 生成Ui
+        /// </summary>
+        /// <returns></returns>
+        private async Task RenderUi()
+        {
+            if (Config.ConfigInstance.UiConfig == null)
+                return;
+
+            // ts model
+            await RenderTsModel();
+
+            // ts enum
+            await RenderTsEnum();
+        }
+
+        private async Task RenderTsModel()
+        {
+            foreach (var classMetaData in _assemblyMetaData.ClassMetaDataDictionary.Select(d => d.Value).Where(d => d.TypeWrapper.Type != typeof(CancellationToken)))
+            {
+                var name = classMetaData.Name.FormatMessageName();
+                var param = new
+                {
+                    config = Config.ConfigInstance,
+                    data = new
+                    {
+                        name = name,
+                        description = Config.ConfigInstance.Proto.PropertyDescriptionFunc(classMetaData) ?? classMetaData.Description,
+                        items = new List<Tuple<string, string, string>>()
+                    }
+                };
+
+                foreach (var prop in classMetaData.PropertyMetaDataList)
+                {
+                    var itemName = prop.Name.ToFirstLowString();
+                    if (prop.TypeWrapper.IsNullable)
+                        itemName += "?";
+
+                    var description = Config.ConfigInstance.Proto.PropertyDescriptionFunc(prop) ?? prop.Description;
+                    string dateType;
+
+                    if (prop.TypeWrapper.Type == typeof(string) || prop.TypeWrapper.Type == typeof(Guid) || prop.TypeWrapper.IsByteArray)
+                        dateType = "string";
+                    else if (prop.TypeWrapper.Type == typeof(int) || prop.TypeWrapper.Type == typeof(uint))
+                        dateType = "number";
+                    else if (prop.TypeWrapper.Type == typeof(long) || prop.TypeWrapper.Type == typeof(ulong))
+                        dateType = "number";
+                    else if (prop.TypeWrapper.Type == typeof(decimal) || prop.TypeWrapper.Type == typeof(float) || prop.TypeWrapper.Type == typeof(double))
+                        dateType = "number";
+
+                    else if (prop.TypeWrapper.Type == typeof(DateTime) || prop.TypeWrapper.Type == typeof(DateOnly) || prop.TypeWrapper.Type == typeof(TimeOnly))
+                        dateType = "Date";
+
+                    else if (prop.TypeWrapper.Type == typeof(bool) || prop.TypeWrapper.Type == typeof(bool))
+                        dateType = "boolean";
+
+                    else if (prop.TypeWrapper.Type == typeof(byte))
+                        dateType = "number";
+
+                    else if (prop.TypeWrapper.IsEnum)
+                    {
+                        dateType = "number";
+                        description = "[枚举] - " + description;
+                    }
+
+                    else if (prop.ClassMetaData != null)
+                        dateType = prop.ClassMetaData.Name.FormatMessageName();
+
+                    else dateType = "any";
+
+                    if (prop.TypeWrapper.IsArray)
+                        dateType += "[]";
+
+                    param.data.items.Add(new Tuple<string, string, string>(description, itemName, dateType));
+                }
+
+                var str = await ScribanHelper.Render(param, "Ui.Model");
+                await BuilderPath.CreateFileAsync(Config.ConfigInstance.UiConfig.GetTsFileOutputPath(), $"{name}.ts", str, true);
+            }
+        }
+
+        private async Task RenderTsEnum()
+        {
+            foreach (var enumMeta in _assemblyMetaData.EnumMetaDataDictionary.Select(d => d.Value))
+            {
+                var name = enumMeta.Name.FormatMessageName();
+                var param = new
+                {
+                    config = Config.ConfigInstance,
+                    data = new
+                    {
+                        name = name,
+                        description = Config.ConfigInstance.Proto.PropertyDescriptionFunc(enumMeta) ?? enumMeta.Description,
+                        items = new List<Tuple<string, string, string>>()
+                    }
+                };
+
+                foreach (var member in enumMeta.Members)
+                {
+                    var description = member.AttributeMetaDataList
+                        .FirstOrDefault(d => d.Type == typeof(DescriptionAttribute))?.ConstructorDictionary
+                        .FirstOrDefault().Value?.ToString();
+                    
+                    param.data.items.Add(new Tuple<string, string, string>(description, member.Name, member.Value.ToString()));
+                }
+
+                var str = await ScribanHelper.Render(param, "Ui.Enum");
+                await BuilderPath.CreateFileAsync(Config.ConfigInstance.UiConfig.GetTsFileOutputPath(), $"Enum.{name}.ts", str, true);
+            }
         }
     }
 }
