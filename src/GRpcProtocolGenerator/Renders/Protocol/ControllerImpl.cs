@@ -190,6 +190,12 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                     ReturnResult = "result.Data";
                 }
             }
+
+            //返回值：如果是空
+            if (Item.OutParam.Items.Count == 0)
+            {
+                ReturnResult = "";
+            }
         }
         
         /// <summary>

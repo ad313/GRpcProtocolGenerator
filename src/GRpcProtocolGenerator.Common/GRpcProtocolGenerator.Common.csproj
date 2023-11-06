@@ -3,7 +3,7 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>0.2.2</Version>
+		<Version>0.2.3</Version>
 		<Description>GRpc Attribute Config</Description>
 		<PackageProjectUrl>https://github.com/ad313/GRpcProtocolGenerator</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/ad313/GRpcProtocolGenerator</RepositoryUrl>

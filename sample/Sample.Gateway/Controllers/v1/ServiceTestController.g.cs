@@ -40,7 +40,7 @@ namespace Sample.Gateway.Controllers.v1
         public virtual async Task<IActionResult> VoidMethodSync(CancellationToken cancellationToken = default)
         {
             var result = await _client.VoidMethodSync(new Google.Protobuf.WellKnownTypes.Empty(), cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok();
         }
                 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Sample.Gateway.Controllers.v1
         public virtual async Task<IActionResult> MethodWithInputReturnVoid3Sync([FromBody] GRpcSampleClass clientInput, CancellationToken cancellationToken = default)
         {
             var result = await _client.MethodWithInputReturnVoid3Sync(clientInput, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok();
         }
                 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Sample.Gateway.Controllers.v1
         public virtual async Task<IActionResult> MethodWithInputTreeReturnVoid5Sync([FromQuery] GRpcTreeNode_SampleClass a, [FromQuery] GRpcTreeClass b, [FromQuery] GRpcExtClass c, System.Int32 d, CancellationToken cancellationToken = default)
         {
             var result = await _client.MethodWithInputTreeReturnVoid5Sync(new GRpcServiceTest_MethodWithInputTreeReturnVoid5Sync_Request() { A = a, B = b, C = c, D = d }, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok();
         }
                 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Sample.Gateway.Controllers.v1
         public virtual async Task<IActionResult> MethodWithInputReturnVoid3Async([FromBody] GRpcSampleClass clientInput, CancellationToken cancellationToken = default)
         {
             var result = await _client.MethodWithInputReturnVoid3Async(clientInput, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok();
         }
                 
         /// <summary>
@@ -148,7 +148,7 @@ namespace Sample.Gateway.Controllers.v1
         public virtual async Task<IActionResult> TestExtClass2([FromBody] GRpcExtClass2 clientInput, CancellationToken cancellationToken = default)
         {
             var result = await _client.TestExtClass2(clientInput, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok();
         }        
     }
 }
