@@ -31,19 +31,6 @@ namespace Sample.Gateway.Controllers.v1
         }
                 
         /// <summary>
-        /// Test1
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("Test1")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [SwaggerOperation("Test1")]        
-        public virtual async Task<IActionResult> Test1Async(CancellationToken cancellationToken = default)
-        {
-            var result = await _client.Test1Async(new Google.Protobuf.WellKnownTypes.Empty(), cancellationToken: cancellationToken);
-            return Ok(result);
-        }
-                
-        /// <summary>
         /// 这是修改
         /// </summary>
         /// <returns></returns>
@@ -53,7 +40,7 @@ namespace Sample.Gateway.Controllers.v1
         public virtual async Task<IActionResult> Test2Async(System.Int32 a, [FromBody] GRpcSampleClass model, CancellationToken cancellationToken = default)
         {
             var result = await _client.Test2Async(new GRpcServiceTest2Service_Test2Async_Request() { A = a, Model = model }, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok();
         }
                 
         /// <summary>
@@ -66,7 +53,7 @@ namespace Sample.Gateway.Controllers.v1
         public virtual async Task<IActionResult> Test2_2Async([FromBody] GRpcServiceTest2Service_Test2_2Async_Request clientInput, CancellationToken cancellationToken = default)
         {
             var result = await _client.Test2_2Async(clientInput, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok();
         }
                 
         /// <summary>
@@ -135,7 +122,7 @@ namespace Sample.Gateway.Controllers.v1
         public virtual async Task<IActionResult> Test7(System.Object id, CancellationToken cancellationToken = default)
         {
             var result = await _client.Test7(new GRpcServiceTest2ServiceIdRequest() { Id = id.ToString() }, cancellationToken: cancellationToken);
-            return Ok(result);
+            return Ok();
         }        
     }
 }

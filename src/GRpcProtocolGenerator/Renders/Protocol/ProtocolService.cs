@@ -86,15 +86,20 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                          GetHttpOption(HttpMethod.Delete, typeof(HttpDeleteAttribute)) ??
                          GetHttpOption(HttpMethod.Patch, typeof(HttpPatchAttribute));
 
-            if (HttpOption == null)
-            {
-                HttpOption = GetDefaultHttpOption();
-            }
+            ////没标记 http，不生成
+            //if (HttpOption == null)
+            //{
+            //    //return string.Empty;
+            //    HttpOption = GetDefaultHttpOption();
+            //}
 
             if (Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding)
             {
                 sb.Append($"\trpc {Name}({InParam.GetGRpcName()}) returns({OutParam.GetGRpcName()})");
-                sb.Append(HttpOption.ToString());
+
+                //没标记 http，不生成
+                if (HttpOption != null)
+                    sb.Append(HttpOption.ToString());
             }
             else
             {

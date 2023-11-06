@@ -3,7 +3,7 @@
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>0.3.0</Version>
+		<Version>0.3.2</Version>
 		<Description>use C# interface to generate grpc protocol file、server、controller、restfulapi、swagger、ts model</Description>
 		<PackageProjectUrl>https://github.com/ad313/GRpcProtocolGenerator</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/ad313/GRpcProtocolGenerator</RepositoryUrl>
