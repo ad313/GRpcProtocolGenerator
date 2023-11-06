@@ -13,7 +13,9 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         {
             ProtocolService = protocolService;
 
-            Items = protocolService.Items.Select(d => new ControllerImplItem(d)).ToList();
+            Items = protocolService.Items
+                .Where(d => d.HttpOption != null)
+                .Select(d => new ControllerImplItem(d)).ToList();
 
             //如果以 Service 结尾，则去掉 Service
             Name = protocolService.InterfaceMetaData.Name.TrimStart('I').TrimLastString("Service") + "Controller";

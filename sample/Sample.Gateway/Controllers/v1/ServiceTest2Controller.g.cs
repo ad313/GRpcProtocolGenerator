@@ -31,19 +31,6 @@ namespace Sample.Gateway.Controllers.v1
         }
                 
         /// <summary>
-        /// Test1
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("Test1")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [SwaggerOperation("Test1")]        
-        public virtual async Task<IActionResult> Test1Async(CancellationToken cancellationToken = default)
-        {
-            var result = await _client.Test1Async(new Google.Protobuf.WellKnownTypes.Empty(), cancellationToken: cancellationToken);
-            return Ok(result);
-        }
-                
-        /// <summary>
         /// 这是修改
         /// </summary>
         /// <returns></returns>

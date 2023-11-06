@@ -52,6 +52,16 @@ namespace GRpcProtocolGenerator.Types
         /// <summary>
         /// 是否忽略gRpc生成
         /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsGRpcIgnore(this Type type)
+        {
+            return type.CustomAttributes.Any(d => d.AttributeType == typeof(GRpcIgnoreAttribute)) || type.GetInterfaces()?.Any(t => t.IsGRpcIgnore()) == true;
+        }
+
+        /// <summary>
+        /// 是否忽略gRpc生成
+        /// </summary>
         /// <param name="attrs"></param>
         /// <returns></returns>
         public static bool IsGRpcIgnore(this IEnumerable<CustomAttributeData> attrs)

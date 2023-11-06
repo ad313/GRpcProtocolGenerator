@@ -39,7 +39,7 @@ namespace GRpcProtocolGenerator.Resolve
             if (interfaces == null || interfaces.Count == 0)
                 return new List<InterfaceMetaData>();
 
-            var nodes = interfaces.Where(d => d.IsGRpcGenerator()).Select(d => ToInterfaceMetaData(d.ToTypeWrapper())).Where(d => d != null).ToList();
+            var nodes = interfaces.Where(d => d.IsGRpcGenerator() && !d.IsGRpcIgnore()).Select(d => ToInterfaceMetaData(d.ToTypeWrapper())).Where(d => d != null).ToList();
             nodes = Distinct(nodes);
             return Format(nodes, null);
         }
