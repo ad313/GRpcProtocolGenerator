@@ -1,0 +1,69 @@
+﻿{
+  "sites": [
+    {
+      "group": "新版网站 - 开发",
+      "items": [
+        {
+          "name": "都发 - 用水计量",
+          "url": "http://192.168.1.80:32197/"
+        },
+        {
+          "name": "眉山 - 考勤",
+          "url": "http://192.168.1.80:32123/attendance-management-ui/"
+        },
+        {
+          "name": "平台 - 租户",
+          "url": "https://192.168.1.20/tenant/"
+        }
+      ]
+    },
+    {
+      "group": "旧版网站 - 开发",
+      "old": true,
+      "items": [
+        {
+          "name": "东风渠 - 用水计量",
+          "url": "https://192.168.1.47/person-ui/layout"
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "group": "管理员 - 开发",
+      "items": [
+        {
+          "user": "admin",
+          "password": "Sl123.com"
+        },
+        {
+          "user": "ad313",
+          "password": "Sl123.com"
+        }        
+      ]
+    },
+    {
+      "group": "眉山 - 开发",
+      "items": [
+        {
+          "user": "wh",
+          "password": "Sl123.com"
+        },
+        {
+          "user": "qh",
+          "password": "Sl123.com"
+        }
+      ]
+    },
+    {
+      "group": "东风渠 - 开发",
+      "items": [
+        {
+          "user": "admin",
+          "password": "admin83506920"
+        }
+      ]
+    }
+  ],
+  "ocr": "http://192.168.1.251:2223/WeatherForecast/OCR"
+}
