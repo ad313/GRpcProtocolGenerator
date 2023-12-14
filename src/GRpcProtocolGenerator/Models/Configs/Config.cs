@@ -35,6 +35,13 @@ namespace GRpcProtocolGenerator.Models.Configs
         public ServerConfig Server { get; set; }
 
         /// <summary>
+        /// 服务端配置
+        /// </summary>
+        public GoServerConfig GoServer { get; set; }
+
+        public GoStructConfig GoStruct { get; set; }
+
+        /// <summary>
         /// 是否生成Server
         /// </summary>
         public bool HasServer => Server != null;
@@ -53,6 +60,11 @@ namespace GRpcProtocolGenerator.Models.Configs
         /// 生成控制器配置
         /// </summary>
         public ControllerConfig Controller { get; set; }
+
+        /// <summary>
+        /// 生成控制器配置
+        /// </summary>
+        public GoControllerConfig GoController { get; set; }
 
         /// <summary>
         /// Ui 配置

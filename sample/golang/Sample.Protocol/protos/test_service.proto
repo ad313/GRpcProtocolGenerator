@@ -1,0 +1,374 @@
+﻿//----自动生成，请勿修改----//
+syntax = "proto3";
+package assets;
+
+option csharp_namespace = "Sample.GRpc.Protocol";
+option go_package = "sailing.cn/protobuf/assets";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
+//desc from Description Sample.Services.IServiceTest
+service TestService {
+	
+	// title from Display attr
+	rpc VoidMethodSync(google.protobuf.Empty) returns(google.protobuf.Empty);
+	
+	// 
+	rpc MethodWithInputReturnVoidSync(TestService_MethodWithInputReturnVoidSync_Request) returns(google.protobuf.Empty);
+	
+	// 
+	rpc MethodWithInputReturnVoid2Sync(TestService_MethodWithInputReturnVoid2Sync_Request) returns(google.protobuf.Empty);
+	
+	// 
+	rpc MethodWithInputReturnVoid3Sync(GRpcSampleClass) returns(google.protobuf.Empty);
+	
+	// 
+	rpc MethodWithInputReturnVoid4Sync(TestService_MethodWithInputReturnVoid4Sync_Request) returns(google.protobuf.Empty);
+	
+	// 
+	rpc MethodWithInputEnumReturnVoid4Sync(TestService_MethodWithInputEnumReturnVoid4Sync_Request) returns(google.protobuf.Empty);
+	
+	// 
+	rpc MethodWithInputTreeReturnVoid5Sync(TestService_MethodWithInputTreeReturnVoid5Sync_Request) returns(google.protobuf.Empty);
+	
+	// 
+	rpc VoidMethod(google.protobuf.Empty) returns(google.protobuf.Empty);
+	
+	// 
+	rpc MethodWithInputReturnVoid(TestService_MethodWithInputReturnVoidAsync_Request) returns(google.protobuf.Empty);
+	
+	// 
+	rpc MethodWithInputReturnVoid2(TestService_MethodWithInputReturnVoid2Async_Request) returns(google.protobuf.Empty);
+	
+	// 
+	rpc MethodWithInputReturnVoid3(GRpcSampleClass) returns(google.protobuf.Empty);
+	
+	// 
+	rpc MethodWithInputReturnVoid4(TestService_MethodWithInputReturnVoid4Async_Request) returns(google.protobuf.Empty);
+	
+	// 
+	rpc MethodWithInputEnumReturnVoid4(TestService_MethodWithInputEnumReturnVoid4Async_Request) returns(google.protobuf.Empty);
+	
+	// 
+	rpc MethodWithInputReturnIntSync(TestService_MethodWithInputReturnIntSync_Request) returns(TestService_MethodWithInputReturnIntSync_Response);
+	
+	// 
+	rpc MethodWithInputReturnStringSync(TestService_MethodWithInputReturnStringSync_Request) returns(TestServiceStringResponse);
+	
+	// 
+	rpc MethodWithInputReturnClassSync(TestService_MethodWithInputReturnClassSync_Request) returns(GRpcSampleClass);
+	
+	// 
+	rpc MethodWithInputReturnListClassSync(GRpcSampleClass) returns(TestServiceListSampleClassResponse);
+	
+	// 
+	rpc MethodWithInputReturnListIntSync(GRpcSampleClass) returns(TestServiceListInt32Response);
+	
+	// 
+	rpc MethodWithInputReturnEnumSync(TestService_MethodWithInputReturnEnumSync_Request) returns(TestService_MethodWithInputReturnEnumSync_Response);
+	
+	// 
+	rpc MethodWithInputReturnInt(TestService_MethodWithInputReturnIntAsync_Request) returns(TestService_MethodWithInputReturnIntAsync_Response);
+	
+	// 
+	rpc MethodWithInputReturnString(TestService_MethodWithInputReturnStringAsync_Request) returns(TestServiceStringResponse);
+	
+	// 
+	rpc MethodWithInputReturnClass(TestService_MethodWithInputReturnClassAsync_Request) returns(GRpcSampleClass);
+	
+	// 
+	rpc MethodWithInputReturnNullableClass(TestService_MethodWithInputReturnNullableClassAsync_Request) returns(GRpcNullableClass);
+	
+	// 
+	rpc MethodWithInputReturnListClass(GRpcSampleClass) returns(TestServiceListSampleClassResponse);
+	
+	// 
+	rpc MethodWithInputReturnListInt(GRpcSampleClass) returns(TestServiceListInt32Response);
+	
+	// 
+	rpc MethodWithInputReturnEnum(TestService_MethodWithInputReturnEnumAsync_Request) returns(TestService_MethodWithInputReturnEnumAsync_Response);
+	
+	// 
+	rpc MethodWithInputReturnEnumValueTask(TestService_MethodWithInputReturnEnumValueTaskAsync_Request) returns(TestService_MethodWithInputReturnEnumValueTaskAsync_Response);
+	
+	// 
+	rpc ChangeToSupportMethod7(TestService_ChangeToSupportMethod7_Request) returns(google.protobuf.Empty);
+	
+	// 
+	rpc TestCancellationToken(google.protobuf.Empty) returns(google.protobuf.Empty);
+	
+	// 
+	rpc TestCancellationToken2(TestService_TestCancellationToken2_Request) returns(google.protobuf.Empty);
+	
+	// 
+	rpc TestExtClass2(GRpcExtClass2) returns(google.protobuf.Empty);
+}
+
+//SampleStruct Sample.Services.Models.SampleStruct
+message GRpcSampleStruct {
+	int32 IntColumn = 1; // IntColumn
+	int64 LongColumn = 2; // LongColumn
+	double DecimalColumn = 3; // DecimalColumn
+	double DoubleColumn = 4; // DoubleColumn
+	float FloatColumn = 5; // FloatColumn
+	uint32 UintColumn = 6; // UintColumn
+	uint64 UlongColumn = 7; // UlongColumn
+	google.protobuf.StringValue StringColumn = 8; // StringColumn
+	bool BoolColumn = 9; // BoolColumn
+	string GuidColumn = 10; // GuidColumn
+	string DateTimeColumn = 11; // DateTimeColumn
+	int32 ByteColumn = 12; // ByteColumn
+}
+
+//SampleClass Sample.Services.Models.SampleClass
+message GRpcSampleClass {
+	int32 IntColumn = 1; // IntColumn
+	int64 LongColumn = 2; // LongColumn
+	double DecimalColumn = 3; // DecimalColumn
+	double DoubleColumn = 4; // DoubleColumn
+	float FloatColumn = 5; // FloatColumn
+	uint32 UintColumn = 6; // UintColumn
+	uint64 UlongColumn = 7; // UlongColumn
+	google.protobuf.StringValue StringColumn = 8; // StringColumn
+	bool BoolColumn = 9; // BoolColumn
+	string DateTimeColumn = 10; // DateTimeColumn
+	int32 ByteColumn = 11; // ByteColumn
+	GRpcSampleClass ClassColumn = 12; // ClassColumn
+	int32 EnumColumn = 13; // EnumColumn
+	GRpcSampleStruct StructColumn = 14; // StructColumn
+}
+
+// Sample.Services.Models.TreeNode`1_ExtClass2
+message GRpcTreeNode_ExtClass2 {
+	google.protobuf.StringValue Key = 1;
+	google.protobuf.StringValue Parent = 2;
+	repeated GRpcExtClass2 Children = 3;
+}
+
+// Sample.Services.Models.ExtClass2
+message GRpcExtClass2 {
+	GRpcTreeNode_ExtClass2 GenericClass = 1; // GenericClass
+	int32 IntColumn = 2; // IntColumn
+	int64 LongColumn = 3; // LongColumn
+	double DecimalColumn = 4; // DecimalColumn
+	double DoubleColumn = 5; // DoubleColumn
+	float FloatColumn = 6; // FloatColumn
+	uint32 UintColumn = 7; // UintColumn
+	uint64 UlongColumn = 8; // UlongColumn
+	google.protobuf.StringValue StringColumn = 9; // StringColumn
+	bool BoolColumn = 10; // BoolColumn
+	string DateTimeColumn = 11; // DateTimeColumn
+	int32 ByteColumn = 12; // ByteColumn
+	GRpcSampleClass ClassColumn = 13; // ClassColumn
+	int32 EnumColumn = 14; // EnumColumn
+	GRpcSampleStruct StructColumn = 15; // StructColumn
+}
+
+// Sample.Services.Models.NullableClass
+message GRpcNullableClass {
+	google.protobuf.Int32Value NullableIntColumn = 1;
+	google.protobuf.Int64Value NullableLongColumn = 2;
+	google.protobuf.DoubleValue NullableDecimalColumn = 3;
+	google.protobuf.DoubleValue NullableDoubleColumn = 4;
+	google.protobuf.FloatValue NullableFloatColumn = 5;
+	google.protobuf.UInt32Value NullableUintColumn = 6;
+	google.protobuf.UInt64Value NullableUlongColumn = 7;
+	google.protobuf.StringValue NullableStringColumn = 8;
+	google.protobuf.BoolValue NullableBoolColumn = 9;
+	google.protobuf.StringValue NullableGuidColumn = 10;
+	google.protobuf.StringValue NullableDateTimeColumn = 11;
+	google.protobuf.Int32Value NullableByteColumn = 12;
+	GRpcNullableClass NullableClassColumn = 13;
+	google.protobuf.Int32Value NullableEnumColumn = 14;
+	GRpcSampleStruct NullableStructColumn = 15;
+}
+
+// TestService_ChangeToSupportMethod7_Request
+message TestService_ChangeToSupportMethod7_Request {
+	google.protobuf.StringValue a = 1;
+}
+
+// TestService_MethodWithInputEnumReturnVoid4Async_Request
+message TestService_MethodWithInputEnumReturnVoid4Async_Request {
+	int32 a = 1;
+}
+
+// TestService_MethodWithInputEnumReturnVoid4Sync_Request
+message TestService_MethodWithInputEnumReturnVoid4Sync_Request {
+	int32 a = 1;
+}
+
+// TestService_MethodWithInputReturnClassAsync_Request
+message TestService_MethodWithInputReturnClassAsync_Request {
+	int32 a = 1;
+	google.protobuf.StringValue b = 2;
+}
+
+// TestService_MethodWithInputReturnClassSync_Request
+message TestService_MethodWithInputReturnClassSync_Request {
+	int32 a = 1;
+	google.protobuf.StringValue b = 2;
+}
+
+// TestService_MethodWithInputReturnEnumAsync_Request
+message TestService_MethodWithInputReturnEnumAsync_Request {
+	int32 a = 1;
+}
+
+// TestService_MethodWithInputReturnEnumAsync_Response
+message TestService_MethodWithInputReturnEnumAsync_Response {
+	int32 Data = 1;
+}
+
+// TestService_MethodWithInputReturnEnumSync_Request
+message TestService_MethodWithInputReturnEnumSync_Request {
+	int32 a = 1;
+}
+
+// TestService_MethodWithInputReturnEnumSync_Response
+message TestService_MethodWithInputReturnEnumSync_Response {
+	int32 Data = 1;
+}
+
+// TestService_MethodWithInputReturnEnumValueTaskAsync_Request
+message TestService_MethodWithInputReturnEnumValueTaskAsync_Request {
+	int32 a = 1;
+}
+
+// TestService_MethodWithInputReturnEnumValueTaskAsync_Response
+message TestService_MethodWithInputReturnEnumValueTaskAsync_Response {
+	int32 Data = 1;
+}
+
+// TestService_MethodWithInputReturnIntAsync_Request
+message TestService_MethodWithInputReturnIntAsync_Request {
+	int32 a = 1;
+}
+
+// TestService_MethodWithInputReturnIntAsync_Response
+message TestService_MethodWithInputReturnIntAsync_Response {
+	int32 Data = 1;
+}
+
+// TestService_MethodWithInputReturnIntSync_Request
+message TestService_MethodWithInputReturnIntSync_Request {
+	int32 a = 1;
+}
+
+// TestService_MethodWithInputReturnIntSync_Response
+message TestService_MethodWithInputReturnIntSync_Response {
+	int32 Data = 1;
+}
+
+// TestService_MethodWithInputReturnNullableClassAsync_Request
+message TestService_MethodWithInputReturnNullableClassAsync_Request {
+	int32 a = 1;
+	google.protobuf.StringValue b = 2;
+}
+
+// TestService_MethodWithInputReturnStringAsync_Request
+message TestService_MethodWithInputReturnStringAsync_Request {
+	int32 a = 1;
+	google.protobuf.StringValue b = 2;
+}
+
+// TestService_MethodWithInputReturnStringSync_Request
+message TestService_MethodWithInputReturnStringSync_Request {
+	int32 a = 1;
+	google.protobuf.StringValue b = 2;
+}
+
+// TestService_MethodWithInputReturnVoid2Async_Request
+message TestService_MethodWithInputReturnVoid2Async_Request {
+	int32 a = 1;
+	google.protobuf.StringValue b = 2;
+}
+
+// TestService_MethodWithInputReturnVoid2Sync_Request
+message TestService_MethodWithInputReturnVoid2Sync_Request {
+	int32 a = 1;
+	google.protobuf.StringValue b = 2;
+}
+
+// TestService_MethodWithInputReturnVoid4Async_Request
+message TestService_MethodWithInputReturnVoid4Async_Request {
+	repeated int32 a = 1;
+}
+
+// TestService_MethodWithInputReturnVoid4Sync_Request
+message TestService_MethodWithInputReturnVoid4Sync_Request {
+	repeated int32 a = 1;
+}
+
+// TestService_MethodWithInputReturnVoidAsync_Request
+message TestService_MethodWithInputReturnVoidAsync_Request {
+	int32 a = 1;
+}
+
+// TestService_MethodWithInputReturnVoidSync_Request
+message TestService_MethodWithInputReturnVoidSync_Request {
+	int32 a = 1;
+}
+
+// Sample.Services.Models.TreeNode`1_SampleClass
+message GRpcTreeNode_SampleClass {
+	google.protobuf.StringValue Key = 1;
+	google.protobuf.StringValue Parent = 2;
+	repeated GRpcSampleClass Children = 3;
+}
+
+// Sample.Services.Models.ExtClass
+message GRpcExtClass {
+	GRpcTreeNode_SampleClass GenericClass = 1; // GenericClass
+	int32 IntColumn = 2; // IntColumn
+	int64 LongColumn = 3; // LongColumn
+	double DecimalColumn = 4; // DecimalColumn
+	double DoubleColumn = 5; // DoubleColumn
+	float FloatColumn = 6; // FloatColumn
+	uint32 UintColumn = 7; // UintColumn
+	uint64 UlongColumn = 8; // UlongColumn
+	google.protobuf.StringValue StringColumn = 9; // StringColumn
+	bool BoolColumn = 10; // BoolColumn
+	string DateTimeColumn = 11; // DateTimeColumn
+	int32 ByteColumn = 12; // ByteColumn
+	GRpcSampleClass ClassColumn = 13; // ClassColumn
+	int32 EnumColumn = 14; // EnumColumn
+	GRpcSampleStruct StructColumn = 15; // StructColumn
+}
+
+// Sample.Services.Models.TreeClass
+message GRpcTreeClass {
+	google.protobuf.StringValue Key = 1;
+	google.protobuf.StringValue Parent = 2;
+	repeated GRpcTreeClass Children = 3;
+}
+
+// TestService_MethodWithInputTreeReturnVoid5Sync_Request
+message TestService_MethodWithInputTreeReturnVoid5Sync_Request {
+	GRpcTreeNode_SampleClass a = 1;
+	GRpcTreeClass b = 2;
+	GRpcExtClass c = 3;
+	int32 d = 4;
+}
+
+// TestService_TestCancellationToken2_Request
+message TestService_TestCancellationToken2_Request {
+	int32 a = 1;
+}
+
+// TestServiceListInt32Response
+message TestServiceListInt32Response {
+	repeated int32 Data = 1;
+}
+
+// TestServiceListSampleClassResponse
+message TestServiceListSampleClassResponse {
+	repeated GRpcSampleClass Data = 1;
+}
+
+// TestServiceStringResponse
+message TestServiceStringResponse {
+	google.protobuf.StringValue Data = 1;
+}
+

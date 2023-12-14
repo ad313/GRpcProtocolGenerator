@@ -1,0 +1,119 @@
+// Package {{ data.namespace_or_package }} 此代码自动生成，请勿修改
+package {{ data.namespace_or_package }}
+
+import (
+	{{- for dep in data.dependency }}
+	{{ dep }}
+	{{- end }}
+)
+
+type {{ data.name }}Controller struct{}
+
+// 路由配置
+func add{{ data.name }}Router(router *gin.RouterGroup) {
+	api := new({{ data.name }}Controller)
+	router = router.Group("/{{ data.name }}")
+	{{- for item in data.items }}
+	router.{{ item.http }}("/{{ item.route }}", api.{{ item.method_name }})
+	{{- end }}
+}
+{{}}
+{{- for item in data.items }}
+// {{ item.method_name }} {{ item.description }}
+// @Summary  {{ item.description }}
+// @Tags     {{ item.base_route==""?"":(item.base_route+"/") }}{{ data.name }}
+// 
+{{- if item.route_param != null }}
+//	@Param		{{ item.route_param }}		path		string							true	"输入参数"
+{{- end }}
+{{- if item.dto_input_type != null && item.has_input_param }}
+//	@Param		model	{{ (item.http | string.downcase) == "get" ? "query" : "body" }}		{{ item.dto_input_type }}			false	"{{ item.dto_input_type_description == null || item.dto_input_type_description == "" ? "输入参数" : item.dto_input_type_description }}"
+{{- end }}
+//	@success	200	{object}	restful.JSONResult{data={{ item.return == 0 ? "emptypb.Empty": item.return_type | string.replace "*" ""}}}	"返回结果"
+//
+// @Router   /{{ data.version }}/{{ item.base_route==""?"":(item.base_route+"/") }}{{ data.name }}/{{ item.original_route }} [{{ item.http | string.downcase }}]
+func (x *{{ data.name }}Controller) {{ item.method_name }}(c *gin.Context) {
+{{- hasId = false }}
+{{- hasDto = false }}
+{{- hasReturn = false }}
+{{- if item.route_param != null }}
+	{{- hasId = true }}
+{{- end }}
+{{- if item.dto_input_type != null }}
+	{{- hasDto = true }}
+{{- end }}
+{{- if item.grpc_input_type != null }}
+	{{- hasReturn = true }}
+{{- end }}
+
+    var err error
+{{- if hasId }}
+	var {{ item.route_param }} = c.Param("{{ item.route_param }}")
+{{- end }}
+
+{{- if hasDto }}
+	_request := &{{ item.dto_input_type }}{}
+	err = c.ShouldBind(_request)
+	if err != nil {
+		restful.Fail(c, err)
+		return
+	}
+{{- end }}
+
+{{- if hasId && hasDto }}
+	_request.{{ item.route_param_upper }} = {{ item.route_param }}
+{{- end }}
+{{## dot to proto ##}}
+{{- if hasDto }}
+	request := &{{ item.grpc_input_type }}{}
+	err = mapper.MapStructToProto(_request, request)
+	if err != nil {
+		restful.Fail(c, err)
+		return
+	}
+{{- end }}
+
+{{- if hasDto == false }}
+	request := &emptypb.Empty{}
+{{- end }}
+
+    result, err := grpc.Get{{ data.name }}Client().{{ item.method_name }}(common.BuildContext(c), request)
+	if err != nil {
+		restful.Fail(c, err)
+		return
+	}
+
+    {{- if item.return == 0 }}
+	restful.Success(c, result)
+	{{- else if item.return == 2 }}
+	_result := &{{ item.return_type }}{}
+	err = mapper.MapProtoToStruct(result, &_result)
+	if err != nil {
+		restful.Fail(c, err)
+		return
+	}
+	restful.Success(c, _result)
+	{{- else }}
+
+	{{- if item.return_class }}
+	  {{- if item.is_array }}
+	_result2 := make({{ item.return_type }}, 0)
+	  {{- else }}
+	_result2 := {{ item.return_type }}{}
+	  {{- end }}
+
+	
+	err = mapper.MapProtoToStruct(result.{{ item.return_name }}, &_result2)
+	if err != nil {
+		restful.Fail(c, err)
+		return
+	}
+	restful.Success(c, _result2)
+	{{- else }}
+	restful.Success(c, result.{{ item.return_name }})
+	{{- end }}
+		
+	{{- end }}
+}
+{{}}
+{{- end }}

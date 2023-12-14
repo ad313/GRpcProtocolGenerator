@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GRpcProtocolGenerator.Common.Attributes;
 using GRpcProtocolGenerator.Models.Configs;
 using GRpcProtocolGenerator.Types;
 
@@ -104,6 +105,10 @@ namespace GRpcProtocolGenerator.Models.MetaData
                 }
             }
 
+            foreach (var valuePair in ClassMetaDataDictionary)
+            {
+                valuePair.Value.Filter();
+            }
         }
 
         /// <summary>

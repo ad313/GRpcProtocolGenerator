@@ -220,6 +220,11 @@ namespace GRpcProtocolGenerator.Types
 
             return TypeConvert.Convert(type, isNullable);
         }
+
+        public static string ToGoStructString(this Type type, bool isNullable)
+        {
+            return TypeConvert.ConvertToGoStruct(type, isNullable);
+        }
     }
 
     /// <summary>

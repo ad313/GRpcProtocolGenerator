@@ -17,7 +17,11 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
         private readonly StringBuilder _sbContent;
 
+        private readonly StringBuilder _goStructStringBuilder;
+
         public string CSharpNamespace { get; set; }
+
+        public string GoLangPackage { get; set; }
 
         ///// <summary>
         ///// 枚举文件名称
@@ -43,9 +47,10 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             ProtoMessageList = ProtoMessageList.Distinct().OrderBy(d => d.Name).ToList();
 
             _sbContent = new StringBuilder();
+            _goStructStringBuilder = new StringBuilder();
             foreach (var message in ProtoMessageList)
             {
-                message.GetOrSetGRpcServiceProtoPath(ProtoService.InterfaceMetaData, _sbContent);
+                message.GetOrSetGRpcServiceProtoPath(ProtoService.InterfaceMetaData, _sbContent, _goStructStringBuilder);
 
                 DependencyList.AddRange(message.Imports);
                 DependencyList.Add(message.MessagePath);
@@ -68,17 +73,35 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             DependencyList = DependencyList.Where(d => d != ProtoService.InterfaceMetaData.FormatServiceProtoFileNameFullPath()).Distinct().ToList();
 
             CSharpNamespace = Config.ConfigInstance.Proto.GetCSharpNamespace(ProtoService.InterfaceMetaData);
+
+            GoLangPackage = Config.ConfigInstance.Proto.GetGoPackageName(ProtoService.InterfaceMetaData);
         }
 
         public string ToContent()
         {
             CreateProtoVersion();
-            CreateDependencyImport();
-            CreateCSharpNamespace();
             CreatePackage();
+            CreateEmptyLine();
+            CreateCSharpNamespace();
+            CreateGoLangPackage();
+            CreateEmptyLine();
+            CreateDependencyImport();
             CreateEmptyLine();
             CreateContent();
             return _sbHeader.ToString();
+        }
+
+        public string ToGoStructContent()
+        {
+            var str = _goStructStringBuilder.ToString();
+            _goStructStringBuilder.Clear();
+
+            _goStructStringBuilder.AppendLine($"package {Config.ConfigInstance.GoStruct.GetPackageName(ProtoService.InterfaceMetaData)}");
+            
+            _goStructStringBuilder.AppendLine();
+            _goStructStringBuilder.Append(str);
+
+            return _goStructStringBuilder.ToString();
         }
 
         public string ToEnumContent()
@@ -92,6 +115,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
         private void CreateProtoVersion()
         {
+            _sbHeader.AppendLine("//----自动生成，请勿修改----//");
             _sbHeader.AppendLine("syntax = \"proto3\";");
         }
 
@@ -106,6 +130,11 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         private void CreateCSharpNamespace()
         {
             _sbHeader.AppendLine($"option csharp_namespace = \"{CSharpNamespace}\";");
+        }
+
+        private void CreateGoLangPackage()
+        {
+            _sbHeader.AppendLine($"option go_package = \"{GoLangPackage}\";");
         }
 
         private void CreatePackage()

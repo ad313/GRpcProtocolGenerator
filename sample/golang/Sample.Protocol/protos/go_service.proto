@@ -1,0 +1,57 @@
+﻿//----自动生成，请勿修改----//
+syntax = "proto3";
+package assets;
+
+option csharp_namespace = "Sample.GRpc.Protocol";
+option go_package = "sailing.cn/protobuf/assets";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
+//go 接口 Sample.Services.IGoService
+service GoService {
+	
+	// 备注哈哈哈哈
+	rpc Test1(google.protobuf.Empty) returns(google.protobuf.Empty);
+	
+	// 
+	rpc Test2(GRpcIdModel) returns(google.protobuf.Empty);
+	
+	// 
+	rpc Test3(GRpcIdModel) returns(google.protobuf.Empty);
+	
+	// 
+	rpc Test4(GRpcIdModel) returns(GRpcIdModel);
+	
+	// 
+	rpc Test5(GRpcIdModel) returns(GRpcIdListModel);
+	
+	// 
+	rpc Test6_1(GRpcIdList2Model) returns(GRpcIdList2Model);
+	
+	// 
+	rpc Test6_2(GRpcIdList3Model) returns(GRpcIdList3Model);
+}
+
+// Sample.Services.IdList2Model
+message GRpcIdList2Model {
+	repeated int32 Data = 1;
+}
+
+//IdModel的注释 Sample.Services.IdModel
+message GRpcIdModel {
+	google.protobuf.StringValue Id = 1;
+}
+
+// Sample.Services.IdList3Model
+message GRpcIdList3Model {
+	google.protobuf.StringValue StringColumn = 1; // string column.....
+	repeated int32 Ids = 2;
+	repeated GRpcIdModel Data = 3;
+}
+
+// Sample.Services.IdListModel
+message GRpcIdListModel {
+	repeated GRpcIdModel Data = 1;
+}
+

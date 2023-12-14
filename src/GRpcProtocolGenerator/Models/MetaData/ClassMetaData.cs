@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using GRpcProtocolGenerator.Common.Attributes;
 using GRpcProtocolGenerator.Types;
 
 namespace GRpcProtocolGenerator.Models.MetaData
@@ -26,6 +28,12 @@ namespace GRpcProtocolGenerator.Models.MetaData
                 name = typeWrapper.Type.GetGenericClassName();
                 SetName(name);
             }
+        }
+
+        public void Filter()
+        {
+            PropertyMetaDataList = PropertyMetaDataList
+                .Where(d => d.AttributeMetaDataList.All(a => a.Type != typeof(GRpcIgnoreAttribute))).ToList();
         }
     }
 }

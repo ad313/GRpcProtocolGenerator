@@ -1,0 +1,50 @@
+//----自动生成，请勿修改----//
+
+package {{ config.go_server.package }}
+
+import (
+	"context"
+	log "github.com/sirupsen/logrus"
+	"{{ config.go_server.proto_namespace }}/{{ config.go_server.proto_package_name }}"
+	"{{ config.go_server.go_store_package_path }}"
+	"sailing.cn/v2/mapper"
+	"google.golang.org/protobuf/types/known/emptypb"
+)
+
+// {{ config.go_server.description }}
+type {{ config.go_server.server_name }} struct {
+	{{ config.go_server.proto_package_name }}.Unimplemented{{ config.go_server.service_server_name }}
+}
+
+{{- lite = config.go_server.lite }}
+{{ model = "&" + config.go_server.go_store_package + "." + lite + "{}" }}
+//接口类型
+//type {{ lite }} struct {
+	
+//}
+{{}}
+{{- server = config.go_server.server_name }}
+{{- for item in data }}
+{{- NoReturn = item.is_out_empty }}
+// {{ item.name }} {{ item.description }}
+func (g *{{ server }}) {{ item.name }}(ctx context.Context, request *{{ item.in_param }}) (*{{ item.out_param }}, error) {
+	model := {{ model }}
+	{{ item.store_out_param }} := model.{{ item.name }}({{ item.store_in_param }})
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+	{{- if NoReturn }}
+	return &emptypb.Empty{}, err
+	{{- else }}
+	result := &{{ item.out_param }}{}
+	err = mapper.MapStructToProto(data, result)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+	return result, err
+	{{- end }}	
+}
+{{}}
+{{- end  }}

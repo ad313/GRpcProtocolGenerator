@@ -37,7 +37,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"//{Config.ConfigInstance.Proto.PropertyDescriptionFunc(InterfaceMetaData)} {InterfaceMetaData.FullName}");
+            sb.AppendLine($"//{Config.ConfigInstance.Proto.PropertyDescriptionFunc(InterfaceMetaData)}");
             sb.AppendLine($"service {InterfaceMetaData.FormatServiceName()} " + "{");
 
             foreach (var item in Items)

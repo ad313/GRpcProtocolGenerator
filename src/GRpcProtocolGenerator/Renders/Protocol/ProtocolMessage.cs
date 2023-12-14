@@ -120,7 +120,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"//{Config.ConfigInstance.Proto.PropertyDescriptionFunc(ClassMetaData)} {ClassMetaData?.FullName ?? Name}");
+            sb.AppendLine($"//{Config.ConfigInstance.Proto.PropertyDescriptionFunc(ClassMetaData)}");
             sb.AppendLine($"message {GetGRpcName()} " + "{");
 
             var index = 1;
@@ -140,7 +140,32 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             return sb.ToString();
         }
 
-        public void GetOrSetGRpcServiceProtoPath(InterfaceMetaData interfaceMetaData, StringBuilder sb)
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public string ToGoDtoString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"// {GetGoStructName()} {Config.ConfigInstance.Proto.PropertyDescriptionFunc(ClassMetaData)}");
+            sb.AppendLine($"type {GetGoStructName()} " + "struct {");
+
+            var index = 1;
+            foreach (var item in Items)
+            {
+                item.SetIndex(index);
+
+                var text = item.ToGoStructString();
+                if (string.IsNullOrWhiteSpace(text))
+                    continue;
+
+                sb.AppendLine("\t" + text);
+                index++;
+            }
+
+            sb.AppendLine("}");
+            return sb.ToString();
+        }
+
+        public void GetOrSetGRpcServiceProtoPath(InterfaceMetaData interfaceMetaData, StringBuilder sb,StringBuilder goStructStringBuilder)
         {
             Imports = new List<string>();
             if (string.IsNullOrWhiteSpace(MessagePath))
@@ -151,7 +176,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                 {
                     foreach (var message in ClassDependency.OrderBy(d => d.Name))
                     {
-                        message.GetOrSetGRpcServiceProtoPath(interfaceMetaData, sb);
+                        message.GetOrSetGRpcServiceProtoPath(interfaceMetaData, sb, goStructStringBuilder);
                     }
 
                     Imports.AddRange(ClassDependency.Select(d => d.MessagePath));
@@ -160,7 +185,12 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                 Imports = Imports.Distinct().ToList();
 
                 if (IsCancellationToken == false)
+                {
                     sb.AppendLine(ToString());
+
+                    if (IsOriginalClass)
+                        goStructStringBuilder.AppendLine(ToGoDtoString());
+                }
             }
         }
 
@@ -176,6 +206,14 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             }
 
             return this.FormatMessageName();
+        }
+
+        public string GetGoStructName()
+        {
+            if (IsEmpty)
+                return Name;
+
+            return Name.FormatGoStructName();
         }
 
         public bool Equals(ProtocolMessage other)
@@ -233,6 +271,20 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             //GRpc json，属性小写，否则大写
             var name = Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? Name.ToFirstLowString() : Name;
             return BuilderPart.BuildMessageItem(name,
+                Type,
+                IsArray,
+                IsNullable,
+                Index,
+                Config.ConfigInstance.Proto.PropertyDescriptionFunc(CommentMetaData));
+        }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public string ToGoStructString()
+        {
+            //GRpc json，属性小写，否则大写
+            var name = Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? Name.ToFirstLowString() : Name;
+            return BuilderPart.BuildGoStructItem(name,
                 Type,
                 IsArray,
                 IsNullable,

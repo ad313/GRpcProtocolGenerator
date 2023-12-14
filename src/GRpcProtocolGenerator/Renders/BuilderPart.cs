@@ -212,5 +212,23 @@ namespace GRpcProtocolGenerator.Renders
         }
 
         #endregion
+
+        #region go dto struct
+
+        public static string BuildGoStructItem(string name, Type type, bool isArray, bool isNullable, int index, string desc)
+        {
+            if (type.IsCancellationToken())
+                return null;
+
+            var wrapper = type.ToTypeWrapper();
+
+            var typeString = wrapper.IsClass || wrapper.IsStruct ? ("*" + wrapper.Type.GetGenericClassName().FormatGoStructName()) : type.ToGoStructString(isNullable);
+
+            var json = $" `json:\"{name.ToSnakeString()}\" form:\"{name.ToSnakeString()}\"` ";
+
+            return $"{name}  {(isArray ? "[]" : "")}{typeString}" + json + $" // {desc}";
+        }
+
+        #endregion
     }
 }

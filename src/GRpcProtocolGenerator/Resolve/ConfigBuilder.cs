@@ -53,6 +53,28 @@ namespace GRpcProtocolGenerator.Resolve
             return this;
         }
 
+        public ConfigBuilder SetGoServerConfig(Action<GoServerConfig> serverConfigAction)
+        {
+            ArgumentNullException.ThrowIfNull(serverConfigAction, nameof(serverConfigAction));
+
+            Config.GoServer = new GoServerConfig(Config.CurrentPath);
+
+            serverConfigAction.Invoke(Config.GoServer);
+
+            return this;
+        }
+
+        public ConfigBuilder SetGoStructConfig(Action<GoStructConfig> serverConfigAction)
+        {
+            ArgumentNullException.ThrowIfNull(serverConfigAction, nameof(serverConfigAction));
+
+            Config.GoStruct = new GoStructConfig(Config.CurrentPath);
+
+            serverConfigAction.Invoke(Config.GoStruct);
+
+            return this;
+        }
+
         /// <summary>
         /// 配置json转码
         /// </summary>
@@ -82,6 +104,22 @@ namespace GRpcProtocolGenerator.Resolve
             Config.Controller = new ControllerConfig(Config.CurrentPath);
 
             controllerConfig.Invoke(Config.Controller);
+
+            return this;
+        }
+
+        /// <summary>
+        /// 生成控制器配置
+        /// </summary>
+        /// <param name="controllerConfig"></param>
+        /// <returns></returns>
+        public ConfigBuilder SetGoController(Action<GoControllerConfig> controllerConfig)
+        {
+            ArgumentNullException.ThrowIfNull(controllerConfig, nameof(controllerConfig));
+
+            Config.GoController = new GoControllerConfig(Config.CurrentPath);
+
+            controllerConfig.Invoke(Config.GoController);
 
             return this;
         }

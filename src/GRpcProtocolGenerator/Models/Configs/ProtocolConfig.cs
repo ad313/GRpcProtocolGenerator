@@ -113,7 +113,7 @@ namespace GRpcProtocolGenerator.Models.Configs
 
         #endregion
 
-        #region 命名空间
+        #region 命名空间 CSharp
 
         public string CSharpNamespace { get; set; }
 
@@ -122,6 +122,24 @@ namespace GRpcProtocolGenerator.Models.Configs
         public string GetCSharpNamespace(InterfaceMetaData meta)
         {
             return CSharpNamespaceFunc?.Invoke(meta) ?? CSharpNamespace;
+        }
+
+        public string GeGoLangPackage(InterfaceMetaData meta)
+        {
+            return GoLangPackageFunc?.Invoke(meta) ?? GoLangPackage;
+        }
+        
+        #endregion
+
+        #region 命名空间 Golang
+
+        public string GoLangPackage { get; set; }
+
+        public Func<InterfaceMetaData, string> GoLangPackageFunc { get; set; }
+
+        public string GetGoPackageName(InterfaceMetaData meta)
+        {
+            return GoLangPackageFunc?.Invoke(meta) ?? GoLangPackage;
         }
 
         #endregion

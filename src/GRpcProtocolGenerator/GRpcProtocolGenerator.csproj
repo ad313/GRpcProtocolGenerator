@@ -24,13 +24,21 @@
 	  <None Remove="Renders\Templates\Controller.AppSettings.txt" />
 	  <None Remove="Renders\Templates\Controller.Controller.txt" />
 	  <None Remove="Renders\Templates\Controller.csproj.txt" />
+	  <None Remove="Renders\Templates\Controller.GoController.txt" />
 	  <None Remove="Renders\Templates\Controller.Program.txt" />
 	  <None Remove="Renders\Templates\Controller.Swagger.txt" />
+	  <None Remove="Renders\Templates\go.server.txt" />
 	  <None Remove="Renders\Templates\Server.AppSettings.txt" />
 	  <None Remove="Renders\Templates\Ui.Enum.txt" />
 	  <None Remove="Renders\Templates\Ui.Model.txt" />
 	</ItemGroup>
 	<ItemGroup>
+		<EmbeddedResource Include="Renders\Templates\Controller.GoController.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Renders\Templates\go.server.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
 		<EmbeddedResource Include="Renders\Templates\Ui.Enum.txt">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</EmbeddedResource>

@@ -45,6 +45,14 @@ namespace GRpcProtocolGenerator
             await CreateBuilder().RenderAsync();
         }
 
+        public async Task GeneratorGoLangAsync()
+        {
+            if (!_isContinue)
+                return;
+
+            await CreateBuilder().RenderGoLangAsync();
+        }
+
         public Builder CreateBuilder()
         {
             return new Builder(AssemblyMetaData);
@@ -60,7 +68,10 @@ namespace GRpcProtocolGenerator
             _config.Check();
             _config.Proto.Check();
             _config.Server?.Check();
+            _config.GoServer?.Check();
+            _config.GoStruct?.Check();
             _config.Controller?.Check();
+            _config.GoController?.Check();
             _config.UiConfig?.Check();
 
             //获取当前作用域内所有程序集

@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace GRpcProtocolGenerator.Renders
 {
-    public static class BuilderName
+    public static partial class BuilderName
     {
         public static string FormatServiceName(this InterfaceMetaData meta)
         {
@@ -50,6 +50,13 @@ namespace GRpcProtocolGenerator.Renders
             ArgumentNullException.ThrowIfNull(name, nameof(name));
 
             return Config.ConfigInstance?.Proto?.OriginalClassNameFunc?.Invoke(name) ?? name;
+        }
+
+        public static string FormatGoStructName(this string name)
+        {
+            ArgumentNullException.ThrowIfNull(name, nameof(name));
+
+            return Config.ConfigInstance?.GoStruct?.StructNameFunc?.Invoke(name) ?? name;
         }
 
         public static string FormatGRpcClientName(this string name)
