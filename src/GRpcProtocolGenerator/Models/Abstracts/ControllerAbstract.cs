@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GRpcProtocolGenerator.Renders.Protocol;
 
 namespace GRpcProtocolGenerator.Models.Abstracts
@@ -42,6 +43,11 @@ namespace GRpcProtocolGenerator.Models.Abstracts
         /// api 版本
         /// </summary>
         public string Version { get; set; }
+
+        /// <summary>
+        /// 方法是否需要jwt验证
+        /// </summary>
+        public bool HasJwt => Items.Any(d => d.HasJwt);
 
         public List<ControllerItemAbstract> Items { get; set; }
     }
@@ -144,6 +150,11 @@ namespace GRpcProtocolGenerator.Models.Abstracts
         public string ReturnType { get; set; }
 
         /// <summary>
+        /// 原始返回参数类型
+        /// </summary>
+        public string OriginalReturnType { get; set; }
+
+        /// <summary>
         /// Return 为 1时，单个参数字段名称
         /// </summary>
         public string ReturnName { get; set; }
@@ -157,5 +168,10 @@ namespace GRpcProtocolGenerator.Models.Abstracts
         /// 是否有输入参数
         /// </summary>
         public bool HasInputParam { get; set; }
+
+        /// <summary>
+        /// 方法是否需要jwt验证
+        /// </summary>
+        public bool HasJwt { get; set; }
     }
 }

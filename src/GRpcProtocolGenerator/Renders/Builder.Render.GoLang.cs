@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using GRpcProtocolGenerator.Models.Abstracts;
 using GRpcProtocolGenerator.Types;
 using System.Text.RegularExpressions;
+using GRpcProtocolGenerator.Common.Attributes;
 
 namespace GRpcProtocolGenerator.Renders
 {
@@ -78,7 +79,7 @@ namespace GRpcProtocolGenerator.Renders
                 //proto
                 var protoContent = new ProtocolContent(service);
                 var content = protoContent.ToContent();
-                await BuilderPath.CreateFile(service.InterfaceMetaData.FormatServiceProtoFileName().Replace("_service", ""), content);
+                await BuilderPath.CreateFile(service.InterfaceMetaData.FormatServiceProtoFileName().Replace("_service", "") + ".g", content);
                 Console.WriteLine(service.InterfaceMetaData.FormatServiceProtoFileName());
                 Console.WriteLine(content);
 
@@ -106,7 +107,7 @@ namespace GRpcProtocolGenerator.Renders
                 
                 //dto
                 var dtoString = protoContent.ToGoStructContent();
-                await BuilderPath.CreateFileAsync(Config.ConfigInstance.GoStruct.OutputFullPath, $"{Config.ConfigInstance.GoServer.Lite.ToSnakeString()}.go", dtoString, true);
+                await BuilderPath.CreateFileAsync(Config.ConfigInstance.GoStruct.OutputFullPath, $"{Config.ConfigInstance.GoServer.Lite.ToSnakeString()}.g.go", dtoString, true);
 
                 //if (Config.ConfigInstance.HasServer)
                 //{
@@ -171,6 +172,9 @@ namespace GRpcProtocolGenerator.Renders
                         param.HasInputParam = true;
                     }
 
+                    //原始返回参数类型
+                    param.OriginalReturnType = Config.ConfigInstance.GoStruct.GetPackageName(null) + "." + item.OutParam.ClassMetaData?.Name.FormatGoStructName() ?? "";
+
                     if (outParam.Count > 0)
                     {
                         param.GRpcOutType = item.OutParam.IsOriginalClass ? Config.ConfigInstance.Proto.GetPackageName(null) + "." + item.OutParam.GetGRpcName() : null;
@@ -212,13 +216,15 @@ namespace GRpcProtocolGenerator.Renders
                         param.Return = 0;
                     }
 
+                    param.HasJwt = item.MethodMetaData.AttributeMetaDataList.All(d => d.Type != typeof(GRpcIgnoreJwtAttribute));
+
                     controller.Items.Add(param);
                     //pa.ReturnType = "emptypb.Empty";
                 }
 
                 //Controller
                 var controllerString = await ScribanHelper.Render(new { config = Config.ConfigInstance, data = controller }, "Controller.GoController");
-                await BuilderPath.CreateFileAsync(Config.ConfigInstance.GoController.OutputFullPath, $"{Config.ConfigInstance.GoServer.Lite.ToSnakeString()}.controller.go", controllerString, true);
+                await BuilderPath.CreateFileAsync(Config.ConfigInstance.GoController.OutputFullPath, $"{Config.ConfigInstance.GoServer.Lite.ToSnakeString()}.controller.g.go", controllerString, true);
             }
 
             //if (Config.ConfigInstance.HasServer)
