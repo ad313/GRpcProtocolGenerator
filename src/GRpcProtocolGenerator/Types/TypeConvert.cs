@@ -103,7 +103,7 @@ namespace GRpcProtocolGenerator.Types
                 case "byte":
                     return GoStructTypeEnum.Byte.GetDescription();
                 case "byte[]":
-                    return GoStructTypeEnum.ByteArray.GetDescription();
+                    return GoStructTypeEnum.String.GetDescription();
                 case "intptr":
                     return "int32";
                 default:

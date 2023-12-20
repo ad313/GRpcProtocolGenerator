@@ -52,6 +52,11 @@ namespace GRpcProtocolGenerator.Models.Configs
         public List<string> AppendPackageToCsproj { get; set; } = new List<string>();
 
         /// <summary>
+        /// go 引用包时执行顶级目录
+        /// </summary>
+        public string PackageImportBasePath { get; set; }
+
+        /// <summary>
         /// 初始化，传入宿主程序地址，不是bin地址
         /// </summary>
         /// <param name="currentPath">宿主程序地址，不是bin地址</param>
@@ -159,6 +164,15 @@ namespace GRpcProtocolGenerator.Models.Configs
         /// 服务名称
         /// </summary>
         public Func<InterfaceMetaData, string> ServiceNameFunc { get; set; }
+
+        #endregion
+
+        #region 文件名称
+
+        /// <summary>
+        /// 服务名称
+        /// </summary>
+        public Func<InterfaceMetaData, string> FileNameFunc { get; set; }
 
         #endregion
 

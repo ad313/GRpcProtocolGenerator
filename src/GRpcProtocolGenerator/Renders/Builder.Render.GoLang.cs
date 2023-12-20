@@ -79,7 +79,8 @@ namespace GRpcProtocolGenerator.Renders
                 //proto
                 var protoContent = new ProtocolContent(service);
                 var content = protoContent.ToContent();
-                await BuilderPath.CreateFile(service.InterfaceMetaData.FormatServiceProtoFileName().Replace("_service", "") + ".g", content);
+                //await BuilderPath.CreateFile(service.InterfaceMetaData.FormatServiceProtoFileName().Replace("_service", "") + ".g", content);
+                await BuilderPath.CreateFile(service.InterfaceMetaData.FormatServiceProtoFileName(), content);
                 Console.WriteLine(service.InterfaceMetaData.FormatServiceProtoFileName());
                 Console.WriteLine(content);
 
@@ -126,7 +127,8 @@ namespace GRpcProtocolGenerator.Renders
                     NamespaceOrPackage = Config.ConfigInstance.GoController.NamespaceOrPackage,
                     Dependency = Config.ConfigInstance.GoController.Dependency ?? new List<string>(),
                     Version = Config.ConfigInstance.GoController.Version,
-                    Items = new List<ControllerItemAbstract>()
+                    Items = new List<ControllerItemAbstract>(),
+                    HasEmpty = service.Items.Any(d => d.InParam.IsEmpty)
                 };
 
                 foreach (var item in service.Items)

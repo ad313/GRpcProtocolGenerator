@@ -8,6 +8,10 @@ import (
 	{{- if data.has_jwt }}
 	//"sailing.cn/v2/restful/jwt"
 	{{- end }}
+
+	{{- if data.has_empty }}
+	"google.golang.org/protobuf/types/known/emptypb"
+	{{- end }}
 )
 
 type {{ data.name }}Controller struct{}
@@ -60,7 +64,13 @@ func (x *{{ data.name }}Controller) {{ item.method_name }}(c *gin.Context) {
 
 {{- if hasDto }}
 	_request := &{{ item.dto_input_type }}{}
+	{{- if (item.http | string.downcase) == "get" }}
+	err = c.ShouldBindQuery(_request)
+	{{- else if item.has_input_param }}
 	err = c.ShouldBindJSON(_request)
+	{{- else }}
+	err = c.ShouldBind(_request)
+	{{- end }}	
 	if err != nil {
 		restful.Fail(c, err)
 		return
@@ -103,11 +113,7 @@ func (x *{{ data.name }}Controller) {{ item.method_name }}(c *gin.Context) {
 	{{- else }}
 	
 
-	 {{- if item.is_array }}
-	_result2 := make({{ item.original_return_type }}, 0)
-	  {{- else }}
-	_result2 := {{ item.original_return_type }}{}
-	  {{- end }}
+	 _result2 := {{ item.original_return_type }}{}
 
 	{{-}}
 	err = mapper.MapProtoToStruct(result, &_result2)

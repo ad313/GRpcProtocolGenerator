@@ -57,7 +57,11 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             }
 
             //谷歌数据包装器
-            DependencyList.Insert(0, new EmptyProtocolMessage().MessagePath);
+            if (ProtoService.Items.Any(d => d.InParam.IsEmpty || d.OutParam.IsEmpty))
+            {
+                DependencyList.Insert(0, new EmptyProtocolMessage().MessagePath);
+            }
+
             DependencyList.Insert(0, "google/protobuf/wrappers");
 
             // http api

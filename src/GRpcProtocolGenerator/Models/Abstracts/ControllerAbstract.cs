@@ -50,6 +50,11 @@ namespace GRpcProtocolGenerator.Models.Abstracts
         public bool HasJwt => Items.Any(d => d.HasJwt);
 
         public List<ControllerItemAbstract> Items { get; set; }
+
+        /// <summary>
+        /// 是否有空参数
+        /// </summary>
+        public bool HasEmpty { get; set; }
     }
 
     public class ControllerItemAbstract

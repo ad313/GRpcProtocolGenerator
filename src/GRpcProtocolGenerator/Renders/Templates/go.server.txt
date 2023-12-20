@@ -11,7 +11,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-// {{ config.go_server.description }}
+// {{ config.go_server.server_name }} {{ config.go_server.description }}
 type {{ config.go_server.server_name }} struct {
 	{{ config.go_server.proto_package_name }}.Unimplemented{{ config.go_server.service_server_name }}
 }

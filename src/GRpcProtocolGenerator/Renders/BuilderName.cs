@@ -18,14 +18,26 @@ namespace GRpcProtocolGenerator.Renders
 
         public static string FormatServiceProtoFileName(this InterfaceMetaData meta)
         {
-            return meta.FormatServiceName().ToSnakeString();
+            //return meta.FormatServiceName().ToSnakeString();
+            return Config.ConfigInstance.Proto.FileNameFunc?.Invoke(meta) ?? meta.FormatServiceName().ToSnakeString();
         }
+
+        //public static string FormatServiceProtoFileNameFullPath(this InterfaceMetaData meta)
+        //{
+        //    return Config.ConfigInstance.Proto.UseProtoDirectoryWhenImportPackage ?
+        //        $"{Config.ConfigInstance.Proto.ProtoDirectory}/{meta.FormatServiceName().ToSnakeString()}" :
+        //        $"{meta.FormatServiceName().ToSnakeString()}";
+        //}
 
         public static string FormatServiceProtoFileNameFullPath(this InterfaceMetaData meta)
         {
+            var basePath = string.IsNullOrWhiteSpace(Config.ConfigInstance.Proto.PackageImportBasePath)
+                ? ""
+                : $"{Config.ConfigInstance.Proto.PackageImportBasePath}/";
+
             return Config.ConfigInstance.Proto.UseProtoDirectoryWhenImportPackage ?
-                $"{Config.ConfigInstance.Proto.ProtoDirectory}/{meta.FormatServiceName().ToSnakeString()}" :
-                $"{meta.FormatServiceName().ToSnakeString()}";
+                $"{basePath}{Config.ConfigInstance.Proto.ProtoDirectory}/{meta.FormatServiceProtoFileName()}" :
+                $"{meta.FormatServiceProtoFileName()}";
         }
 
         public static string FormatServiceMethodName(this MethodMetaData method)
