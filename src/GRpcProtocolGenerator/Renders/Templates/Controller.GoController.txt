@@ -31,7 +31,7 @@ func add{{ data.name }}Router(router *gin.RouterGroup) {
 {{}}
 {{- for item in data.items }}
 // {{ item.method_name }} {{ item.description }}
-// @Summary  {{ item.description }}
+// @Summary  [{{ data.description }}-控制器] - {{ item.description }}
 // @Tags     {{ item.base_route==""?"":(item.base_route+"/") }}{{ data.name }}
 // 
 {{- if item.route_param != null }}

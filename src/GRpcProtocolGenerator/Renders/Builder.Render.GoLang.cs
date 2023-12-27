@@ -96,16 +96,16 @@ namespace GRpcProtocolGenerator.Renders
                 Config.ConfigInstance.GoServer.ProtoNamespace = Config.ConfigInstance.GoServer.ProtoNamespace.Replace($"/{last}", "");
 
                 var items = new List<GoGRpcServerIml>();
-                foreach (var serviceItem in service.Items)
+                foreach (var serviceItem in service.Items.OrderBy(d => d.Name))
                 {
                     var item = new GoGRpcServerIml(serviceItem);
                     items.Add(item);
                 }
 
                 //server
-                var str = await ScribanHelper.Render(new { config = Config.ConfigInstance, data = items }, "go.server");
+                var str = await ScribanHelper.Render(new { config = Config.ConfigInstance, data = items, empty = service.Items.Any(d => d.InParam.IsEmpty || d.OutParam.IsEmpty) }, "go.server");
                 await BuilderPath.CreateFileAsync(Config.ConfigInstance.GoServer.OutputFullPath, Config.ConfigInstance.GoServer.GetServerFileName(service.InterfaceMetaData), str, true);
-                
+
                 //dto
                 var dtoString = protoContent.ToGoStructContent();
                 await BuilderPath.CreateFileAsync(Config.ConfigInstance.GoStruct.OutputFullPath, $"{Config.ConfigInstance.GoServer.Lite.ToSnakeString()}.g.go", dtoString, true);
@@ -128,10 +128,10 @@ namespace GRpcProtocolGenerator.Renders
                     Dependency = Config.ConfigInstance.GoController.Dependency ?? new List<string>(),
                     Version = Config.ConfigInstance.GoController.Version,
                     Items = new List<ControllerItemAbstract>(),
-                    HasEmpty = service.Items.Any(d => d.InParam.IsEmpty)
+                    HasEmpty = service.Items.Where(d => d.MethodMetaData.AttributeMetaDataList.All(t => t.Type != typeof(GRpcNoActionAttribute))).Any(d => d.InParam.IsEmpty)
                 };
 
-                foreach (var item in service.Items)
+                foreach (var item in service.Items.Where(d => d.MethodMetaData.AttributeMetaDataList.All(t => t.Type != typeof(GRpcNoActionAttribute))).OrderBy(d => d.Name))
                 {
                     var inParam = item.MethodMetaData.InParamMetaDataListFilter();
                     var outParam = item.MethodMetaData.OutParamMetaDataList;
@@ -304,8 +304,8 @@ namespace GRpcProtocolGenerator.Renders
             //// 生成控制器
             //await RenderController();
 
-            //// 生成Ui
-            //await RenderUi();
+            // 生成Ui
+            await RenderUi();
 
             Console.WriteLine("生成完毕");
         }

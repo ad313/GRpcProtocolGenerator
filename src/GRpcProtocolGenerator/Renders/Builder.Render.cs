@@ -282,6 +282,11 @@ namespace GRpcProtocolGenerator.Renders
                 foreach (var prop in classMetaData.PropertyMetaDataList)
                 {
                     var itemName = prop.Name.ToFirstLowString();
+                    if (Config.ConfigInstance.UiConfig.IsNameSnake)
+                    {
+                        itemName = itemName.ToSnakeString();
+                    }
+
                     if (prop.TypeWrapper.IsNullable)
                         itemName += "?";
 

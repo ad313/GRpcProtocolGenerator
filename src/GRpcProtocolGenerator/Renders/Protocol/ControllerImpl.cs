@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GRpcProtocolGenerator.Common.Attributes;
 
 namespace GRpcProtocolGenerator.Renders.Protocol
 {
@@ -15,7 +16,8 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
             Items = protocolService.Items
                 .Where(d => d.HttpOption != null)
-                .Select(d => new ControllerImplItem(d)).ToList();
+                .Where(d => d.MethodMetaData.AttributeMetaDataList.All(t => t.Type != typeof(GRpcNoActionAttribute)))
+                .Select(d => new ControllerImplItem(d)).OrderBy(d => d.Name).ToList();
 
             //如果以 Service 结尾，则去掉 Service
             Name = protocolService.InterfaceMetaData.Name.TrimStart('I').TrimLastString("Service") + "Controller";

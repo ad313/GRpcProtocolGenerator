@@ -5,22 +5,33 @@ package Server
 import (
 	"context"
 	log "github.com/sirupsen/logrus"
-	"sailing.cn/protobuf/core"
 	"sailing.cn/protobuf/assets"
 	"service.cn/assets/store111"
 	"sailing.cn/v2/mapper"
-	"google.golang.org/protobuf/types/known/emptypb"
+	"google.golang.org/protobuf/types/known/emptypb"	
 )
 
-// IServiceTest2
+// Test2Server IServiceTest2
 type Test2Server struct {
 	assets.UnimplementedTest2ServiceServer
 }
 
-//接口类型
-//type Test2 struct {
-	
-//}
+// GetById 获取单个
+func (g *Test2Server) GetById(ctx context.Context, request *assets.Test2Service_GetByIdAsync_Request) (*assets.GRpcSampleClass, error) {
+	model := &store.Test2{}
+	data, err := model.GetById(ctx, request)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+	result := &assets.GRpcSampleClass{}
+	err = mapper.MapStructToProto(data, result)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+	return result, err	
+}
 
 // Test1 Test1
 func (g *Test2Server) Test1(ctx context.Context, request *emptypb.Empty) (*emptypb.Empty, error) {
@@ -53,23 +64,6 @@ func (g *Test2Server) Test2_2(ctx context.Context, request *assets.Test2Service_
 		return nil, err
 	}
 	return &emptypb.Empty{}, err	
-}
-
-// GetById 获取单个
-func (g *Test2Server) GetById(ctx context.Context, request *assets.Test2Service_GetByIdAsync_Request) (*assets.GRpcSampleClass, error) {
-	model := &store.Test2{}
-	data, err := model.GetById(ctx, request)
-	if err != nil {
-		log.Error(err)
-		return nil, err
-	}
-	result := &assets.GRpcSampleClass{}
-	err = mapper.MapStructToProto(data, result)
-	if err != nil {
-		log.Error(err)
-		return nil, err
-	}
-	return result, err	
 }
 
 // Test4 查询列表

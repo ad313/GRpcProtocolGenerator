@@ -5,22 +5,16 @@ package Server
 import (
 	"context"
 	log "github.com/sirupsen/logrus"
-	"sailing.cn/protobuf/core"
 	"sailing.cn/protobuf/assets"
 	"service.cn/assets/store111"
 	"sailing.cn/v2/mapper"
-	"google.golang.org/protobuf/types/known/emptypb"
+	"google.golang.org/protobuf/types/known/emptypb"	
 )
 
-// go 接口
+// GoServer go 接口
 type GoServer struct {
 	assets.UnimplementedGoServiceServer
 }
-
-//接口类型
-//type Go struct {
-	
-//}
 
 // Test1 备注哈哈哈哈
 func (g *GoServer) Test1(ctx context.Context, request *emptypb.Empty) (*emptypb.Empty, error) {

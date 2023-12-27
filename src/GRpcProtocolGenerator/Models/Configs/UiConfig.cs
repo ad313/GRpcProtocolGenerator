@@ -29,6 +29,11 @@ namespace GRpcProtocolGenerator.Models.Configs
         public string TsModelFileDirectory { get; set; }
 
         /// <summary>
+        /// 是否名称转成蛇形
+        /// </summary>
+        public bool IsNameSnake { get; set; }
+
+        /// <summary>
         /// 初始化，传入宿主程序地址，不是bin地址
         /// </summary>
         /// <param name="currentPath">宿主程序地址，不是bin地址</param>

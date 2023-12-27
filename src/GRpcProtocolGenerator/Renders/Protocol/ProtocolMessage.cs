@@ -165,7 +165,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             return sb.ToString();
         }
 
-        public void GetOrSetGRpcServiceProtoPath(InterfaceMetaData interfaceMetaData, StringBuilder sb,StringBuilder goStructStringBuilder)
+        public void GetOrSetGRpcServiceProtoPath(InterfaceMetaData interfaceMetaData, StringBuilder sb, StringBuilder goStructStringBuilder)
         {
             Imports = new List<string>();
             if (string.IsNullOrWhiteSpace(MessagePath))

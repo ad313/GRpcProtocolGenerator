@@ -209,7 +209,7 @@ namespace GRpcProtocolGenerator.Resolve
             if (methodInfos == null || methodInfos.Count == 0)
                 return new List<MethodMetaData>();
 
-            return methodInfos.Select(ToMethodMetaData).Where(d => d != null).ToList();
+            return methodInfos.Select(ToMethodMetaData).Where(d => d != null).OrderBy(d => d.Name).ToList();
         }
 
         private MethodMetaData ToMethodMetaData(MethodInfo methodInfo)

@@ -9,7 +9,7 @@ export class GRpcSampleClass {
     floatColumn : number; // FloatColumn  
     uintColumn : number; // UintColumn  
     ulongColumn : number; // UlongColumn  
-    stringColumn? : string; // StringColumn  
+    stringColumn : string; // StringColumn  
     boolColumn : boolean; // BoolColumn  
     dateTimeColumn : Date; // DateTimeColumn  
     byteColumn : number; // ByteColumn  

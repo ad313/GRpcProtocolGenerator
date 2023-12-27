@@ -8,7 +8,9 @@ import (
 	"{{ config.go_server.proto_namespace }}/{{ config.go_server.proto_package_name }}"
 	"{{ config.go_server.go_store_package_path }}"
 	"sailing.cn/v2/mapper"
+	{{- if empty }}
 	"google.golang.org/protobuf/types/known/emptypb"
+	{{- end }}	
 )
 
 // {{ config.go_server.server_name }} {{ config.go_server.description }}
@@ -18,11 +20,7 @@ type {{ config.go_server.server_name }} struct {
 
 {{- lite = config.go_server.lite }}
 {{ model = "&" + config.go_server.go_store_package + "." + lite + "{}" }}
-//接口类型
-//type {{ lite }} struct {
-	
-//}
-{{}}
+
 {{- server = config.go_server.server_name }}
 {{- for item in data }}
 {{- NoReturn = item.is_out_empty }}

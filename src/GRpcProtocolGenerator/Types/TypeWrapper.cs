@@ -294,16 +294,16 @@ namespace GRpcProtocolGenerator.Types
         /// <returns></returns>
         public bool SetNullable(List<Type> types)
         {
+            //Required 不为空
+            if (types?.Any(d => d == typeof(RequiredAttribute)) == true)
+                IsNullable = false;
+
             if (Type == typeof(string))
                 return IsNullable;
 
             //byte[] 默认可为空
             if (IsByteArray)
                 IsNullable = true;
-
-            //Required 不为空
-            if (types?.Any(d => d == typeof(RequiredAttribute)) == true)
-                IsNullable = false;
 
             //有些读取不到 NullableAttribute
             //if (types?.Any(d => d.FullName.Equals("System.Runtime.CompilerServices.NullableAttribute", StringComparison.OrdinalIgnoreCase)) == true)

@@ -40,7 +40,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             sb.AppendLine($"//{Config.ConfigInstance.Proto.PropertyDescriptionFunc(InterfaceMetaData)}");
             sb.AppendLine($"service {InterfaceMetaData.FormatServiceName()} " + "{");
 
-            foreach (var item in Items)
+            foreach (var item in Items.OrderBy(d => d.Name))
             {
                 sb.AppendLine("\t" + item.ToString());
             }
