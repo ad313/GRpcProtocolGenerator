@@ -95,6 +95,11 @@ namespace GRpcProtocolGenerator.Models.Abstracts
         public string RouteParamUpper { get; set; }
 
         /// <summary>
+        /// 路由参数对应的模型字段是否可为空
+        /// </summary>
+        public bool RouteParamNullable { get; set; }
+
+        /// <summary>
         /// HttpMethod
         /// </summary>
         public HttpMethod? HttpMethod { get; set; }

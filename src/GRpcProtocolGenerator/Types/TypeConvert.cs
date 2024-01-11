@@ -71,41 +71,42 @@ namespace GRpcProtocolGenerator.Types
 
         public static string ConvertToGoStruct(Type type, bool isNullable)
         {
-            isNullable = false;
+            //isNullable = false;
+            var sp = "";
             switch (type.Name.ToLower())
             {
                 case "object":
                 case "guid":
                 case "string":
-                    return GoStructTypeEnum.String.GetDescription();
+                    return (isNullable ? sp : "") + GoStructTypeEnum.String.GetDescription();
                     break;
                 case "decimal":
                 case "double":
-                    return GoStructTypeEnum.Double.GetDescription();
+                    return (isNullable ? sp : "") + GoStructTypeEnum.Double.GetDescription();
                 case "float":
                 case "single":
-                    return GoStructTypeEnum.Float.GetDescription();
+                    return (isNullable ? sp : "") + GoStructTypeEnum.Float.GetDescription();
                 case "int32":
-                    return GoStructTypeEnum.Int.GetDescription();
+                    return (isNullable ? sp : "") + GoStructTypeEnum.Int.GetDescription();
                 case "long":
                 case "int64":
                 case "datetime":
-                    return GoStructTypeEnum.Long.GetDescription();
+                    return (isNullable ? sp : "") + GoStructTypeEnum.Long.GetDescription();
                     break;
                 case "uint32":
-                    return GoStructTypeEnum.UInt.GetDescription();
+                    return (isNullable ? sp : "") + GoStructTypeEnum.UInt.GetDescription();
                 case "ulong":
                 case "uint64":
-                    return GoStructTypeEnum.ULong.GetDescription();
+                    return (isNullable ? sp : "") + GoStructTypeEnum.ULong.GetDescription();
                     break;
                 case "boolean":
-                    return GoStructTypeEnum.Bool.GetDescription();
+                    return (isNullable ? sp : "") + GoStructTypeEnum.Bool.GetDescription();
                 case "byte":
-                    return GoStructTypeEnum.Byte.GetDescription();
+                    return (isNullable ? sp : "") + GoStructTypeEnum.Byte.GetDescription();
                 case "byte[]":
                     return GoStructTypeEnum.String.GetDescription();
                 case "intptr":
-                    return "int32";
+                    return (isNullable ? sp : "") + "int32";
                 default:
                     throw new NotSupportedException(type.Name.ToLower());
             }

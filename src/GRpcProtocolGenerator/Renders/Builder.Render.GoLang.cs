@@ -140,7 +140,7 @@ namespace GRpcProtocolGenerator.Renders
                     {
                         MethodName = item.Name,
                         BaseRoute = Config.ConfigInstance.GoController.Route,
-                        Route = item.HttpOption?.Route.TrimStart('/') ?? "",
+                        Route = item.HttpOption?.Route.TrimStart('/') ?? "", 
                         HttpMethod = item.HttpOption?.HttpMethod,
                         Http = item.HttpOption?.HttpMethod.ToString().ToUpper(),
                         Description = FilterFunctions.GetMethodDescription(item),
@@ -154,6 +154,16 @@ namespace GRpcProtocolGenerator.Renders
                     {
                         param.RouteParam = param.Route.Split('{')[1].Split('}')[0];
                         param.RouteParamUpper = param.RouteParam?.ToFirstUpString();
+
+                        //判断路由参数对应的模型字段是否可为空
+                        if (!string.IsNullOrEmpty(param.RouteParamUpper))
+                        {
+                            var column = item.InParam?.ClassMetaData?.PropertyMetaDataList.FirstOrDefault(d => d.Name == param.RouteParamUpper);
+                            if (column != null)
+                            {
+                                param.RouteParamNullable = column.TypeWrapper.IsNullable;
+                            }
+                        }
                     }
 
                     param.Route = Regex.Replace(param.Route, "\\{", ":").Replace("}", "");

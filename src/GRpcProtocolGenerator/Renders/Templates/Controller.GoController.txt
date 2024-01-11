@@ -14,6 +14,7 @@ import (
 	{{- end }}
 )
 
+// {{ data.name }}Controller {{ data.description }}
 type {{ data.name }}Controller struct{}
 
 // 路由配置
@@ -21,10 +22,11 @@ func add{{ data.name }}Router(router *gin.RouterGroup) {
 	api := new({{ data.name }}Controller)
 	router = router.Group("/{{ data.name }}")
 	{{- for item in data.items }}
+	{{- route = item.route == ""?"":("/"+item.route) }}
 	{{- if item.has_jwt }}
-	router.{{ item.http }}("/{{ item.route }}", common.CustomAuth, api.{{ item.method_name }})
+	router.{{ item.http }}("{{ route }}", common.CustomAuth, api.{{ item.method_name }})
 	{{- else }}
-	router.{{ item.http }}("/{{ item.route }}", api.{{ item.method_name }})
+	router.{{ item.http }}("{{ route }}", api.{{ item.method_name }})
 	{{- end }}	
 	{{- end }}
 }
@@ -42,7 +44,7 @@ func add{{ data.name }}Router(router *gin.RouterGroup) {
 {{- end }}
 //	@success	200	{object}	restful.JSONResult{data={{ item.return == 0 ? "emptypb.Empty": item.return_type | string.replace "*" ""}}}	"返回结果"
 //
-// @Router   /{{ data.version }}/{{ item.base_route==""?"":(item.base_route+"/") }}{{ data.name }}/{{ item.original_route }} [{{ item.http | string.downcase }}]
+// @Router   /{{ data.version }}/{{ item.base_route==""?"":(item.base_route+"/") }}{{ data.name }}{{ item.original_route==""?"":"/" }}{{ item.original_route }} [{{ item.http | string.downcase }}]
 func (x *{{ data.name }}Controller) {{ item.method_name }}(c *gin.Context) {
 {{- hasId = false }}
 {{- hasDto = false }}
@@ -78,7 +80,7 @@ func (x *{{ data.name }}Controller) {{ item.method_name }}(c *gin.Context) {
 {{- end }}
 
 {{- if hasId && hasDto }}
-	_request.{{ item.route_param_upper }} = {{ item.route_param }}
+	_request.{{ item.route_param_upper }} = {{ item.route_param_nullable?"":"" }}{{ item.route_param }}
 {{- end }}
 {{## dot to proto ##}}
 {{- if hasDto }}
