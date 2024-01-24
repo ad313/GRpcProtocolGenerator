@@ -118,7 +118,12 @@ namespace GRpcProtocolGenerator.Renders
                 //    Console.WriteLine(serverContent);
                 //}
 
+                //没有方法，则跳过
+                var methods = service.Items.Where(d =>
+                    d.MethodMetaData.AttributeMetaDataList.All(t => t.Type != typeof(GRpcNoActionAttribute))).ToList();
 
+                if (!methods.Any())
+                    continue;
 
                 var controller = new ControllerAbstract()
                 {
@@ -131,7 +136,7 @@ namespace GRpcProtocolGenerator.Renders
                     HasEmpty = service.Items.Where(d => d.MethodMetaData.AttributeMetaDataList.All(t => t.Type != typeof(GRpcNoActionAttribute))).Any(d => d.InParam.IsEmpty)
                 };
 
-                foreach (var item in service.Items.Where(d => d.MethodMetaData.AttributeMetaDataList.All(t => t.Type != typeof(GRpcNoActionAttribute))).OrderBy(d => d.Name))
+                foreach (var item in methods.OrderBy(d => d.Name))
                 {
                     var inParam = item.MethodMetaData.InParamMetaDataListFilter();
                     var outParam = item.MethodMetaData.OutParamMetaDataList;

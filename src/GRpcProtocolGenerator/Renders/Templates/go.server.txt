@@ -6,8 +6,7 @@ import (
 	"context"
 	log "github.com/sirupsen/logrus"
 	"{{ config.go_server.proto_namespace }}/{{ config.go_server.proto_package_name }}"
-	"{{ config.go_server.go_store_package_path }}"
-	"sailing.cn/v2/mapper"
+	"{{ config.go_server.go_store_package_path }}"	
 	{{- if empty }}
 	"google.golang.org/protobuf/types/known/emptypb"
 	{{- end }}	
@@ -33,15 +32,9 @@ func (g *{{ server }}) {{ item.name }}(ctx context.Context, request *{{ item.in_
 		return nil, err
 	}
 	{{- if NoReturn }}
-	return &emptypb.Empty{}, err
+	return &emptypb.Empty{}, nil
 	{{- else }}
-	result := &{{ item.out_param }}{}
-	err = mapper.MapStructToProto(data, result)
-	if err != nil {
-		log.Error(err)
-		return nil, err
-	}
-	return result, err
+	return data, nil
 	{{- end }}	
 }
 {{}}

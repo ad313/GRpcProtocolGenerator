@@ -33,8 +33,8 @@ func add{{ data.name }}Router(router *gin.RouterGroup) {
 {{}}
 {{- for item in data.items }}
 // {{ item.method_name }} {{ item.description }}
-// @Summary  [{{ data.description }}-控制器] - {{ item.description }}
-// @Tags     {{ item.base_route==""?"":(item.base_route+"/") }}{{ data.name }}
+// @Summary  {{ item.description }}
+// @Tags     {{ item.base_route==""?"":(item.base_route+"/") }}{{ data.name }} {{ data.description }}
 // 
 {{- if item.route_param != null }}
 //	@Param		{{ item.route_param }}		path		string							true	"输入参数"
