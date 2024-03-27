@@ -224,7 +224,10 @@ namespace GRpcProtocolGenerator.Renders
 
             var typeString = wrapper.IsClass || wrapper.IsStruct ? ("*" + wrapper.Type.GetGenericClassName().FormatGoStructName()) : type.ToGoStructString(isNullable);
 
-            var json = $" `json:\"{name.ToSnakeString()}\" form:\"{name.ToSnakeString()}\"` ";
+            //暂时移除 omitempty
+            var json = wrapper.IsClass || wrapper.IsStruct
+                ? $" `json:\"{name.ToSnakeString()}\" form:\"{name.ToSnakeString()}\"` "
+                : $" `json:\"{name.ToSnakeString()}\" form:\"{name.ToSnakeString()}\"` ";
 
             return $"{name}  {(isArray ? "[]" : "")}{typeString}" + json + $" // {desc}";
         }

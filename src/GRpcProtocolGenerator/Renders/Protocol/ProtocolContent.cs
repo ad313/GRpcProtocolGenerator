@@ -63,6 +63,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             }
 
             DependencyList.Insert(0, "google/protobuf/wrappers");
+            DependencyList.Insert(0, "google/protobuf/any");
 
             // http api
             if (Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding)

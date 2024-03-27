@@ -76,6 +76,7 @@ namespace GRpcProtocolGenerator.Types
             switch (type.Name.ToLower())
             {
                 case "object":
+                    return (isNullable ? sp : "") + GoStructTypeEnum.Any.GetDescription();
                 case "guid":
                 case "string":
                     return (isNullable ? sp : "") + GoStructTypeEnum.String.GetDescription();
@@ -228,7 +229,12 @@ namespace GRpcProtocolGenerator.Types
         /// ByteString 
         /// </summary>
         [Description("[]byte")]
-        ByteArray = 8,
+        ByteArray = 9,
+        /// <summary>
+        /// ByteString 
+        /// </summary>
+        [Description("any")]
+        Any = 10,
     }
 
     public enum CSharpNullableTypeEnum
