@@ -57,6 +57,16 @@ namespace GRpcProtocolGenerator.Models.Configs
         public int Port { get; set; } = 6011;
 
         /// <summary>
+        /// dto 名称
+        /// </summary>
+        public Func<string, string> DtoNameFunc { get; set; }
+
+        /// <summary>
+        /// dto存放文件夹
+        /// </summary>
+        public string DtoDirectory { get; set; } = "Models";
+
+        /// <summary>
         /// swagger
         /// </summary>
         public SwaggerConfig Swagger { get; set; } = new SwaggerConfig();
@@ -97,7 +107,13 @@ namespace GRpcProtocolGenerator.Models.Configs
             var path = Path.Combine(OutputFullPath, ControllerDirectory ?? "");
             return Path.GetFullPath(path);
         }
-        
+
+        public string GetDtoOutputPath()
+        {
+            var path = Path.Combine(OutputFullPath, DtoDirectory ?? "");
+            return Path.GetFullPath(path);
+        }
+
         #region 命名空间
 
         //public Func<InterfaceMetaData, string> NamespaceFunc { get; set; }
@@ -120,6 +136,11 @@ namespace GRpcProtocolGenerator.Models.Configs
         public string GetControllerNamespace()
         {
             return $"{ProjectName}.{ControllerDirectory.Replace("//",".").Replace("\\", ".")}";
+        }
+
+        public string GetDtoNamespace()
+        {
+            return ProjectName + "." + (DtoDirectory ?? "");
         }
 
         #endregion

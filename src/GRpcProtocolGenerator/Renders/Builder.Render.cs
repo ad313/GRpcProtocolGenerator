@@ -40,6 +40,10 @@ namespace GRpcProtocolGenerator.Renders
                     await BuilderPath.CreateServerFile(server.ServerName.ToSnakeString(), serverContent);
                     Console.WriteLine(serverContent);
                 }
+
+                //dto
+                var dtoString = protoContent.ToCSharpDtoContent();
+                await BuilderPath.CreateFileAsync(Config.ConfigInstance.Controller.GetDtoOutputPath(), $"{service.Name.TrimStart('I').TrimLastString("Service")}Model.cs", dtoString, true);
             }
 
             if (Config.ConfigInstance.HasServer)

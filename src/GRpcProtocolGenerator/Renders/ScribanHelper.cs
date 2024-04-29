@@ -57,6 +57,13 @@ namespace GRpcProtocolGenerator.Renders
                 : item.InParam.GetGRpcName();
         }
 
+        public static string GetDtoTypeString(ProtoServiceItem item)
+        {
+            return item.MethodMetaData.InParamMetaDataListFilter().Count == 0
+                ? "Empty"
+                : item.InParam.GetDtoName();
+        }
+
         public static string GetMethodDescription(ProtoServiceItem item)
         {
             return Config.ConfigInstance.Proto.PropertyDescriptionFunc(item.MethodMetaData);

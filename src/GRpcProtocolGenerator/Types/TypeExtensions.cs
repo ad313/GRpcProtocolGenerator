@@ -225,6 +225,11 @@ namespace GRpcProtocolGenerator.Types
         {
             return TypeConvert.ConvertToGoStruct(type, isNullable);
         }
+
+        public static string ToCSharpDtoString(this Type type, bool isNullable)
+        {
+            return TypeConvert.ConvertToCSharpDto(type, isNullable);
+        }
     }
 
     /// <summary>

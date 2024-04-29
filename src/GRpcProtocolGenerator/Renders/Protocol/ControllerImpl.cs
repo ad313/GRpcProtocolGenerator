@@ -96,6 +96,9 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                         //判断枚举
                         var type = prop.EnumMetaData != null ? typeof(int).FullName : prop.TypeWrapper.Type.FullName;
 
+                        if (prop.TypeWrapper.Type == typeof(object))
+                            type = "string";
+
                         //判断可为空
                         if (prop.TypeWrapper.IsNullable) type += "?";
 
@@ -123,7 +126,12 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                 //特殊处理单个参数，且是 class
                 if (inParamList.Count == 1 && inParamList.First().ClassMetaData != null)
                 {
-                    ClientInputType = "clientInput";
+                    //ClientInputType = "clientInput";
+
+                    //修改为dto名称
+                    InputType = $"{ParamFlag} {FilterFunctions.GetDtoTypeString(Item)} clientInput, ";
+                    var clientNeedTypeName = FilterFunctions.GetMethodInString(Item);
+                    ClientInputType = $"clientInput.Adapt<{clientNeedTypeName}>()";
                 }
                 else
                 {
@@ -229,6 +237,11 @@ namespace GRpcProtocolGenerator.Renders.Protocol
         /// 方法注释
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// 忽略jwt验证
+        /// </summary>
+        public bool IgnoreJwt => Item.MethodMetaData.AttributeMetaDataList.Any(d => d.Type == typeof(GRpcIgnoreJwtAttribute));
 
         /// <summary>
         /// 方法输入参数

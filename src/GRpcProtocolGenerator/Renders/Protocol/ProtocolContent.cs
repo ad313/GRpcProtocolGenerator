@@ -19,6 +19,8 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
         private readonly StringBuilder _goStructStringBuilder;
 
+        private readonly StringBuilder _cSharpDtoStringBuilder;
+
         public string CSharpNamespace { get; set; }
 
         public string GoLangPackage { get; set; }
@@ -48,9 +50,10 @@ namespace GRpcProtocolGenerator.Renders.Protocol
 
             _sbContent = new StringBuilder();
             _goStructStringBuilder = new StringBuilder();
+            _cSharpDtoStringBuilder = new StringBuilder();
             foreach (var message in ProtoMessageList)
             {
-                message.GetOrSetGRpcServiceProtoPath(ProtoService.InterfaceMetaData, _sbContent, _goStructStringBuilder);
+                message.GetOrSetGRpcServiceProtoPath(ProtoService.InterfaceMetaData, _sbContent, _goStructStringBuilder, _cSharpDtoStringBuilder);
 
                 DependencyList.AddRange(message.Imports);
                 DependencyList.Add(message.MessagePath);
@@ -107,6 +110,26 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             _goStructStringBuilder.Append(str);
 
             return _goStructStringBuilder.ToString();
+        }
+
+        public string ToCSharpDtoContent()
+        {
+            var str = _cSharpDtoStringBuilder.ToString();
+            _cSharpDtoStringBuilder.Clear();
+
+            //_cSharpDtoStringBuilder.AppendLine($"package {Config.ConfigInstance.GoStruct.GetPackageName(ProtoService.InterfaceMetaData)}");
+
+            _cSharpDtoStringBuilder.AppendLine("/*");
+            _cSharpDtoStringBuilder.AppendLine("     此代码是自动生成，请勿修改，如果要修改，请继承它再重写方法。");
+            _cSharpDtoStringBuilder.AppendLine("*/");
+            _cSharpDtoStringBuilder.AppendLine("");
+
+            _cSharpDtoStringBuilder.AppendLine($"namespace {Config.ConfigInstance.Controller.GetDtoNamespace()};");
+
+            _cSharpDtoStringBuilder.AppendLine();
+            _cSharpDtoStringBuilder.Append(str);
+
+            return _cSharpDtoStringBuilder.ToString();
         }
 
         public string ToEnumContent()

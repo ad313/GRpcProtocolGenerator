@@ -3,7 +3,6 @@ using GRpcProtocolGenerator.Models.MetaData;
 using GRpcProtocolGenerator.Renders.Protocol;
 using System;
 using System.Text;
-using System.Xml.Linq;
 
 namespace GRpcProtocolGenerator.Renders
 {
@@ -69,6 +68,13 @@ namespace GRpcProtocolGenerator.Renders
             ArgumentNullException.ThrowIfNull(name, nameof(name));
 
             return Config.ConfigInstance?.GoStruct?.StructNameFunc?.Invoke(name) ?? name;
+        }
+
+        public static string FormatCSharpDtoName(this string name)
+        {
+            ArgumentNullException.ThrowIfNull(name, nameof(name));
+
+            return Config.ConfigInstance?.Controller?.DtoNameFunc?.Invoke(name) ?? name;
         }
 
         public static string FormatGRpcClientName(this string name)

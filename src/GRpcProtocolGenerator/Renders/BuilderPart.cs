@@ -233,5 +233,30 @@ namespace GRpcProtocolGenerator.Renders
         }
 
         #endregion
+
+        #region CSharp dto struct
+
+        public static string BuildCSharpDtoItem(string name, Type type, bool isArray, bool isNullable, int index, string desc)
+        {
+            if (type.IsCancellationToken())
+                return null;
+
+            var wrapper = type.ToTypeWrapper();
+
+            var typeString = wrapper.IsClass || wrapper.IsStruct ? (wrapper.Type.GetGenericClassName().FormatCSharpDtoName()) : type.ToCSharpDtoString(isNullable);
+
+            if (isArray)
+            {
+                typeString = $"List<{typeString}>";
+            }
+
+            //var str = "///" + Environment.NewLine;
+            //str += "   /// " + desc + Environment.NewLine;
+            //str += "   ///" + Environment.NewLine;
+
+            return $"   public {typeString} " + name + "{ get; set; }" + (string.IsNullOrWhiteSpace(desc) ? "" : " //" + desc);
+        }
+
+        #endregion
     }
 }

@@ -8,8 +8,10 @@ using Swashbuckle.AspNetCore.Annotations;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Mapster;
 using {{ data.proto_namespace }};
 using {{ config.proto.project_name }}.{{ config.proto.clients_directory }};
+using {{ config.controller.project_name }}.{{ config.controller.dto_directory }};
 
 namespace {{ data.name_space }}
 {
@@ -45,6 +47,9 @@ namespace {{ data.name_space }}
         {{- if item.return_type != "Empty" }}
         [SwaggerResponse(200, "响应结果", typeof({{ item.return_type }}))]
         {{- end }}        
+        {{- if item.ignore_jwt }}
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+        {{- end }}
         public virtual async Task<IActionResult> {{ item.name }}({{ item.input_type }}CancellationToken cancellationToken = default)
         {
             var result = await _client.{{ item.client_method_name }}({{ item.client_input_type }}, cancellationToken: cancellationToken);

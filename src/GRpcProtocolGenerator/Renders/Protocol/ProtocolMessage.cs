@@ -165,7 +165,33 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             return sb.ToString();
         }
 
-        public void GetOrSetGRpcServiceProtoPath(InterfaceMetaData interfaceMetaData, StringBuilder sb, StringBuilder goStructStringBuilder)
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public string ToCSharpDtoString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"// {Name} {Config.ConfigInstance.Proto.PropertyDescriptionFunc(ClassMetaData)}");
+            sb.AppendLine($"public partial class {Name.FormatCSharpDtoName()}" + " {");
+
+            var index = 1;
+            foreach (var item in Items)
+            {
+                item.SetIndex(index);
+
+                var text = item.ToCSharpDtoString();
+                if (string.IsNullOrWhiteSpace(text))
+                    continue;
+
+                sb.AppendLine("\t" + text);
+                index++;
+            }
+
+            sb.AppendLine("}");
+            sb.AppendLine();
+            return sb.ToString();
+        }
+
+        public void GetOrSetGRpcServiceProtoPath(InterfaceMetaData interfaceMetaData, StringBuilder sb, StringBuilder goStructStringBuilder, StringBuilder cSharpDtoStringBuilder)
         {
             Imports = new List<string>();
             if (string.IsNullOrWhiteSpace(MessagePath))
@@ -176,7 +202,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                 {
                     foreach (var message in ClassDependency.OrderBy(d => d.Name))
                     {
-                        message.GetOrSetGRpcServiceProtoPath(interfaceMetaData, sb, goStructStringBuilder);
+                        message.GetOrSetGRpcServiceProtoPath(interfaceMetaData, sb, goStructStringBuilder, cSharpDtoStringBuilder);
                     }
 
                     Imports.AddRange(ClassDependency.Select(d => d.MessagePath));
@@ -189,7 +215,10 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                     sb.AppendLine(ToString());
 
                     if (IsOriginalClass)
+                    {
                         goStructStringBuilder.AppendLine(ToGoDtoString());
+                        cSharpDtoStringBuilder.Append(ToCSharpDtoString());
+                    }
                 }
             }
         }
@@ -206,6 +235,20 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             }
 
             return this.FormatMessageName();
+        }
+
+        public string GetDtoName()
+        {
+            if (IsEmpty)
+                return Name;
+
+            if (IsCancellationToken)
+            {
+                IsEmpty = true;
+                return "google.protobuf.Empty";
+            }
+
+            return this.Name.FormatCSharpDtoName();
         }
 
         public string GetGoStructName()
@@ -285,6 +328,18 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             //GRpc json，属性小写，否则大写
             var name = Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? Name.ToFirstLowString() : Name;
             return BuilderPart.BuildGoStructItem(name,
+                Type,
+                IsArray,
+                IsNullable,
+                Index,
+                Config.ConfigInstance.Proto.PropertyDescriptionFunc(CommentMetaData));
+        }
+
+        public string ToCSharpDtoString()
+        {
+            //GRpc json，属性小写，否则大写
+            var name = Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? Name.ToFirstLowString() : Name;
+            return BuilderPart.BuildCSharpDtoItem(name,
                 Type,
                 IsArray,
                 IsNullable,

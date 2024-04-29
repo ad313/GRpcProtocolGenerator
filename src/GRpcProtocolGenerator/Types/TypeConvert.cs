@@ -113,6 +113,53 @@ namespace GRpcProtocolGenerator.Types
             }
         }
 
+        public static string ConvertToCSharpDto(Type type, bool isNullable)
+        {
+            //isNullable = false;
+            var sp = "";
+            switch (type.Name.ToLower())
+            {
+                case "object":
+                    return "string" ;
+                case "guid":
+                    return "Guid" + (isNullable ? "?" : "");
+                case "string":
+                    return "string" + (isNullable ? "?" : "");
+                case "decimal":
+                    return "decimal" + (isNullable ? "?" : "");
+                case "double":
+                    return "double" + (isNullable ? "?" : "");
+                case "float":
+                    return "float" + (isNullable ? "?" : "");
+                case "single":
+                    return "Single" + (isNullable ? "?" : "");
+                case "int32":
+                    return "int" + (isNullable ? "?" : "");
+                case "long":
+                    return "long" + (isNullable ? "?" : "");
+                case "int64":
+                    return "Int64" + (isNullable ? "?" : "");
+                case "datetime":
+                    return "DateTime" + (isNullable ? "?" : "");
+                case "uint32":
+                    return "UInt32" + (isNullable ? "?" : "");
+                case "ulong":
+                    return "ulong" + (isNullable ? "?" : "");
+                case "uint64":
+                    return "UInt64" + (isNullable ? "?" : "");
+                case "boolean":
+                    return "bool" + (isNullable ? "?" : "");
+                case "byte":
+                    return "byte" + (isNullable ? "?" : "");
+                case "byte[]":
+                    return "string";
+                case "intptr":
+                    return "IntPtr" + (isNullable ? "?" : "");
+                default:
+                    throw new NotSupportedException(type.Name.ToLower());
+            }
+        }
+
         /// <summary>
         /// 获取枚举的描述
         /// </summary>
