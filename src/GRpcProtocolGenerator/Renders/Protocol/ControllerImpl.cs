@@ -177,7 +177,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                     }
                     else if (firstParam.ClassMetaData != null)
                     {
-                        ReturnType = firstParam.TypeWrapper.Type.Name.FormatMessageName();
+                        ReturnType = firstParam.TypeWrapper.Type.Name.FormatCSharpDtoName();
                     }
                     else
                     {
@@ -187,6 +187,13 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                     if (firstParam.TypeWrapper.IsArray)
                     {
                         ReturnType = $"List<{ReturnType}>";
+                    }
+                }
+                else
+                {
+                    if (firstParam.ClassMetaData != null)
+                    {
+                        ReturnType = firstParam.ClassMetaData.Name.FormatCSharpDtoName();
                     }
                 }
             }

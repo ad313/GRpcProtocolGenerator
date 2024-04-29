@@ -250,11 +250,15 @@ namespace GRpcProtocolGenerator.Renders
                 typeString = $"List<{typeString}>";
             }
 
-            //var str = "///" + Environment.NewLine;
-            //str += "   /// " + desc + Environment.NewLine;
-            //str += "   ///" + Environment.NewLine;
+            var str = "";
+            if (!string.IsNullOrWhiteSpace(desc))
+            {
+                str = "/// <summary>" + Environment.NewLine;
+                str += "    /// " + desc + Environment.NewLine;
+                str += "    /// </summary>" + Environment.NewLine + "    ";
+            }
 
-            return $"   public {typeString} " + name + "{ get; set; }" + (string.IsNullOrWhiteSpace(desc) ? "" : " //" + desc);
+            return str + $"public {typeString} " + name + "{ get; set; }";
         }
 
         #endregion
