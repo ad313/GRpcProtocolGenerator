@@ -203,6 +203,9 @@ namespace GRpcProtocolGenerator.Renders.Protocol
                     foreach (var message in ClassDependency.OrderBy(d => d.Name))
                     {
                         message.GetOrSetGRpcServiceProtoPath(interfaceMetaData, sb, goStructStringBuilder, cSharpDtoStringBuilder);
+
+                        //添加依赖项的依赖
+                        Imports.AddRange(message.Imports);
                     }
 
                     Imports.AddRange(ClassDependency.Select(d => d.MessagePath));

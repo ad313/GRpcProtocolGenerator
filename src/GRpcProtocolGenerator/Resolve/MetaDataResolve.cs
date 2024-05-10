@@ -248,6 +248,9 @@ namespace GRpcProtocolGenerator.Resolve
             if (!typeWrapper.IsClass && !typeWrapper.IsStruct)
                 return (null, false);
 
+            if (_classMetaDataDictionary.TryGetValue(typeWrapper.Type.FullName ?? "", out ClassMetaData value))
+                return (value, false);
+
             // todo 无限循环，当子类和父类一样，需要特殊处理
             if (parentType != null && parentType.Contains(typeWrapper.Type))
             {
@@ -255,10 +258,7 @@ namespace GRpcProtocolGenerator.Resolve
             }
 
             parentType?.Add(typeWrapper.Type);
-
-            if (_classMetaDataDictionary.TryGetValue(typeWrapper.Type.FullName ?? "", out ClassMetaData value))
-                return (value, false);
-
+            
             //不处理父级
             //(ClassMetaData meta, bool target) parentClass = ToClassMetaData(typeWrapper.Type.BaseType.FormatType(), typeWrapper.Type);
             (ClassMetaData meta, bool target) parentClass = (null, false);

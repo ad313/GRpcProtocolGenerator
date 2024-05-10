@@ -271,7 +271,7 @@ namespace GRpcProtocolGenerator.Renders
         {
             foreach (var classMetaData in _assemblyMetaData.ClassMetaDataDictionary.Select(d => d.Value).Where(d => d.TypeWrapper.Type != typeof(CancellationToken)))
             {
-                var name = classMetaData.Name.FormatMessageName();
+                var name = classMetaData.Name.FormatCSharpDtoName();
                 var param = new
                 {
                     config = Config.ConfigInstance,
@@ -282,7 +282,7 @@ namespace GRpcProtocolGenerator.Renders
                         items = new List<Tuple<string, string, string>>()
                     }
                 };
-
+                
                 foreach (var prop in classMetaData.PropertyMetaDataList)
                 {
                     var itemName = prop.Name.ToFirstLowString();
@@ -322,7 +322,7 @@ namespace GRpcProtocolGenerator.Renders
                     }
 
                     else if (prop.ClassMetaData != null)
-                        dateType = prop.ClassMetaData.Name.FormatMessageName();
+                        dateType = prop.ClassMetaData.Name.FormatCSharpDtoName();
 
                     else dateType = "any";
 

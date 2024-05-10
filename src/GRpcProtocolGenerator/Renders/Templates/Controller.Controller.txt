@@ -24,7 +24,7 @@ namespace {{ data.name_space }}
     [ApiExplorerSettings(GroupName = "{{ data.description }}")]
     public partial class {{ data.service.name }} : {{ config.controller.base_controller }}
     {
-        private readonly {{ data.service.client_interface }} _client;
+        protected readonly {{ data.service.client_interface }} _client;
 
         /// <summary>
         /// 初始化

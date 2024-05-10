@@ -208,7 +208,7 @@ namespace GRpcProtocolGenerator.Renders.Protocol
             //原始类
             if (item.OutParam.IsOriginalClass)
             {
-                builder.Append($"\t\t\t{BuilderPart.BuildClassReturn(item.OutParam.GetGRpcName(), param.IsArray, IsWrapper, SuccessCode)}");
+                builder.Append($"\t\t\t{BuilderPart.BuildClassReturn(item.OutParam.GetGRpcName(), false, IsWrapper, SuccessCode)}");
                 return builder;
             }
 
