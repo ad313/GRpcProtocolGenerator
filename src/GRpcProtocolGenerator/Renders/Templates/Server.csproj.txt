@@ -1,19 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
-	    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.11" />
-		<PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.3.10" />
-		<PackageReference Include="Mapster" Version="7.4.0" />
+	    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.13" />
+		<PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.10.11" />
+		<PackageReference Include="Mapster" Version="10.0.13" />
+		{{- if config.server.enable_health_checks }}
+		<PackageReference Include="Grpc.AspNetCore.HealthChecks" Version="2.84.0" />
+		{{- end }}
+		{{- if config.server.enable_reflection }}
+		<PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.84.0" />
+		{{- end }}
 
 		{{- for pkg in config.server.append_package_to_csproj }}
 		<PackageReference Include="{{ pkg }}" Version="*" />
 		{{- end }}
-	</ItemGroup>	
+	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="{{ config.proto.output | string.replace '/' '\\' }}\{{ config.proto.project_name }}.csproj" />

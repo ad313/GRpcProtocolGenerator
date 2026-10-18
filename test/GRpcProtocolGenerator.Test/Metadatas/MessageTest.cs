@@ -37,7 +37,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Int.GetDescription());
 
-            var itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // IntColumn";
+            var itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // IntColumn";
             Assert.Equal(item.ToString(), itemString);
 
 
@@ -48,7 +48,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Long.GetDescription());
 
-            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // LongColumn";
+            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // LongColumn";
             Assert.Equal(item.ToString(), itemString);
 
 
@@ -59,7 +59,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Double.GetDescription());
 
-            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // DecimalColumn";
+            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // DecimalColumn";
             Assert.Equal(item.ToString(), itemString);
 
 
@@ -70,7 +70,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Double.GetDescription());
 
-            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // DoubleColumn";
+            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // DoubleColumn";
             Assert.Equal(item.ToString(), itemString);
 
             
@@ -81,7 +81,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Float.GetDescription());
 
-            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // FloatColumn";
+            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // FloatColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //UintColumn
@@ -91,7 +91,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.UInt.GetDescription());
 
-            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // UintColumn";
+            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // UintColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //UlongColumn
@@ -101,17 +101,17 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.ULong.GetDescription());
 
-            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // UlongColumn";
+            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // UlongColumn";
             Assert.Equal(item.ToString(), itemString);
 
-            //StringColumn  默认可为空
+            //StringColumn 未标注 ?，在启用可空注解的程序集中视为不可空
             item = sampleClassMessage.Items.FirstOrDefault(x => x.Name == "StringColumn");
             Assert.NotNull(item);
             Assert.False(item.IsArray);
-            Assert.True(item.IsNullable);
-            Assert.Equal(item.GRpcType, CSharpNullableTypeEnum.String.GetDescription());
+            Assert.False(item.IsNullable);
+            Assert.Equal(item.GRpcType, CSharpTypeEnum.String.GetDescription());
 
-            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // StringColumn";
+            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // StringColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //BoolColumn
@@ -121,7 +121,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Bool.GetDescription());
 
-            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // BoolColumn";
+            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // BoolColumn";
             Assert.Equal(item.ToString(), itemString);
 
 
@@ -132,7 +132,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.String.GetDescription());
 
-            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // DateTimeColumn";
+            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // DateTimeColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //ByteColumn
@@ -142,7 +142,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Int.GetDescription());
 
-            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // ByteColumn";
+            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // ByteColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //ClassColumn
@@ -152,7 +152,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.True(item.ClassMetaData != null);
             Assert.Equal("GRpcSampleClass", item.GRpcType);
 
-            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // ClassColumn";
+            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // ClassColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //EnumColumn 默认转数字
@@ -162,7 +162,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsNullable);
             Assert.Equal(item.GRpcType, CSharpTypeEnum.Int.GetDescription());
 
-            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // EnumColumn";
+            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // EnumColumn";
             Assert.Equal(item.ToString(), itemString);
 
             //StructColumn
@@ -171,7 +171,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsArray);
             Assert.Equal("GRpcSampleStruct", item.GRpcType);
 
-            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // StructColumn";
+            itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // StructColumn";
             Assert.Equal(item.ToString(), itemString);
         }
 
@@ -196,7 +196,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.False(item.IsArray);
             Assert.Equal("GRpcTreeNode_SampleClass", item.GRpcType);
 
-            var itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name.ToFirstLowString() : item.Name)} = 0; // GenericClass";
+            var itemString = $"{item.GRpcType} {(Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding ? item.Name!.ToFirstLowString() : item.Name)} = 0; // GenericClass";
             Assert.Equal(item.ToString(), itemString);
         }
 

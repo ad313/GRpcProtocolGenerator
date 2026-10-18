@@ -69,7 +69,15 @@ namespace {{ config.server.project_name }}
                    .AllowAnyOrigin()));
             {{- else }}
             builder.Services.AddGrpc();
-            {{- end }}         
+            {{- end }}
+            {{- if config.server.enable_health_checks }}
+            //gRPC 健康检查
+            builder.Services.AddGrpcHealthChecks();
+            {{- end }}
+            {{- if config.server.enable_reflection }}
+            //gRPC 反射（建议仅在开发环境启用）
+            builder.Services.AddGrpcReflection();
+            {{- end }}
             {{}}
             {{- if config.json_transcoding.use_jwt_authentication }}
             //认证授权
@@ -111,6 +119,14 @@ namespace {{ config.server.project_name }}
             //注册 gRpc Server
             {{- for server in servers }}
             app.MapGrpcService<{{ server.full_name }}>();
+            {{- end }}
+            {{- if config.server.enable_health_checks }}
+            //健康检查
+            app.MapGrpcHealthChecksService();
+            {{- end }}
+            {{- if config.server.enable_reflection }}
+            //反射
+            app.MapGrpcReflectionService();
             {{- end }}
 
             app.Run();

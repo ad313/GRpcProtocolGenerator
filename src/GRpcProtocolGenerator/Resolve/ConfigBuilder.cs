@@ -1,121 +1,103 @@
-﻿using GRpcProtocolGenerator.Models.Configs;
 using System;
+using GRpcProtocolGenerator.Models.Configs;
 
-namespace GRpcProtocolGenerator.Resolve
+namespace GRpcProtocolGenerator.Resolve;
+
+public class ConfigBuilder(string currentPath)
 {
-    public class ConfigBuilder
+    public Config Config { get; private set; } = new(currentPath ?? throw new ArgumentNullException(nameof(currentPath)));
+
+    /// <summary>
+    /// 配置目标程序集名称
+    /// </summary>
+    public ConfigBuilder SetAssembly(string assemblyName)
     {
-        public Config Config { get; private set; }
+        ArgumentNullException.ThrowIfNull(assemblyName);
 
-        public ConfigBuilder(string currentPath)
-        {
-            Config = new Config(currentPath ?? throw new ArgumentNullException(nameof(currentPath)));
-        }
+        Config.Assemblies = assemblyName;
 
-        /// <summary>
-        /// 配置目标程序集名称
-        /// </summary>
-        /// <param name="assemblyName"></param>
-        /// <returns></returns>
-        public ConfigBuilder SetAssembly(string assemblyName)
-        {
-            ArgumentNullException.ThrowIfNull(assemblyName, nameof(assemblyName));
+        return this;
+    }
 
-            Config.Assemblies = assemblyName;
+    /// <summary>
+    /// 配置 protocol
+    /// </summary>
+    public ConfigBuilder SetProtocolConfig(Action<ProtocolConfig> protocolConfigAction)
+    {
+        ArgumentNullException.ThrowIfNull(protocolConfigAction);
 
-            return this;
-        }
+        Config.Proto = new ProtocolConfig(Config.CurrentPath);
 
-        /// <summary>
-        /// 配置 protocol
-        /// </summary>
-        /// <param name="protocolConfigAction"></param>
-        /// <returns></returns>
-        public ConfigBuilder SetProtocolConfig(Action<ProtocolConfig> protocolConfigAction)
-        {
-            ArgumentNullException.ThrowIfNull(protocolConfigAction, nameof(protocolConfigAction));
+        protocolConfigAction.Invoke(Config.Proto);
 
-            Config.Proto = new ProtocolConfig(Config.CurrentPath);
+        return this;
+    }
 
-            protocolConfigAction.Invoke(Config.Proto);
+    public ConfigBuilder SetServerConfig(Action<ServerConfig> serverConfigAction)
+    {
+        ArgumentNullException.ThrowIfNull(serverConfigAction);
 
-            return this;
-        }
+        Config.Server = new ServerConfig(Config.CurrentPath);
 
-        public ConfigBuilder SetServerConfig(Action<ServerConfig> serverConfigAction)
-        {
-            ArgumentNullException.ThrowIfNull(serverConfigAction, nameof(serverConfigAction));
+        serverConfigAction.Invoke(Config.Server);
 
-            Config.Server = new ServerConfig(Config.CurrentPath);
+        return this;
+    }
 
-            serverConfigAction.Invoke(Config.Server);
+    /// <summary>
+    /// 配置json转码
+    /// </summary>
+    public ConfigBuilder SetJsonTranscoding(Action<JsonTranscodingConfig> jsonTranscodingConfigAction)
+    {
+        ArgumentNullException.ThrowIfNull(jsonTranscodingConfigAction);
 
-            return this;
-        }
+        Config.JsonTranscoding ??= new JsonTranscodingConfig();
+        Config.JsonTranscoding.UseJsonTranscoding = true;
 
-        /// <summary>
-        /// 配置json转码
-        /// </summary>
-        /// <param name="jsonTranscodingConfigAction"></param>
-        /// <returns></returns>
-        public ConfigBuilder SetJsonTranscoding(Action<JsonTranscodingConfig> jsonTranscodingConfigAction)
-        {
-            ArgumentNullException.ThrowIfNull(jsonTranscodingConfigAction, nameof(jsonTranscodingConfigAction));
+        jsonTranscodingConfigAction.Invoke(Config.JsonTranscoding);
 
-            Config.JsonTranscoding ??= new JsonTranscodingConfig();
-            Config.JsonTranscoding.UseJsonTranscoding = true;
+        return this;
+    }
 
-            jsonTranscodingConfigAction.Invoke(Config.JsonTranscoding);
+    /// <summary>
+    /// 生成控制器配置
+    /// </summary>
+    public ConfigBuilder SetController(Action<ControllerConfig> controllerConfig)
+    {
+        ArgumentNullException.ThrowIfNull(controllerConfig);
 
-            return this;
-        }
+        Config.Controller = new ControllerConfig(Config.CurrentPath);
 
-        /// <summary>
-        /// 生成控制器配置
-        /// </summary>
-        /// <param name="controllerConfig"></param>
-        /// <returns></returns>
-        public ConfigBuilder SetController(Action<ControllerConfig> controllerConfig)
-        {
-            ArgumentNullException.ThrowIfNull(controllerConfig, nameof(controllerConfig));
+        controllerConfig.Invoke(Config.Controller);
 
-            Config.Controller = new ControllerConfig(Config.CurrentPath);
+        return this;
+    }
 
-            controllerConfig.Invoke(Config.Controller);
+    /// <summary>
+    /// 生成UI配置
+    /// </summary>
+    public ConfigBuilder SetUi(Action<UiConfig> uiConfig)
+    {
+        ArgumentNullException.ThrowIfNull(uiConfig);
 
-            return this;
-        }
+        Config.UiConfig = new UiConfig(Config.CurrentPath);
 
-        /// <summary>
-        /// 生成UI配置
-        /// </summary>
-        /// <param name="uiConfig"></param>
-        /// <returns></returns>
-        public ConfigBuilder SetUi(Action<UiConfig> uiConfig)
-        {
-            ArgumentNullException.ThrowIfNull(uiConfig, nameof(uiConfig));
+        uiConfig.Invoke(Config.UiConfig);
 
-            Config.UiConfig = new UiConfig(Config.CurrentPath);
+        return this;
+    }
 
-            uiConfig.Invoke(Config.UiConfig);
+    /// <summary>
+    /// 元数据过滤
+    /// </summary>
+    public ConfigBuilder SetFilter(Action<Filter> filterAction)
+    {
+        ArgumentNullException.ThrowIfNull(filterAction);
 
-            return this;
-        }
+        Config.Filter = new Filter();
 
-        /// <summary>
-        /// 元数据过滤
-        /// </summary>
-        /// <param name="filterAction"></param>
-        /// <returns></returns>
-        public ConfigBuilder SetFilter(Action<Filter> filterAction)
-        {
-            ArgumentNullException.ThrowIfNull(filterAction, nameof(filterAction));
+        filterAction.Invoke(Config.Filter);
 
-            Config.Filter = new Filter();
-
-            filterAction.Invoke(Config.Filter);
-
-            return this;
-        }
+        return this;
     }
 }

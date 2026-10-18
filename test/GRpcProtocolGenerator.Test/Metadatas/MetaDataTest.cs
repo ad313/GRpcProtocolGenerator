@@ -11,7 +11,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
 {
     public class MetaDataTest
     {
-        private AssemblyMetaData _assemblyMetaData { get; set; }
+        private AssemblyMetaData _assemblyMetaData = null!;
 
         public GeneratorHandler Handler;
         
@@ -24,48 +24,48 @@ namespace GRpcProtocolGenerator.Test.Metadatas
 
             Handler = new GeneratorHandler(basePath, builder =>
             {
-                //ÅäÖÃÄ¿±ê³ÌĞò¼¯Ãû³Æ
+                //é…ç½®ç›®æ ‡ç¨‹åºé›†åç§°
                 builder.SetAssembly($"{project}.Services");
 
-                //ÅäÖÃ protocol
+                //é…ç½® protocol
                 builder.SetProtocolConfig(proto =>
                 {
                     proto.Output = $"../{project}.Protocol";
                     proto.ProtoDirectory = "protos";
                     proto.PackageNameFunc = meta => "_grpc";
                     proto.CSharpNamespaceFunc = meta => $"{project}.GRpc.Protocol";
-                    proto.PropertyDescriptionFunc = meta => meta?.Display ?? meta?.DisplayName ?? meta?.Description;
-                    proto.ServiceNameFunc = meta => "GRpc" + meta.Name.TrimStart('I');
+                    proto.PropertyDescriptionFunc = meta => meta?.Display ?? meta?.DisplayName ?? meta?.Description ?? "";
+                    proto.ServiceNameFunc = meta => "GRpc" + meta.Name!.TrimStart('I');
                     proto.UseProtoDirectoryWhenImportPackage = true;
                     proto.MethodNameFunc = meta =>
                     {
-                        if (meta.Name.EndsWith("Async"))
+                        if (meta.Name!.EndsWith("Async"))
                         {
-                            return meta.Name.Substring(0, meta.Name.Length - 5);
+                            return meta.Name!.Substring(0, meta.Name!.Length - 5);
                         }
 
-                        return meta.Name;
+                        return meta.Name!;
                     };
                     proto.MethodInOutParamNameFunc = (method, props) =>
                     {
-                        //´«Èë
+                        //ä¼ å…¥
                         if (props.Count == 1 && !props[0].TypeWrapper.IsArray &&
                             props[0].TypeWrapper.Type == typeof(string) && props[0].Name == "ids")
                         {
-                            return $"{method.InterfaceMetaData.FormatServiceName()}IdsRequest";
+                            return $"{method.InterfaceMetaData!.FormatServiceName()}IdsRequest";
                         }
 
                         if (props.Count == 1 && !props[0].TypeWrapper.IsArray &&
                             props[0].TypeWrapper.Type == typeof(object) && props[0].Name == "id")
                         {
-                            return $"{method.InterfaceMetaData.FormatServiceName()}IdRequest";
+                            return $"{method.InterfaceMetaData!.FormatServiceName()}IdRequest";
                         }
 
-                        //´«³ö
+                        //ä¼ å‡º
                         if (props.Count == 1 && string.IsNullOrWhiteSpace(props[0].Name) &&
                             !props[0].TypeWrapper.IsArray && props[0].TypeWrapper.Type == typeof(string))
                         {
-                            return $"{method.InterfaceMetaData.FormatServiceName()}StringResponse";
+                            return $"{method.InterfaceMetaData!.FormatServiceName()}StringResponse";
                         }
 
                         if (props.Count == 1 && string.IsNullOrWhiteSpace(props[0].Name) &&
@@ -73,10 +73,10 @@ namespace GRpcProtocolGenerator.Test.Metadatas
                         {
                             if (props[0].TypeWrapper.IsNullable)
                                 return
-                                    $"{method.InterfaceMetaData.FormatServiceName()}ListNullable{props[0].TypeWrapper.Type.Name}Response";
+                                    $"{method.InterfaceMetaData!.FormatServiceName()}ListNullable{props[0].TypeWrapper.Type!.Name}Response";
 
                             return
-                                $"{method.InterfaceMetaData.FormatServiceName()}List{props[0].TypeWrapper.Type.Name}Response";
+                                $"{method.InterfaceMetaData!.FormatServiceName()}List{props[0].TypeWrapper.Type!.Name}Response";
                         }
 
                         return null;
@@ -124,7 +124,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
                 });
             });
             
-            _assemblyMetaData = Handler.AssemblyMetaData;
+            _assemblyMetaData = Handler.AssemblyMetaData!;
         }
 
 
@@ -156,27 +156,27 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.True(metaData.MethodMetaDataList.Any());
 
 
-            //ÎŞ·µ»ØÖµ Í¬²½
+            //æ— è¿”å›å€¼ åŒæ­¥
             SyncMethodWithNoReturnTest(metaData);
 
-            //ÎŞ·µ»ØÖµ Òì²½
+            //æ— è¿”å›å€¼ å¼‚æ­¥
             AsyncMethodWithNoReturnTest(metaData);
 
-            //ÓĞ·µ»ØÖµ Í¬²½
+            //æœ‰è¿”å›å€¼ åŒæ­¥
             SyncMethodWithReturnTest(metaData);
 
-            //ÓĞ·µ»ØÖµ Òì²½
+            //æœ‰è¿”å›å€¼ å¼‚æ­¥
             AsyncMethodWithReturnTest(metaData);
 
-            //²»Ö§³ÖµÄ·½·¨
+            //ä¸æ”¯æŒçš„æ–¹æ³•
             NotSupportMethodTest(metaData);
 
-            //ÆäËû
+            //å…¶ä»–
             OtherTest(metaData);
         }
 
         /// <summary>
-        /// ÎŞ·µ»ØÖµ Í¬²½
+        /// æ— è¿”å›å€¼ åŒæ­¥
         /// </summary>
         /// <param name="metaData"></param>
         private void SyncMethodWithNoReturnTest(InterfaceMetaData metaData)
@@ -199,8 +199,8 @@ namespace GRpcProtocolGenerator.Test.Metadatas
 
             var httpGet = voidMethodSync.AttributeMetaDataList.First(d => d.Type == typeof(HttpGetAttribute));
             Assert.NotNull(httpGet);
-            Assert.True(httpGet.ConstructorDictionary.Count == 1);
-            Assert.True(httpGet.ConstructorDictionary.First().Value.ToString() == name);
+            Assert.True(httpGet.ConstructorDictionary!.Count == 1);
+            Assert.True(httpGet.ConstructorDictionary!.First().Value?.ToString() == name);
 
 
 
@@ -306,15 +306,15 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.True(inParam4.TypeWrapper.Type == typeof(int));
             Assert.True(inParam4.Name == "d");
 
-            //·ºĞÍ½á¹¹
+            //æ³›å‹ç»“æ„
             GenericClassMetaDataTest(inParam1.ClassMetaData);
 
-            //Ê÷ĞÎ½á¹¹
+            //æ ‘å½¢ç»“æ„
             TreeClassMetaDataTest(inParam2.ClassMetaData);
         }
 
         /// <summary>
-        /// ÎŞ·µ»ØÖµ Òì²½
+        /// æ— è¿”å›å€¼ å¼‚æ­¥
         /// </summary>
         /// <param name="metaData"></param>
         private void AsyncMethodWithNoReturnTest(InterfaceMetaData metaData)
@@ -332,7 +332,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
         }
 
         /// <summary>
-        /// ÓĞ·µ»ØÖµ Í¬²½
+        /// æœ‰è¿”å›å€¼ åŒæ­¥
         /// </summary>
         /// <param name="metaData"></param>
         private void SyncMethodWithReturnTest(InterfaceMetaData metaData)
@@ -451,7 +451,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
         }
 
         /// <summary>
-        /// ÓĞ·µ»ØÖµ Òì²½
+        /// æœ‰è¿”å›å€¼ å¼‚æ­¥
         /// </summary>
         /// <param name="metaData"></param>
         private void AsyncMethodWithReturnTest(InterfaceMetaData metaData)
@@ -500,7 +500,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
         private void NotSupportMethodTest(InterfaceMetaData metaData)
         {
             var name = "NotSupport";
-            var notSupport = metaData.MethodMetaDataList.FirstOrDefault(d => d.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase));
+            var notSupport = metaData.MethodMetaDataList.FirstOrDefault(d => d.Name!.StartsWith(name, StringComparison.OrdinalIgnoreCase));
             Assert.Null(notSupport);
         }
 
@@ -518,7 +518,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             //Assert.True(inParam.Name == "a");
         }
 
-        private void ClassMetaDataTest(ClassMetaData metaData)
+        private void ClassMetaDataTest(ClassMetaData? metaData)
         {
             Assert.NotNull(metaData);
 
@@ -613,7 +613,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.Equal("StructColumn", prop.Display);
         }
 
-        private void TreeClassMetaDataTest(ClassMetaData metaData)
+        private void TreeClassMetaDataTest(ClassMetaData? metaData)
         {
             Assert.NotNull(metaData);
 
@@ -633,7 +633,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.True(prop.TypeWrapper.IsClass);
         }
 
-        private void GenericClassMetaDataTest(ClassMetaData metaData)
+        private void GenericClassMetaDataTest(ClassMetaData? metaData)
         {
             Assert.NotNull(metaData);
 
@@ -653,7 +653,7 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.True(prop.TypeWrapper.IsClass);
         }
 
-        private void NullableClassMetaDataTest(ClassMetaData metaData)
+        private void NullableClassMetaDataTest(ClassMetaData? metaData)
         {
             Assert.NotNull(metaData);
 
@@ -683,10 +683,10 @@ namespace GRpcProtocolGenerator.Test.Metadatas
         }
 
         /// <summary>
-        /// Ã¶¾Ù
+        /// æšä¸¾
         /// </summary>
         /// <param name="metaData"></param>
-        private void SampleEnumTest(EnumMetaData metaData)
+        private void SampleEnumTest(EnumMetaData? metaData)
         {
             Assert.NotNull(metaData);
 
@@ -704,13 +704,13 @@ namespace GRpcProtocolGenerator.Test.Metadatas
             Assert.Equal("One1", firstMember.Name);
             Assert.Equal(0, firstMember.Value);
             Assert.Contains(typeof(DescriptionAttribute), firstMember.AttributeMetaDataList.Select(d => d.Type));
-            Assert.Equal("One1", firstMember.AttributeMetaDataList.First(d => d.Type == typeof(DescriptionAttribute)).ConstructorDictionary.First().Value.ToString());
+            Assert.Equal("One1", firstMember.AttributeMetaDataList.First(d => d.Type == typeof(DescriptionAttribute)).ConstructorDictionary!.First().Value?.ToString());
 
             var secondMember = metaData.Members.Last();
             Assert.Equal("Two2", secondMember.Name);
             Assert.Equal(12, secondMember.Value);
             Assert.Contains(typeof(DescriptionAttribute), secondMember.AttributeMetaDataList.Select(d => d.Type));
-            Assert.Equal("Two2", secondMember.AttributeMetaDataList.First(d => d.Type == typeof(DescriptionAttribute)).ConstructorDictionary.First().Value.ToString());
+            Assert.Equal("Two2", secondMember.AttributeMetaDataList.First(d => d.Type == typeof(DescriptionAttribute)).ConstructorDictionary!.First().Value?.ToString());
 
 
         }
