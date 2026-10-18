@@ -1,19 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
+		<!-- 特性包保持 netstandard2.0，保证在各类目标框架的消费项目中可用 -->
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>0.2.3</Version>
+		<Version>0.3.0</Version>
 		<Description>GRpc Attribute Config</Description>
 		<PackageProjectUrl>https://github.com/ad313/GRpcProtocolGenerator</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/ad313/GRpcProtocolGenerator</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Authors>ad313</Authors>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<NoWarn>1701;1702;1591;</NoWarn>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<NoWarn>1701;1702;1591;</NoWarn>
 	</PropertyGroup>
 </Project>
