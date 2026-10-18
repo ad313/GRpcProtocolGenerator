@@ -71,6 +71,21 @@ public class ProtoServiceItem
 
     public ProtocolHttpOption? HttpOption { get; set; }
 
+    /// <summary>
+    /// gRPC 流式类型
+    /// </summary>
+    public StreamKind StreamKind => MethodMetaData.StreamKind;
+
+    /// <summary>
+    /// 是否服务端流（含双向流）
+    /// </summary>
+    public bool IsServerStreaming => MethodMetaData.IsServerStreaming;
+
+    /// <summary>
+    /// 是否客户端流（含双向流）
+    /// </summary>
+    public bool IsClientStreaming => MethodMetaData.IsClientStreaming;
+
     /// <summary>Returns a string that represents the current object.</summary>
     public override string ToString()
     {
@@ -78,23 +93,37 @@ public class ProtoServiceItem
         sb.AppendLine();
         sb.AppendLine($"\t// {Config.ConfigInstance.Proto.GetPropertyDescription(MethodMetaData)}");
 
-        HttpOption = GetHttpOption(HttpMethod.Get, typeof(HttpGetAttribute)) ??
-                     GetHttpOption(HttpMethod.Post, typeof(HttpPostAttribute)) ??
-                     GetHttpOption(HttpMethod.Put, typeof(HttpPutAttribute)) ??
-                     GetHttpOption(HttpMethod.Delete, typeof(HttpDeleteAttribute)) ??
-                     GetHttpOption(HttpMethod.Patch, typeof(HttpPatchAttribute));
+        //流式与 gRPC JSON 转码不兼容，不生成 http option（控制器也不会包含流式方法）
+        if (StreamKind == StreamKind.None)
+        {
+            HttpOption = GetHttpOption(HttpMethod.Get, typeof(HttpGetAttribute)) ??
+                         GetHttpOption(HttpMethod.Post, typeof(HttpPostAttribute)) ??
+                         GetHttpOption(HttpMethod.Put, typeof(HttpPutAttribute)) ??
+                         GetHttpOption(HttpMethod.Delete, typeof(HttpDeleteAttribute)) ??
+                         GetHttpOption(HttpMethod.Patch, typeof(HttpPatchAttribute));
+        }
+
+        var inStream = IsClientStreaming ? "stream " : "";
+        var outStream = IsServerStreaming ? "stream " : "";
 
         if (Config.ConfigInstance.JsonTranscoding.UseJsonTranscoding)
         {
-            sb.Append($"\trpc {Name}({InParam?.GetGRpcName()}) returns({OutParam?.GetGRpcName()})");
+            sb.Append($"\trpc {Name}({inStream}{InParam?.GetGRpcName()}) returns({outStream}{OutParam?.GetGRpcName()})");
 
             //没标记 http，不生成
             if (HttpOption != null)
+            {
                 sb.Append(HttpOption.ToString());
+            }
+            else if (IsServerStreaming || IsClientStreaming)
+            {
+                //流式方法没有 http option，必须以分号结尾才是合法 proto
+                sb.Append(";");
+            }
         }
         else
         {
-            sb.Append($"\trpc {Name}({InParam?.GetGRpcName()}) returns({OutParam?.GetGRpcName()});");
+            sb.Append($"\trpc {Name}({inStream}{InParam?.GetGRpcName()}) returns({outStream}{OutParam?.GetGRpcName()});");
         }
 
         return sb.ToString();

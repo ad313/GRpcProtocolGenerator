@@ -21,4 +21,8 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\GRpcProtocolGenerator.Common\GRpcProtocolGenerator.Common.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+		<!-- 允许测试项目访问内部类型（如 ScribanHelper）以验证模板渲染 -->
+		<InternalsVisibleTo Include="GRpcProtocolGenerator.Test" />
+	</ItemGroup>
 </Project>

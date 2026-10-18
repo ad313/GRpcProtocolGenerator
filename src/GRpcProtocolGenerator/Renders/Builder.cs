@@ -77,14 +77,7 @@ public partial class Builder
 
                     foreach (var methodMetaData in grouping)
                     {
-                        items.Add(new ProtoServiceItem()
-                        {
-                            Index = methodMetaData.Index,
-                            Name = $"{methodMetaData.GrpcMethodName}_{methodIndex}",
-                            InParam = CreateMethodParam(interfaceMetaData, methodMetaData, methodMetaData.InParamMetaDataList, "Request", ref inIndex),
-                            OutParam = ProtoMessageWrapper(interfaceMetaData, CreateMethodParam(interfaceMetaData, methodMetaData, methodMetaData.OutParamMetaDataList, "Response", ref outIndex)),
-                            MethodMetaData = methodMetaData
-                        });
+                        items.Add(CreateProtoServiceItem(interfaceMetaData, methodMetaData, $"{methodMetaData.GrpcMethodName}_{methodIndex}", ref inIndex, ref outIndex));
 
                         methodIndex++;
                     }
@@ -92,19 +85,39 @@ public partial class Builder
                 else
                 {
                     var methodMetaData = grouping.First();
-                    items.Add(new ProtoServiceItem()
-                    {
-                        Index = methodMetaData.Index,
-                        Name = $"{methodMetaData.GrpcMethodName}",
-                        InParam = CreateMethodParam(interfaceMetaData, methodMetaData, methodMetaData.InParamMetaDataList, "Request", ref inIndex),
-                        OutParam = ProtoMessageWrapper(interfaceMetaData, CreateMethodParam(interfaceMetaData, methodMetaData, methodMetaData.OutParamMetaDataList, "Response", ref outIndex)),
-                        MethodMetaData = methodMetaData
-                    });
+                    items.Add(CreateProtoServiceItem(interfaceMetaData, methodMetaData, $"{methodMetaData.GrpcMethodName}", ref inIndex, ref outIndex));
                 }
             }
 
             Services.Add(new ProtocolService(interfaceMetaData.Name!, items, interfaceMetaData));
         }
+    }
+
+    /// <summary>
+    /// 创建服务方法项。流式方法按元素类型生成请求/响应消息，
+    /// 且流式与 JsonTranscoding 的 ResultWrapper 不兼容，跳过包装。
+    /// </summary>
+    private ProtoServiceItem CreateProtoServiceItem(InterfaceMetaData interfaceMetaData, MethodMetaData methodMetaData, string name, ref int inIndex, ref int outIndex)
+    {
+        var isClientStreaming = methodMetaData.IsClientStreaming;
+        var isServerStreaming = methodMetaData.IsServerStreaming;
+
+        var inParam = isClientStreaming
+            ? CreateMethodParam(interfaceMetaData, methodMetaData, [methodMetaData.StreamRequestElement!], "Request", ref inIndex)
+            : CreateMethodParam(interfaceMetaData, methodMetaData, methodMetaData.InParamMetaDataList, "Request", ref inIndex);
+
+        var outParamMessage = isServerStreaming
+            ? CreateMethodParam(interfaceMetaData, methodMetaData, [methodMetaData.StreamResponseElement!], "Response", ref outIndex)
+            : CreateMethodParam(interfaceMetaData, methodMetaData, methodMetaData.OutParamMetaDataList, "Response", ref outIndex);
+
+        return new ProtoServiceItem()
+        {
+            Index = methodMetaData.Index,
+            Name = name,
+            InParam = inParam,
+            OutParam = isServerStreaming ? outParamMessage : ProtoMessageWrapper(interfaceMetaData, outParamMessage),
+            MethodMetaData = methodMetaData
+        };
     }
 
     /// <summary>

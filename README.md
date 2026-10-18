@@ -35,10 +35,42 @@ generator grpc protocol from c# interface
 - 不支持 object 参数，但是可以手动配置字段映射
 - 不支持 StringBuilder 参数
 - 不支持 Tuple / ValueTuple 参数与返回值（会给出明确的不支持原因提示）
+- 不支持多个流式参数，流式参数不能与其他业务参数混用（CancellationToken 除外）
 - 枚举会被转换成数字，因为当启用 grpc json 转码时，生成的 swagger 会有问题
 - C# 的 时间（DateTime/DateOnly/TimeOnly/TimeSpan/DateTimeOffset）会被转换成 protobuf 的 string 字符串
 - short/ushort/sbyte/char/Half/nint/nuint 会映射为 int32/int64（protobuf 无原生对应类型）
 - 待补充
+
+## gRPC 流式支持
+接口方法使用 `IAsyncEnumerable<T>` 即表示流式，按以下约定生成：
+
+| C# 接口签名 | 生成的 proto | 说明 |
+|---|---|---|
+| `IAsyncEnumerable<TResp> M(Req req)` 或 `Task<IAsyncEnumerable<TResp>> M(Req req)` | `rpc M(Req) returns (stream Resp);` | 服务端流 |
+| `Task<TResp> M(IAsyncEnumerable<TReq> stream)` | `rpc M(stream Req) returns (Resp);` | 客户端流 |
+| `IAsyncEnumerable<TResp> M(IAsyncEnumerable<TReq> stream)` | `rpc M(stream Req) returns (stream Resp);` | 双向流 |
+
+示例：
+```csharp
+[GRpcGenerator]
+public interface IStreamService
+{
+    // 服务端流
+    IAsyncEnumerable<SampleClass> GetSampleStream(int count, CancellationToken cancellationToken);
+
+    // 客户端流
+    Task<int> UploadSampleStream(IAsyncEnumerable<SampleClass> stream, CancellationToken cancellationToken);
+
+    // 双向流
+    IAsyncEnumerable<SampleClass> ChatStream(IAsyncEnumerable<SampleClass> stream);
+}
+```
+
+说明：
+- 流式元素类型 `T` 按「类型映射」规则生成 message（标量/枚举会自动包装成 message，因为 proto 的 stream 元素必须是 message 类型）
+- `CancellationToken` 参数会被透传为 `context.CancellationToken`，不参与消息生成
+- 流式方法跳过 JsonTranscoding 的 `ResultWrapper` 包装（与流式不兼容），也不会生成 http option / REST 控制器
+- 生成的服务端实现为标准的 grpc-dotnet 流式重写签名（如 `IServerStreamWriter<T>` / `IAsyncStreamReader<T>`），方法体内调用你的接口实现并做流转发；客户端包装提供 `IAsyncEnumerable<T>` 风格的调用封装
 
 ## 类型映射（C# => protobuf）
 | C# 类型 | protobuf 类型 | 说明 |

@@ -37,15 +37,44 @@ public class MethodMetaData : CommentMetaData
 
     public bool IsTask { get; private set; }
 
+    /// <summary>
+    /// gRPC 流式类型
+    /// </summary>
+    public StreamKind StreamKind { get; private set; }
+
+    /// <summary>
+    /// 流式请求元素元数据（客户端流/双向流时有效，用于生成请求消息）
+    /// </summary>
+    public PropertyMetaData? StreamRequestElement { get; private set; }
+
+    /// <summary>
+    /// 流式响应元素元数据（服务端流/双向流时有效，用于生成响应消息）
+    /// </summary>
+    public PropertyMetaData? StreamResponseElement { get; private set; }
+
+    /// <summary>
+    /// 是否服务端流（含双向流）
+    /// </summary>
+    public bool IsServerStreaming => StreamKind is StreamKind.ServerStreaming or StreamKind.DuplexStreaming;
+
+    /// <summary>
+    /// 是否客户端流（含双向流）
+    /// </summary>
+    public bool IsClientStreaming => StreamKind is StreamKind.ClientStreaming or StreamKind.DuplexStreaming;
+
     public string? GrpcMethodName => this.FormatServiceMethodName();
 
-    public MethodMetaData(string? @namespace, string? name, MethodInfo methodInfo, List<AttributeMetaData> attributeMetaDataList, List<PropertyMetaData> inParamMetaDataList, List<PropertyMetaData> outParamMetaDataList)
+    public MethodMetaData(string? @namespace, string? name, MethodInfo methodInfo, List<AttributeMetaData> attributeMetaDataList, List<PropertyMetaData> inParamMetaDataList, List<PropertyMetaData> outParamMetaDataList,
+        StreamKind streamKind = StreamKind.None, PropertyMetaData? streamRequestElement = null, PropertyMetaData? streamResponseElement = null)
         : base(@namespace, name, attributeMetaDataList)
     {
         MethodInfo = methodInfo;
         InParamMetaDataList = inParamMetaDataList ?? [];
         OutParamMetaDataList = outParamMetaDataList ?? [];
         IsTask = methodInfo.ReturnType.IsTask();
+        StreamKind = streamKind;
+        StreamRequestElement = streamRequestElement;
+        StreamResponseElement = streamResponseElement;
 
         //标记 传入参数是否有 CancellationToken 参数
         HasCancellationToken = InParamMetaDataList.Exists(d => d.TypeWrapper.Type == typeof(CancellationToken));

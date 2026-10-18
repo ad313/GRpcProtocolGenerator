@@ -1,5 +1,6 @@
 using System;
 using GRpcProtocolGenerator.Models.MetaData;
+using GRpcProtocolGenerator.Renders.Protocol;
 using GRpcProtocolGenerator.Types;
 
 namespace GRpcProtocolGenerator.Renders;
@@ -161,6 +162,66 @@ public partial class BuilderPart
         return isArray
             ? $"{name} = " + "{" + $" {MapToList("data", isNullable ? "int?" : "int")} " + "}"
             : $"{name} = " + (isNullable ? "(int?)data" : "(int)data");
+    }
+
+    #endregion
+
+    #region 流式
+
+    /// <summary>
+    /// 获取流式元素的领域类型全名（用于 Adapt 映射与服务端实现签名）
+    /// </summary>
+    public static string GetStreamElementDomainName(PropertyMetaData element)
+    {
+        if (element.ClassMetaData != null)
+            return element.ClassMetaData.FullName!;
+
+        return element.TypeWrapper.Type!.FullName!;
+    }
+
+    /// <summary>
+    /// 构建服务端流写入语句的右值：将领域元素映射为 proto 响应消息
+    /// </summary>
+    public static string BuildStreamResponseWrite(ProtoServiceItem item, string elementVarName)
+    {
+        var outParam = item.OutParam!;
+        var protoName = outParam.GetGRpcName();
+
+        //原始类：直接映射
+        if (outParam.IsOriginalClass)
+            return $"{elementVarName}.Adapt<{protoName}>()";
+
+        //包装消息：唯一的 Data 字段赋值
+        var field = outParam.Items.Last();
+        var value = field.EnumMetaData != null
+            ? $"({(field.IsNullable ? "int?" : "int")}){elementVarName}"
+            : elementVarName;
+
+        return $"new {protoName} {{ {field.Name} = {value} }}";
+    }
+
+    /// <summary>
+    /// 构建客户端流读取映射：将 proto 请求消息映射为领域元素
+    /// </summary>
+    public static string BuildStreamRequestRead(ProtoServiceItem item, string itemVarName)
+    {
+        var inParam = item.InParam!;
+        var element = item.MethodMetaData.StreamRequestElement!;
+
+        //原始类：直接映射
+        if (inParam.IsOriginalClass)
+            return $"{itemVarName}.Adapt<{element.ClassMetaData!.FullName}>()";
+
+        //包装消息：取唯一的 Data 字段
+        var fieldName = inParam.Items.Last().Name!;
+        if (element.EnumMetaData != null)
+        {
+            var enumTypeName = element.TypeWrapper.Type!.FullName!;
+            var cast = element.TypeWrapper.IsNullable ? $"({enumTypeName}?)" : $"({enumTypeName})";
+            return $"{cast}{itemVarName}.{fieldName}";
+        }
+
+        return $"{itemVarName}.{fieldName}";
     }
 
     #endregion
