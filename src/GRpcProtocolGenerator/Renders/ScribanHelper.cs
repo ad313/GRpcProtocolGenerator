@@ -57,6 +57,25 @@ public class FilterFunctions : ScriptObject
             : item.InParam?.GetGRpcName() ?? "Empty";
     }
 
+    /// <summary>
+    /// 流式请求消息的 proto 名称。服务端流的请求可能为空，此时返回 WellKnownTypes.Empty
+    /// </summary>
+    public static string GetStreamRequestProtoName(ProtoServiceItem item)
+    {
+        if (!item.IsClientStreaming && item.MethodMetaData.InParamMetaDataListFilter().Count == 0)
+            return "Empty";
+
+        return item.InParam?.GetGRpcName() ?? "Empty";
+    }
+
+    /// <summary>
+    /// 流式响应消息的 proto 名称
+    /// </summary>
+    public static string GetStreamResponseProtoName(ProtoServiceItem item)
+    {
+        return item.OutParam?.GetGRpcName() ?? "Empty";
+    }
+
     public static string? GetMethodDescription(ProtoServiceItem item)
     {
         return Config.ConfigInstance.Proto.GetPropertyDescription(item.MethodMetaData);

@@ -215,36 +215,167 @@ public class MetaDataResolve
         if (methodInfo == null)
             return null;
 
+        //检测 gRPC 流式（IAsyncEnumerable<T>）
+        var streaming = DetectStreaming(methodInfo);
+        if (streaming.ErrorMessage != null)
+        {
+            _notSupportMethodList.Add(new NotSupportedMethodInfo(methodInfo, streaming.ErrorMessage));
+            return null;
+        }
+
         //过滤不支持的方法，并记录具体原因
         var parameters = methodInfo.GetParameters().Select(p => (Parameter: p, Wrapper: p.ParameterType.ToTypeWrapper())).ToList();
-        var unsupportedParam = parameters.FirstOrDefault(x => !x.Wrapper.IsSupport());
-        if (unsupportedParam.Parameter != null)
+        foreach (var (parameter, wrapper) in parameters)
         {
-            _notSupportMethodList.Add(new NotSupportedMethodInfo(methodInfo,
-                $"参数 '{unsupportedParam.Parameter.Name}' 的类型 '{unsupportedParam.Parameter.ParameterType.FullName}' 不受支持：{GetUnsupportedReason(unsupportedParam.Wrapper)}"));
-            return null;
+            //流式参数：校验元素类型而非 IAsyncEnumerable<T> 本身
+            var checkWrapper = parameter.ParameterType.IsAsyncEnumerable() && streaming.RequestElementType != null
+                ? streaming.RequestElementType.ToTypeWrapper()
+                : wrapper;
+
+            if (!checkWrapper.IsSupport())
+            {
+                _notSupportMethodList.Add(new NotSupportedMethodInfo(methodInfo,
+                    $"参数 '{parameter.Name}' 的类型 '{parameter.ParameterType.FullName}' 不受支持：{GetUnsupportedReason(checkWrapper)}"));
+                return null;
+            }
         }
 
         var returnWrapper = methodInfo.ReturnType.ToTypeWrapper();
-        if (!returnWrapper.IsSupport())
+        //流式响应：校验元素类型；非流式：校验返回值本身
+        var checkReturnWrapper = streaming.ResponseElementType != null
+            ? streaming.ResponseElementType.ToTypeWrapper()
+            : returnWrapper;
+        if (!checkReturnWrapper.IsSupport())
         {
             _notSupportMethodList.Add(new NotSupportedMethodInfo(methodInfo,
-                $"返回值类型 '{methodInfo.ReturnType.FullName}' 不受支持：{GetUnsupportedReason(returnWrapper)}"));
+                $"返回值类型 '{methodInfo.ReturnType.FullName}' 不受支持：{GetUnsupportedReason(checkReturnWrapper)}"));
             return null;
         }
 
-        //传入参数
+        //传入参数（保留原始签名，含流式参数与 CancellationToken）
         var inParam = parameters.Select(x => ToParamMetaData(x.Wrapper, x.Parameter)).ToList();
 
         //传出参数
         var outParam = new List<PropertyMetaData>();
-        var outTypeWrapper = methodInfo.ReturnType.ToTypeWrapper();
-        if (outTypeWrapper.Type != null)
+        PropertyMetaData? streamResponseElement = null;
+        if (streaming.Kind is StreamKind.ServerStreaming or StreamKind.DuplexStreaming)
         {
-            outParam.Add(ToParamMetaData(outTypeWrapper)!);
+            //服务端流：响应消息按元素类型生成
+            streamResponseElement = ToParamMetaData(streaming.ResponseElementType!.ToTypeWrapper());
+            if (streamResponseElement == null)
+            {
+                _notSupportMethodList.Add(new NotSupportedMethodInfo(methodInfo,
+                    $"方法 '{methodInfo.Name}' 的响应流元素类型 '{streaming.ResponseElementType!.FullName}' 无法解析"));
+                return null;
+            }
+
+            outParam.Add(streamResponseElement);
+        }
+        else
+        {
+            var outTypeWrapper = methodInfo.ReturnType.ToTypeWrapper();
+            if (outTypeWrapper.Type != null)
+            {
+                outParam.Add(ToParamMetaData(outTypeWrapper)!);
+            }
         }
 
-        return new MethodMetaData(methodInfo.DeclaringType?.Namespace, methodInfo.Name, methodInfo, ToAttributeMetaDataList(methodInfo.CustomAttributes.ToList()), inParam!, outParam);
+        //流式请求元素元数据（客户端流/双向流：用于生成请求消息）
+        PropertyMetaData? streamRequestElement = null;
+        if (streaming.Kind is StreamKind.ClientStreaming or StreamKind.DuplexStreaming)
+        {
+            var streamParameter = methodInfo.GetParameters().First(p => p.ParameterType.IsAsyncEnumerable());
+            streamRequestElement = ToParamMetaData(streaming.RequestElementType!.ToTypeWrapper(), streamParameter);
+            if (streamRequestElement == null)
+            {
+                _notSupportMethodList.Add(new NotSupportedMethodInfo(methodInfo,
+                    $"方法 '{methodInfo.Name}' 的请求流元素类型 '{streaming.RequestElementType!.FullName}' 无法解析"));
+                return null;
+            }
+        }
+
+        return new MethodMetaData(methodInfo.DeclaringType?.Namespace, methodInfo.Name, methodInfo,
+            ToAttributeMetaDataList(methodInfo.CustomAttributes.ToList()), inParam!, outParam,
+            streaming.Kind, streamRequestElement, streamResponseElement);
+    }
+
+    /// <summary>
+    /// 检测 gRPC 流式方法
+    /// 约定：
+    /// <list type="bullet">
+    /// <item>返回 <c>IAsyncEnumerable&lt;T&gt;</c>（或 <c>Task&lt;IAsyncEnumerable&lt;T&gt;&gt;</c>）→ 服务端流</item>
+    /// <item>参数为 <c>IAsyncEnumerable&lt;T&gt;</c>（唯一业务参数，<c>CancellationToken</c> 除外）→ 客户端流</item>
+    /// <item>两者兼有 → 双向流</item>
+    /// </list>
+    /// </summary>
+    private (StreamKind Kind, Type? RequestElementType, Type? ResponseElementType, string? ErrorMessage) DetectStreaming(MethodInfo methodInfo)
+    {
+        Type? requestElementType = null;
+        Type? responseElementType = null;
+
+        //返回值：解开 Task/ValueTask 后判断是否为 IAsyncEnumerable<T>
+        var returnType = methodInfo.ReturnType.ToTypeWrapper().Type;
+        if (returnType != null && returnType.IsAsyncEnumerable())
+        {
+            responseElementType = returnType.GetAsyncEnumerableElementType();
+        }
+
+        //参数：查找 IAsyncEnumerable<T> 参数
+        var allParameters = methodInfo.GetParameters();
+        var streamParameters = allParameters.Where(p => p.ParameterType.IsAsyncEnumerable()).ToList();
+        if (streamParameters.Count > 0)
+        {
+            var businessParameters = allParameters.Where(p => p.ParameterType != typeof(CancellationToken)).ToList();
+            if (streamParameters.Count > 1)
+            {
+                return (StreamKind.None, null, null,
+                    $"方法 '{methodInfo.Name}' 有 {streamParameters.Count} 个 IAsyncEnumerable<T> 参数，gRPC 只支持一个流式参数");
+            }
+
+            if (businessParameters.Count != 1)
+            {
+                return (StreamKind.None, null, null,
+                    $"方法 '{methodInfo.Name}' 的流式参数不能与其他业务参数混用，流式参数必须是唯一的业务参数（CancellationToken 除外）");
+            }
+
+            requestElementType = streamParameters[0].ParameterType.GetAsyncEnumerableElementType();
+        }
+
+        //校验元素类型
+        foreach (var (label, elementType) in new[] { ("请求", requestElementType), ("响应", responseElementType) })
+        {
+            if (elementType == null)
+                continue;
+
+            if (elementType.IsAsyncEnumerable())
+            {
+                return (StreamKind.None, null, null,
+                    $"方法 '{methodInfo.Name}' 的{label}流元素类型 '{elementType.FullName}' 不受支持：不支持嵌套的 IAsyncEnumerable");
+            }
+
+            var elementWrapper = elementType.ToTypeWrapper();
+            if (elementWrapper.IsTask)
+            {
+                return (StreamKind.None, null, null,
+                    $"方法 '{methodInfo.Name}' 的{label}流元素类型 '{elementType.FullName}' 不受支持：元素类型不能是 Task");
+            }
+
+            if (!elementWrapper.IsSupport())
+            {
+                return (StreamKind.None, null, null,
+                    $"方法 '{methodInfo.Name}' 的{label}流元素类型 '{elementType.FullName}' 不受支持：{GetUnsupportedReason(elementWrapper)}");
+            }
+        }
+
+        var kind = (requestElementType, responseElementType) switch
+        {
+            (not null, not null) => StreamKind.DuplexStreaming,
+            (not null, null) => StreamKind.ClientStreaming,
+            (null, not null) => StreamKind.ServerStreaming,
+            _ => StreamKind.None,
+        };
+
+        return (kind, requestElementType, responseElementType, null);
     }
 
     private static string GetUnsupportedReason(TypeWrapper wrapper)

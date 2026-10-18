@@ -162,6 +162,36 @@ public static class TypeExtensions
     /// </summary>
     public static TypeWrapper ToTypeWrapper(this Type type) => new(type);
 
+    /// <summary>
+    /// 是否是 IAsyncEnumerable&lt;T&gt;（含实现该接口的类型）
+    /// </summary>
+    public static bool IsAsyncEnumerable(this Type? type)
+    {
+        if (type == null)
+            return false;
+
+        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IAsyncEnumerable<>))
+            return true;
+
+        return type.GetInterfaces().Any(d => d.IsGenericType && d.GetGenericTypeDefinition() == typeof(IAsyncEnumerable<>));
+    }
+
+    /// <summary>
+    /// 获取 IAsyncEnumerable&lt;T&gt; 的元素类型 T
+    /// </summary>
+    public static Type? GetAsyncEnumerableElementType(this Type? type)
+    {
+        if (type == null)
+            return null;
+
+        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IAsyncEnumerable<>))
+            return type.GetGenericArguments()[0];
+
+        return type.GetInterfaces()
+            .FirstOrDefault(d => d.IsGenericType && d.GetGenericTypeDefinition() == typeof(IAsyncEnumerable<>))
+            ?.GetGenericArguments()[0];
+    }
+
     public static string ToProtobufString(this Type type, bool isNullable)
     {
         var result = Config.ConfigInstance.Proto.CSharpTypeToProtobufString?.Invoke(type, isNullable);

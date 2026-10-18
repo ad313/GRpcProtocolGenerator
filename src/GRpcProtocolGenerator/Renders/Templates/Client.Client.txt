@@ -5,6 +5,8 @@
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using {{ data.proto_namespace }};
@@ -15,10 +17,21 @@ namespace {{ config.proto.project_name }}.{{ config.proto.clients_directory }}
     public interface I{{data.name}}
     {    
         {{- for item in data.service.items }}
+        {{- if item.is_client_streaming && item.is_server_streaming }}
+        /// {{ get_method_description item }}（双向流）
+        IAsyncEnumerable<{{ get_stream_response_proto_name item }}> {{ item.method_meta_data.name }}(IAsyncEnumerable<{{ get_stream_request_proto_name item }}> requestStream, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        {{- else if item.is_server_streaming }}
+        /// {{ get_method_description item }}（服务端流）
+        IAsyncEnumerable<{{ get_stream_response_proto_name item }}> {{ item.method_meta_data.name }}({{ get_stream_request_proto_name item }} request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        {{- else if item.is_client_streaming }}
+        /// {{ get_method_description item }}（客户端流）
+        Task<{{ get_stream_response_proto_name item }}> {{ item.method_meta_data.name }}(IAsyncEnumerable<{{ get_stream_request_proto_name item }}> requestStream, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        {{- else }}
         {{- returnString = get_method_return_string config item }}
         {{- inString = get_method_in_string item }}
         /// {{ get_method_description item }}
         {{ returnString }} {{ item.method_meta_data.name }}({{ inString }} request, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default);
+        {{- end }}
         {{}}
         {{- end }}
     }
@@ -38,6 +51,51 @@ namespace {{ config.proto.project_name }}.{{ config.proto.clients_directory }}
         }
         
         {{- for item in data.service.items }}
+        {{- if item.is_client_streaming && item.is_server_streaming }}
+        {{}}
+        /// {{ get_method_description item }}（双向流）
+        public async IAsyncEnumerable<{{ get_stream_response_proto_name item }}> {{ item.method_meta_data.name }}(IAsyncEnumerable<{{ get_stream_request_proto_name item }}> requestStream, Metadata header = null, DateTime? deadline = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            using var call = _client.Value.{{ item.name }}(header, deadline, cancellationToken);
+            var writeTask = Task.Run(async () =>
+            {
+                await foreach (var item in requestStream.WithCancellation(cancellationToken))
+                {
+                    await call.RequestStream.WriteAsync(item);
+                }
+                await call.RequestStream.CompleteAsync();
+            });
+            await foreach (var response in call.ResponseStream.ReadAllAsync(cancellationToken))
+            {
+                yield return response;
+            }
+            await writeTask;
+        }
+        {{- else if item.is_server_streaming }}
+        {{}}
+        /// {{ get_method_description item }}（服务端流）
+        public async IAsyncEnumerable<{{ get_stream_response_proto_name item }}> {{ item.method_meta_data.name }}({{ get_stream_request_proto_name item }} request, Metadata header = null, DateTime? deadline = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            using var call = _client.Value.{{ item.name }}(request, header, deadline, cancellationToken);
+            await foreach (var item in call.ResponseStream.ReadAllAsync(cancellationToken))
+            {
+                yield return item;
+            }
+        }
+        {{- else if item.is_client_streaming }}
+        {{}}
+        /// {{ get_method_description item }}（客户端流）
+        public async Task<{{ get_stream_response_proto_name item }}> {{ item.method_meta_data.name }}(IAsyncEnumerable<{{ get_stream_request_proto_name item }}> requestStream, Metadata header = null, DateTime? deadline = null, CancellationToken cancellationToken = default)
+        {
+            using var call = _client.Value.{{ item.name }}(header, deadline, cancellationToken);
+            await foreach (var item in requestStream.WithCancellation(cancellationToken))
+            {
+                await call.RequestStream.WriteAsync(item);
+            }
+            await call.RequestStream.CompleteAsync();
+            return await call.ResponseAsync;
+        }
+        {{- else }}
         {{- returnString = get_method_return_string config item }}
         {{- inString = get_method_in_string item }}
         {{}}
@@ -46,6 +104,7 @@ namespace {{ config.proto.project_name }}.{{ config.proto.clients_directory }}
         {
             return await _client.Value.{{ item.name }}Async(request, header, deadline, cancellationToken);
         }
+        {{- end }}
         {{- end }}
     }
 }
