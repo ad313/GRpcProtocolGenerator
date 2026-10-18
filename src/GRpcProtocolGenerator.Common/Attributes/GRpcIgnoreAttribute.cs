@@ -1,12 +1,11 @@
-﻿using System;
+using System;
 
-namespace GRpcProtocolGenerator.Common.Attributes
+namespace GRpcProtocolGenerator.Common.Attributes;
+
+/// <summary>
+/// 忽略 gRpc 生成；忽略方法和属性
+/// </summary>
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Interface)]
+public class GRpcIgnoreAttribute : Attribute
 {
-    /// <summary>
-    /// 忽略 gRpc 生成；忽略方法和属性
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Interface)]
-    public class GRpcIgnoreAttribute : Attribute
-    {
-    }
 }

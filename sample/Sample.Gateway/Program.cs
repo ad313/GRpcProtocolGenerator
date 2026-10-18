@@ -64,7 +64,7 @@ namespace Sample.Gateway
             });
 
             //注册 gRpc 客户端
-            builder.Services.RegisterClient(builder.Configuration.GetSection("client_address_key").Get<string>());
+            builder.Services.RegisterClient(builder.Configuration.GetSection("client_address_key").Get<string>()!);
 
             var app = builder.Build();
 

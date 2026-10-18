@@ -1,99 +1,76 @@
-﻿using System;
+using System;
 
-namespace GRpcProtocolGenerator.Common.Attributes
+namespace GRpcProtocolGenerator.Common.Attributes;
+
+/// <summary>
+/// Http 路由标记基类
+/// </summary>
+public abstract class HttpMethodAttribute : Attribute
 {
     /// <summary>
-    /// HttpGet
+    /// 路由内容
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
-    public class HttpGetAttribute : Attribute
+    public string? Template { get; set; }
+
+    protected HttpMethodAttribute() { }
+
+    protected HttpMethodAttribute(string template)
     {
-        /// <summary>
-        /// 路由内容
-        /// </summary>
-        public string Template { get; set; }
-
-        public HttpGetAttribute() { }
-
-        public HttpGetAttribute(string template)
-        {
-            Template = template;
-        }
+        Template = template;
     }
+}
 
-    /// <summary>
-    /// HttpPost
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
-    public class HttpPostAttribute : Attribute
-    {
-        /// <summary>
-        /// 路由内容
-        /// </summary>
-        public string Template { get; set; }
+/// <summary>
+/// HttpGet
+/// </summary>
+[AttributeUsage(AttributeTargets.Method)]
+public class HttpGetAttribute : HttpMethodAttribute
+{
+    public HttpGetAttribute() { }
 
-        public HttpPostAttribute() { }
+    public HttpGetAttribute(string template) : base(template) { }
+}
 
-        public HttpPostAttribute(string template)
-        {
-            Template = template;
-        }
-    }
+/// <summary>
+/// HttpPost
+/// </summary>
+[AttributeUsage(AttributeTargets.Method)]
+public class HttpPostAttribute : HttpMethodAttribute
+{
+    public HttpPostAttribute() { }
 
-    /// <summary>
-    /// HttpPut
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
-    public class HttpPutAttribute : Attribute
-    {
-        /// <summary>
-        /// 路由内容
-        /// </summary>
-        public string Template { get; set; }
+    public HttpPostAttribute(string template) : base(template) { }
+}
 
-        public HttpPutAttribute() { }
+/// <summary>
+/// HttpPut
+/// </summary>
+[AttributeUsage(AttributeTargets.Method)]
+public class HttpPutAttribute : HttpMethodAttribute
+{
+    public HttpPutAttribute() { }
 
-        public HttpPutAttribute(string template)
-        {
-            Template = template;
-        }
-    }
+    public HttpPutAttribute(string template) : base(template) { }
+}
 
-    /// <summary>
-    /// HttpDelete
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
-    public class HttpDeleteAttribute : Attribute
-    {
-        /// <summary>
-        /// 路由内容
-        /// </summary>
-        public string Template { get; set; }
+/// <summary>
+/// HttpDelete
+/// </summary>
+[AttributeUsage(AttributeTargets.Method)]
+public class HttpDeleteAttribute : HttpMethodAttribute
+{
+    public HttpDeleteAttribute() { }
 
-        public HttpDeleteAttribute() { }
+    public HttpDeleteAttribute(string template) : base(template) { }
+}
 
-        public HttpDeleteAttribute(string template)
-        {
-            Template = template;
-        }
-    }
+/// <summary>
+/// HttpPatch
+/// </summary>
+[AttributeUsage(AttributeTargets.Method)]
+public class HttpPatchAttribute : HttpMethodAttribute
+{
+    public HttpPatchAttribute() { }
 
-    /// <summary>
-    /// HttpPatch
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
-    public class HttpPatchAttribute : Attribute
-    {
-        /// <summary>
-        /// 路由内容
-        /// </summary>
-        public string Template { get; set; }
-
-        public HttpPatchAttribute() { }
-
-        public HttpPatchAttribute(string template)
-        {
-            Template = template;
-        }
-    }
+    public HttpPatchAttribute(string template) : base(template) { }
 }

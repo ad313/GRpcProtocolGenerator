@@ -1,7 +1,7 @@
 ﻿using GRpcProtocolGenerator.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
@@ -47,19 +47,9 @@ namespace Sample.Gateway
                             Scheme = "Bearer"
                         });
 
-                        option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                        option.AddSecurityRequirement(document => new OpenApiSecurityRequirement
                         {
-                            {
-                                new OpenApiSecurityScheme
-                                {
-                                    Reference = new OpenApiReference
-                                    {
-                                        Type = ReferenceType.SecurityScheme,
-                                        Id = "Bearer"
-                                    }
-                                },
-                                new string[] { }
-                            }
+                            [new OpenApiSecuritySchemeReference("Bearer", document)] = []
                         });
                         break;
                     case SwaggerConfigType.IdentityLogin:
@@ -77,18 +67,9 @@ namespace Sample.Gateway
                             }
                         });
 
-                        var oAuthScheme = new OpenApiSecurityScheme
+                        option.AddSecurityRequirement(document => new OpenApiSecurityRequirement
                         {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "oauth2"
-                            }
-                        };
-
-                        option.AddSecurityRequirement(new()
-                        {
-                            [oAuthScheme] = new List<string>()
+                            [new OpenApiSecuritySchemeReference("oauth2", document)] = new List<string>()
                         });
                         break;
                     default:

@@ -36,10 +36,10 @@ namespace Sample.Start
                     proto.CSharpNamespaceFunc = meta => $"{project}.GRpc.Protocol";
 
                     //获取注释
-                    proto.PropertyDescriptionFunc = meta => meta?.Display ?? meta?.DisplayName ?? meta?.Description;
+                    proto.PropertyDescriptionFunc = meta => meta?.Display ?? meta?.DisplayName ?? meta?.Description ?? "";
 
                     //处理 proto 中 service 名称
-                    proto.ServiceNameFunc = meta => "GRpc" + meta.Name.TrimStart('I');
+                    proto.ServiceNameFunc = meta => "GRpc" + meta.Name!.TrimStart('I');
 
                     //当引用别的proto文件时，是否带上路径；注意，如果你把proto目录设为了根目库，那引用包不需要路径，这里设为false，否则是true
                     proto.UseProtoDirectoryWhenImportPackage = true;
@@ -65,12 +65,12 @@ namespace Sample.Start
                     //处理方法名称，比如去掉 Async 等
                     proto.MethodNameFunc = meta =>
                     {
-                        if (meta.Name.EndsWith("Async"))
+                        if (meta.Name!.EndsWith("Async"))
                         {
-                            return meta.Name.Substring(0, meta.Name.Length - 5);
+                            return meta.Name!.Substring(0, meta.Name!.Length - 5);
                         }
 
-                        return meta.Name;
+                        return meta.Name!;
                     };
 
                     //对输入输出参数包装的类型名称进行处理，让名称可读，否则就自动生成
@@ -79,28 +79,28 @@ namespace Sample.Start
                         if (props.Count == 1 && !props[0].TypeWrapper.IsArray &&
                             props[0].TypeWrapper.Type == typeof(string) && props[0].Name == "ids")
                         {
-                            return $"{method.InterfaceMetaData.FormatServiceName()}IdsRequest";
+                            return $"{method.InterfaceMetaData!.FormatServiceName()}IdsRequest";
                         }
 
                         if (props.Count == 1 && !props[0].TypeWrapper.IsArray &&
                             props[0].TypeWrapper.Type == typeof(object) && props[0].Name == "id")
                         {
-                            return $"{method.InterfaceMetaData.FormatServiceName()}IdRequest";
+                            return $"{method.InterfaceMetaData!.FormatServiceName()}IdRequest";
                         }
 
                         if (props.Count == 1 && string.IsNullOrWhiteSpace(props[0].Name) &&
                             !props[0].TypeWrapper.IsArray && props[0].TypeWrapper.Type == typeof(string))
                         {
-                            return $"{method.InterfaceMetaData.FormatServiceName()}StringResponse";
+                            return $"{method.InterfaceMetaData!.FormatServiceName()}StringResponse";
                         } 
 
                         if (props.Count == 1 && string.IsNullOrWhiteSpace(props[0].Name) &&
                             props[0].TypeWrapper.IsArray)
                         {
                             if (props[0].TypeWrapper.IsNullable)
-                                return $"{method.InterfaceMetaData.FormatServiceName()}ListNullable{props[0].TypeWrapper.Type.Name}Response";
+                                return $"{method.InterfaceMetaData!.FormatServiceName()}ListNullable{props[0].TypeWrapper.Type!.Name}Response";
 
-                            return $"{method.InterfaceMetaData.FormatServiceName()}List{props[0].TypeWrapper.Type.Name}Response";
+                            return $"{method.InterfaceMetaData!.FormatServiceName()}List{props[0].TypeWrapper.Type!.Name}Response";
                         }
 
                         return null;

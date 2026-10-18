@@ -1,6 +1,7 @@
 ﻿/*
      此代码是自动生成，请勿修改，如果要修改，请继承它再重写方法。
 */
+#nullable enable
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
